@@ -1,34 +1,47 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Angular QuickStart</title>
-    <base href="/">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="styles.css">
 
-    <!-- Polyfill(s) for older browsers -->
-    <script src="node_modules/core-js/client/shim.min.js"></script>
+<head>
+  <title>Angular QuickStart</title>
+  <base href="/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="styles.css">
 
-    <script src="node_modules/zone.js/dist/zone.js"></script>
-    <script src="node_modules/systemjs/dist/system.src.js"></script>
+  <!-- Polyfill(s) for older browsers -->
+  <script src="node_modules/core-js/client/shim.min.js"></script>
 
-    <script src="systemjs.config.js"></script>
-    <script>
-      System.import('main.js').catch(function(err){ console.error(err); });
-    </script>
-  </head>
+  <script src="node_modules/zone.js/dist/zone.js"></script>
+  <script src="node_modules/systemjs/dist/system.src.js"></script>
 
-  <body>
+  <script src="app/lib/jquery-2.2.3.min.js"></script>
+  <script src="app/lib/jquery-ui.js"></script>
 
-      <header-nav>loading..</header-nav>
-    
-    <!-- 
+  <script src="systemjs.config.js"></script>
+  <script>
+    System.import('main.js').catch(function (err) { console.error(err); });
+  </script>
+</head>
+
+<body>
+
+  <header-nav>loading..</header-nav>
+
+  <script src="app/lib/jquery-2.2.3.min.js"></script>
+  <script src="app/lib/jquery-ui.js"></script>
+  <script src="app/lib/tether.min.js"></script>
+  <script src="app/lib/bootstrap.min.js"></script>
+  <script src="app/lib/material.js"></script>
+  <script src="app/lib/ripples.js"></script>
+  <script src="app/lib/jquery.dropdown.js"></script>
+
+  <!-- 
       <my-app>
         	<div class="spinner-wrap">
         		<div class="spinner"></div>
         	</div>
       </my-app>
       -->
-  </body>
+</body>
+
 </html>

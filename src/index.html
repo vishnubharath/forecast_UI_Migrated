@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Angular QuickStart</title>
+  <title>Forecast</title>
   <base href="/">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,14 +19,22 @@
 
   <script src="systemjs.config.js"></script>
   <script>
+    System.config({
+        packages: {        
+          app: {
+            format: 'register',
+            defaultExtension: 'js' 
+          }
+        },
+        map: {
+          'primeng': "node_modules/primeng"
+        }
+      });
     System.import('main.js').catch(function (err) { console.error(err); });
   </script>
 </head>
 
 <body>
-
-  <header-nav>loading..</header-nav>
-
   <script src="app/lib/jquery-2.2.3.min.js"></script>
   <script src="app/lib/jquery-ui.js"></script>
   <script src="app/lib/tether.min.js"></script>
@@ -35,13 +43,13 @@
   <script src="app/lib/ripples.js"></script>
   <script src="app/lib/jquery.dropdown.js"></script>
 
-  <!-- 
+  
       <my-app>
         	<div class="spinner-wrap">
         		<div class="spinner"></div>
         	</div>
       </my-app>
-      -->
+  
 </body>
 
 </html>

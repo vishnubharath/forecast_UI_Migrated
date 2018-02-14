@@ -4,10 +4,10 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule, JsonpModule } from '@angular/http';
 
-import { AppComponent }  from './app.component';
+//import { AppComponent }  from './app.component';
 import {PageNotFoundComponent} from './not-found.component';
 
-//import { AppComponent }  from './ts/app.component';
+import { AppComponent }  from './ts/app.component';
 import { UploadComponent} from './modules/upload/app.upload';
 import {HolidayService} from "./modules/holiday/Holiday.service";
 import {HolidayComponent} from "./modules/holiday/app.holiday.list";
@@ -36,33 +36,18 @@ import { ModalModule } from 'ng2-modal';
     BrowserModule,
 		FormsModule,
 		HttpModule,
-		JsonpModule,    
-    routing,
-    
-    /**
-    TabViewModule,         
-    ModalModule,
-    FileUploadModule,
-    PanelModule,
-    CalendarModule,
-    DataTableModule,
-    ButtonModule,
-    InputTextModule,
-    AccordionModule,
-    SharedModule,
-    DialogModule,
-    DropdownModule,
-    TieredMenuModule
-    */
-   
+		JsonpModule,
+		routing,
+		TabViewModule,
+		ModalModule,
+		FileUploadModule,PanelModule,CalendarModule,DataTableModule,ButtonModule,InputTextModule,AccordionModule,SharedModule,DialogModule,DropdownModule,TieredMenuModule
    ],
   declarations: [ 
-    AppComponent,PageNotFoundComponent,
-    /**Modified */
-    HomeComponent,
-    /**Existing */
-    LeaveComponent ],
-  bootstrap:    [ HomeComponent ],
+    AppComponent, HolidayComponent, LoginComponent,LeaveComponent, ReportListComponent, ReportComponent,
+      UploadComponent, PipeLineComponent,HomeComponent,ProjectPipeLineComponent,
+      PageNotFoundComponent  
+  ],
+  bootstrap:    [ AppComponent ],
   providers:[
 		HolidayService, appRoutingProviders, ReportService,UploadService, ForecastMonthsService,StaffPipelineService,ProjectPipelineService
 	]

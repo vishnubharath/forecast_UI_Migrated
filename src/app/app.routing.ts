@@ -7,12 +7,20 @@ import { PipeLineComponent} from './modules/pipeline/pipeline.component';
 import { ProjectPipeLineComponent} from './modules/pipeline/project.pipeline.component';
 import { HomeComponent } from './ts/home.component';
 import { LoginComponent } from './modules/login/login.component';
-
 import { PageNotFoundComponent }    from './not-found.component';
 
 const appRoutes: Routes = [
-    { path: 'leaveModule', component: LeaveComponent },
-    { path: '**', component: PageNotFoundComponent }
+   { path: 'login', component: LoginComponent },
+   { path: 'home', component: HomeComponent },
+   { path: 'leaveModule', component: LeaveComponent },
+   { path: 'reportModule', component: ReportComponent },
+   { path: 'uploadModule', component: UploadComponent },
+   { path: 'pipeLineModule', component: PipeLineComponent },
+   { path: 'projectPipeLineComponent', component: ProjectPipeLineComponent },
+   { path: 'projectPipeLineComponent/:id', component: ProjectPipeLineComponent },
+   { path: 'pipeLineModule/:id', component: PipeLineComponent },
+   { path: '', redirectTo: '/login',pathMatch:'full'},
+   { path: '**', component: PageNotFoundComponent }
  ];
 
 export const appRoutingProviders: any[] = [

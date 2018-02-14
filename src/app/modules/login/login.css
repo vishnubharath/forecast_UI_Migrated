@@ -1,0 +1,32 @@
+.login-wrapper{
+  width: 44%;
+  margin: 0 auto;
+  margin-top: 170px;
+}
+.login-header{
+	position: absolute;
+    width: 93%;
+    background-color: #009688;
+    padding: 17px;
+    top: -42px;
+    left: 25px;
+    color: #fff;
+    text-align: center;
+}
+.login-header h3{
+	margin-top: 7px;
+}
+.padding-login{
+	padding-top: 15px;
+	padding-bottom: 10px;
+}
+.card-block{
+	padding-top: 50px;
+}
+.form-group{
+	margin: 0;
+}
+.sign-in{
+	width: 20%;
+	margin-left: 50%; 
+}

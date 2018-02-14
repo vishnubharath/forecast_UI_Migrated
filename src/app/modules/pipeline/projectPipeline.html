@@ -1,0 +1,131 @@
+<header-nav></header-nav>
+
+<div id="newStaff" style="display:none">
+<p-dataTable #dt [value]="allStaffs" selectionMode="single" *ngIf="allStaffs" [(selection)]="selectedStaff" (onRowSelect)="onRowSelect($event)" [paginator]="true" rows="15" [responsive]="true">
+ <header>
+        <div class="ui-helper-clearfix">
+            <button type="button" pButton icon="fa-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="float:left"></button>
+        </div>
+    </header>
+	<p-column field="sno" header="S.NO"></p-column>
+	<p-column field="lob" header="LOB"></p-column>
+	<p-column field="opportunityname" header="Opportunity Name"></p-column>
+	<p-column field="contact" header="Contact"></p-column>
+	<p-column field="salesstage" header="Sales Stage"></p-column>
+	<p-column field="estCloseDate" header="Est. Close Date"></p-column>
+	<p-column field="list-0" header="headers-0"></p-column>
+	<p-column field="list-1" header="headers-1"></p-column>
+	<p-column field="list-2" header="headers-2"></p-column>
+	<p-column field="list-3" header="headers-3"></p-column>
+	<p-column field="list-4" header="headers-4"></p-column>
+	<p-column field="list-5" header="headers-5"></p-column>
+	<p-column field="list-6" header="headers-6"></p-column>
+	<p-column field="list-7" header="headers-7"></p-column>
+	<p-column field="list-8" header="headers-8"></p-column>
+	<p-column field="list-9" header="headers-9"></p-column>
+	<p-column field="list-10" header="headers-10"></p-column>
+	<p-column field="list-11" header="headers-11"></p-column>
+	<p-column field="tcv" header="TCS$"></p-column>
+	<p-column field="probability" header="Probability"></p-column>
+	<p-column field="practiseinvolved" header="Practise Involved"></p-column>
+
+	
+	
+	    <footer><div class="ui-helper-clearfix" style="width:100%"><button type="button" pButton icon="fa-plus" style="float:left" (click)="showDialogToAdd()" label="Add"></button></div></footer>
+
+</p-dataTable>
+</div>
+
+
+<p-dialog header="Project Details" [(visible)]="displayDialog" [responsive]="true" showEffect="fade" [modal]="true">
+    <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="newStaff">
+	  <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">SNO</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="newStaff.sno" /></div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">LOB</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="newStaff.lob" /></div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="brand">Opportunity Name</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="newStaff.opportunityname" /></div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="brand">Contact</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="brand" [(ngModel)]="newStaff.contact" /></div>
+        </div>
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">Sales Stage</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.salesstage" /></div>
+        </div>
+		 <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">Est. Close Date</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.year" /></div>
+        </div> 
+		<div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">{{newStaff.header[0]}}</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.tcv" /></div>
+        </div>
+		<div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">TCS$</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.estCloseDate" /></div>
+        </div>
+		<div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">Probability</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.practiseinvolved" /></div>
+        </div>
+		<div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="color">Practise Involved</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="color" [(ngModel)]="newStaff.probability" /></div>
+        </div>
+		
+    </div>
+    <footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+            <button type="button" id="delete" pButton icon="fa-close"  (click)="delete()" 	 label="Delete"></button>
+            <button type="button" pButton icon="fa-check" (click)="save()"  label="Save"></button>
+        </div>
+    </footer>
+</p-dialog>
+
+
+
+<p-dialog header="New Page Details" [(visible)]="newStaffingPage" [responsive]="true" showEffect="fade" [modal]="true">
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">Starting Month </label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="start" /></div>
+        </div>
+		  <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">Ending Month </label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="end" /></div>
+        </div>
+       
+    </div>
+	   <footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+            <button type="button" id="Proceed" pButton icon="fa-close"  (click)="proceed()" 	 label="Proceed"></button>
+            </div>
+    </footer>
+</p-dialog>
+
+
+<p-dialog header="Search History Criteria" [(visible)]="projectFromService" [responsive]="true" showEffect="fade" [modal]="true">
+    <div class="ui-grid ui-grid-responsive ui-fluid">
+        <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">Year</label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="start" /></div>
+        </div>
+		  <div class="ui-grid-row">
+            <div class="ui-grid-col-4"><label for="vin">Month </label></div>
+            <div class="ui-grid-col-8"><input pInputText id="vin" [(ngModel)]="end" /></div>
+        </div>
+       
+    </div>
+    <footer>
+        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+            <button type="button" id="Proceed" pButton icon="fa-close"  (click)="getHistory()" 	 label="Proceed"></button>
+            </div>
+    </footer>
+</p-dialog>

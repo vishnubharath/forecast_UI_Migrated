@@ -1,0 +1,250 @@
+
+
+nav a {   
+ color: rgb(255, 255, 255); 
+ font-size: 13px; 
+ height: 32px;   
+ line-height: 32px;
+ text-transform: none;    
+ background: rgb(30, 136, 229); 
+ border-radius: 100px 100px 0px 0px;    
+ outline: none;    
+ padding: 9px 20px;
+ }
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	background-color: #EEEEEE;
+	font-family: "RobotoDraft", "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+img{
+	max-width:100%;
+	height:auto;
+}
+a{
+	text-decoration: none;
+	cursor: pointer;
+	outline: none;
+}
+.wrapper {
+	font-family: arial, sans-serif;
+}
+.header-section {
+	width: 100%;
+}
+
+.logo-wrapper {
+	background: #f0f0f0;
+}
+
+.nav-wrapper {
+	padding-top: 3px;
+}
+
+.logo-section, .nav-section, .main-container {
+    width: 940px;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.logo {
+	float: right;
+}
+
+.title-wrapper {
+	float: left;
+	margin-top: 8px;
+}
+
+.title-wrapper a {
+	text-decoration: none;
+	color: #0977bd;
+}
+
+.title-wrapper p {
+    color: #939393;
+    margin-top: 3px;
+    text-align: right;
+    background: url("../img/canada.png")no-repeat right;
+    padding-right: 20px;
+}
+
+.title-wrapper h1{
+	font-size: 34px;
+	font-family: arial, sans-serif;
+}
+
+.logo-section {
+	padding: 20px 10px 15px;
+}
+
+.nav-section {
+    background-color: #0977bd;
+    overflow: hidden;
+}
+
+.nav-section nav {
+	display: inline-block;
+}
+
+.nav-section a {
+	text-decoration: none;
+	font-size: 15px;
+	padding: 15px;
+	display: inline-block;
+	color: #ade0ee;
+	font-family: arial, sans-serif;
+}
+
+.nav-section a:hover {
+	color: #f0f0f0;
+}
+
+.nav-section a.active {
+	color: #0977bd;
+	background-color: #f0f0f0;
+	font-weight: bold;
+}
+
+.footer-section {
+	background: #0977bd;
+	height: 70px;
+}
+
+.footer-section p{
+	text-align: center;
+    font-size: 14px;
+    color: #ccc;
+    padding-top: 35px;
+}
+
+.main-wrapper {
+	height: 700px;
+}
+.btn-login{
+	background-color: #009688;
+	font-size: 18px;
+    width: 165px;
+}
+.text-xs-center{
+  padding-bottom: 20px;
+}
+.card .form-header h3{
+	font-size: 20px;
+}
+.navbar-nav{
+	float: left;
+}
+.nav-header{
+	text-align: center;
+    width: 45%;
+}
+.nav-header li{
+   width: 100%;
+}
+/*.navbar.navbar-dark .navbar-nav .nav-item a{
+	font-size: 21px;
+	padding-left: 80px;
+	padding-right: 80px;
+}*/
+.spinner-wrap{
+	position: relative;
+}
+.spinner-wrap .spinner {
+    position: absolute;
+    top: 160px;
+    left: 45%;
+    width: 50px;
+    height: 50px;
+    margin: 100px auto;
+    background-color: #009688;
+    animation: rotateplane 1.2s infinite ease-in-out;
+
+}
+.default-color {
+    background-color: #009688!important;
+}
+.nav-item > a{
+	font-weight: bold;
+}
+.md-form .prefix.active{
+	color: #009688;
+}
+.btn{
+	padding: 10px;
+}
+@-webkit-keyframes rotateplane {
+  0% {
+    -webkit-transform: perspective(120px)
+  }
+  50% {
+    -webkit-transform: perspective(120px) rotateY(180deg)
+  }
+  100% {
+    -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg)
+  }
+}
+
+@keyframes rotateplane {
+  0% {
+    transform: perspective(120px) rotateX(0) rotateY(0);
+    -webkit-transform: perspective(120px) rotateX(0) rotateY(0)
+  }
+  50% {
+    transform: perspective(120px) rotateX(-180.1deg) rotateY(0);
+    -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0)
+  }
+  100% {
+    transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg)
+  }
+}
+.headerTitle{font-size: 22px;font-weight: bold;}
+.modal-body{
+  text-align: center;
+  color: #009688;
+}
+.modal-footer{
+  text-align: center;
+}

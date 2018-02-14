@@ -1,0 +1,35 @@
+<header-nav></header-nav>
+<div class="container-fluid">
+	<h2 style="margin-top:0">Generate/View Reports</h2>
+	  
+	   
+     <p-dataTable #reportdata [value]="report" [rows]="2" [paginator]="true" [pageLinks]="3" [rowsPerPageOptions]="[2,4,6]" [responsive]="true" [stacked]="stacked" showEffect="fade" [editable]="true" >
+     <p-column field="type" header="Type" [filter]="true" filterMatchMode="contains" [sortable]="true"  ></p-column>
+      <p-column field="year" header="Year" [sortable]="true"  [filter]="true" filterMatchMode="contains"></p-column>
+       <p-column field="month" header="Month" [sortable]="true" [filter]="true"  filterMatchMode="contains"></p-column>
+        <p-column field="projectId" header="Project Id" [sortable]="true" [filter]="true"  filterMatchMode="contains" ></p-column>
+	 	<p-column field="employeeId" header="Employee Id" [sortable]="true" > </p-column>
+	    <p-column field="locationId" header="Location id(contains)" [filter]="true" filterMatchMode="contains"  [sortable]="true"  ></p-column>
+	    <p-column field="esaProjectName" header="Project Name" [filter]="true" filterMatchMode="contains" [sortable]="true" ></p-column>
+	    <p-column field="associateName" header="Associate name" [sortable]="true" ></p-column>
+	    <p-column field="location" header="Location" [sortable]="true" ></p-column>
+	    <p-column field="lob" header="LOB(contains)" [filter]="true"  [sortable]="true" ></p-column>
+	    <p-column field="leave_days" header="Leave days"  [editable]="true"></p-column>
+	    <p-column field="rate" header="Rate" [editable]="true" ></p-column>
+	    <p-column field="totalHours" header="Billing Hours"></p-column>
+	    <p-column field="allocation_start_date" header="Allocation Start Date" [sortable]="true" ></p-column>
+	    <p-column field="allocation_end_date" header="Allocation End Date" [sortable]="true" ></p-column>
+	    <p-column field="vacationNonBillableDays" header="Vacation Non Billable Days" [editable]="true"></p-column>
+	    <p-column field="vacationNonBillableHours" header="Vacation Non Billable Hours" [editable]="true"></p-column>
+	    <p-column field="totalRate" header="Total Billing Amount"></p-column>
+	    
+    </p-dataTable>
+    <button type="button" pButton  icon="fa-file-o" iconPos="left" (click)="save()"  label="Save" style="float:left"></button>
+     <button type="button" pButton icon="fa-file-o" iconPos="left" label="Download Report" (click)="reportdata.exportCSV()" style="float:left"></button>
+            
+        
+		<div class="col-md-12" id="response">
+			<span *ngIf="errorMessage">{{errorMessage}}</span>
+		</div>
+	
+</div>

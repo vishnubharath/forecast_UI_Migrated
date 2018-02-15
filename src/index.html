@@ -18,20 +18,23 @@
   <script src="app/lib/jquery-ui.js"></script>
 
   <script src="systemjs.config.js"></script>
-  <script>
-    System.config({
-        packages: {        
-          app: {
-            format: 'register',
-            defaultExtension: 'js' 
-          }
-        },
-        map: {
-          'primeng': "node_modules/primeng"
-        }
-      });
+  <script>    
     System.import('main.js').catch(function (err) { console.error(err); });
   </script>
+
+  <!-- Styles from Forecast -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"/>
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css"/>
+	<link rel="stylesheet" href="app/style/css/bootstrap.min.css"/>
+	<link rel="stylesheet" href="app/style/css/bootstrap-material-design.css">
+	<link rel="stylesheet" href="app/style/css/font-awesome.min.css">
+	<link rel="stylesheet" href="app/style/css/ripples.css">
+	<link rel="stylesheet" href="app/style/css/styles.css"/>
+	<link rel="stylesheet" type="text/css" href="node_modules/primeng/resources/themes/omega/theme.css" />
+  	<link rel="stylesheet" type="text/css" href="node_modules/primeng/resources/primeng.min.css" />
+	<link rel="stylesheet" type="text/css" href="node_modules/primeng/components/calendar/calendar.css"/>
+
 </head>
 
 <body>

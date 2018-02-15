@@ -30,7 +30,7 @@ export class ReportService{
 
 	getForecastReport():Promise<Report>{
 		return this._http
-			.get(this.baseUrl )
+			.get(Constants.base_url )
 			.toPromise()
 			.then((response:Response)=>response.json())
 			.catch(error=>{
@@ -48,7 +48,7 @@ export class ReportService{
 			console.log(body);
 		 let headers = new Headers();
 		 headers.append('Content-Type', 'application/json');
-		 this._http.post(this.baseUrl+'reports/saveRowRecord', body, {
+		 this._http.post(Constants.base_url+'reports/reports/saveRowRecord', body, {
 		  headers: headers
 		  })
 		  .subscribe(

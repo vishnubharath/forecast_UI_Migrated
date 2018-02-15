@@ -13,9 +13,9 @@ export class HealthCheck implements OnInit {
   constructor(private _http: Http){}
 
   ngOnInit() {
-      this._http.get(Constants.base_url+"/reports/healthcheck").subscribe(data => this.reportshealth = data + "");
+      this._http.get(Constants.base_url+"reports/healthcheck").subscribe(data => this.reportshealth = data + "");
   }
   check(){
-    this._http.get(Constants.base_url+"/reports/healthcheck").subscribe(data => this.reportshealth = data + "");
+    this._http.get(Constants.base_url+"reports/healthcheck").subscribe(data => this.reportshealth = data + "");
   }
 }

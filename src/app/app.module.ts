@@ -6,6 +6,7 @@ import { HttpModule, JsonpModule } from '@angular/http';
 
 //import { AppComponent }  from './app.component';
 import {PageNotFoundComponent} from './not-found.component';
+import {HealthCheck} from './modules/healthcheck/healthcheck.component';
 
 import { AppComponent }  from './ts/app.component';
 import { UploadComponent} from './modules/upload/app.upload';
@@ -32,7 +33,7 @@ import { HomeComponent } from './ts/home.component';
 import { ModalModule } from 'ng2-modal';
 
 @NgModule({
-  imports:      [   
+  imports:      [
     BrowserModule,
 		FormsModule,
 		HttpModule,
@@ -45,7 +46,7 @@ import { ModalModule } from 'ng2-modal';
   declarations: [ 
     AppComponent, HolidayComponent, LoginComponent,LeaveComponent, ReportListComponent, ReportComponent,
       UploadComponent, PipeLineComponent,HomeComponent,ProjectPipeLineComponent,
-      PageNotFoundComponent  
+      PageNotFoundComponent,HealthCheck  
   ],
   bootstrap:    [ AppComponent ],
   providers:[

@@ -1,16 +1,34 @@
-.idea
-node_modules
-jspm_packages
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+/dist
+/tmp
+
+# dependencies
+/node_modules
+/bower_components
+
+# IDEs and editors
+/.idea
+/.vscode
+.project
+.classpath
+*.launch
+.settings/
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage/*
+/libpeerconnection.log
 npm-debug.log
-debug.log
-src/**/*.js
-!src/systemjs.config.extras.js
-!src/systemjs.config.js
-!src/systemjs-angular-loader.js
-!src/app/lib/
-*.js.map
-e2e/**/*.js
-e2e/**/*.js.map
-_test-output
-_temp
-/package-lock.json
+testem.log
+/typings
+
+# e2e
+/e2e/*.js
+/e2e/*.map
+
+#System Files
+.DS_Store
+Thumbs.db

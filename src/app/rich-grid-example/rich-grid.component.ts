@@ -33,7 +33,7 @@ export class RichGridComponent {
     public dateComponentFramework:DateComponent;
     public HeaderGroupComponent = HeaderGroupComponent;
     public _reportservice:ReportService;
-   
+    public hideprogress:boolean = true;
     private updatedValues : Adjustment[] = [];
 
     constructor(_reportservice:ReportService) {
@@ -148,7 +148,7 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Adjustment", field: "adjustment1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "Adjustment", field: "adjustment_1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false, editable: true
                     },
                     {
@@ -156,8 +156,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue",valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue1.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false, valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue1=(params.data.hours1 - params.data.adjustment1)*params.data.rate1
+                            return params.data.revenue1;
+                          }
                     },
                 ]
             },
@@ -179,8 +184,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue2=(params.data.hours2 - params.data.adjustment2)*params.data.rate2
+                            return params.data.revenue2;
+                          },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false,valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue2.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        }
                     },
                 ]
             },
@@ -202,8 +212,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue3=(params.data.hours3 - params.data.adjustment3)*params.data.rate3
+                            return params.data.revenue3;
+                          },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false,valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue3.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        }
                     },
                 ]
             },
@@ -225,8 +240,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue4=(params.data.hours4 - params.data.adjustment4)*params.data.rate4
+                            return params.data.revenue4;
+                          },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false,valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue4.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        }
                     },
                 ]
             },
@@ -248,8 +268,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue5=(params.data.hours5 - params.data.adjustment5)*params.data.rate5
+                            return params.data.revenue5;
+                          },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false,valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue5.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        }
                     },
                 ]
             },
@@ -272,8 +297,13 @@ export class RichGridComponent {
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                            params.data.revenue6=(params.data.hours6 - params.data.adjustment6)*params.data.rate6
+                            return params.data.revenue6;
+                          },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false,valueFormatter: function RevenueFormater(params) {
+                            return "CAD" + " " + params.data.revenue6.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                        }
                     },
                 ]
             },
@@ -311,6 +341,7 @@ export class RichGridComponent {
         console.log("project id :" + $event.node.data.reportId); 
         console.log("adj val : " + $event.node.data[$event.colDef.field]);         
         console.log("adj id : " + $event.node.data[$event.colDef.field + "_id"]);   
+
         
         console.log(this.updatedValues);        
         
@@ -397,7 +428,11 @@ export class RichGridComponent {
     }
     
     public saveUpdated(){
-        this._reportservice.reportsave(this.updatedValues).catch(err=> console.log(err));
+        this.hideprogress = false;
+        this._reportservice.reportsave(this.updatedValues).then(data =>{
+            this.hideprogress = true;
+        }).catch(err=> console.log(err); this.hideprogress = true;
+    );
         console.log(this.updatedValues);
     }
 

@@ -27,33 +27,33 @@ export class ReportType{
     rate_1:number;
     revenue_1:string;
 
-    adjustment2_id:number;
-    adjustment2:number;    
-    hours2:number;
-    rate2:number;
-    revenue2:string;
+    adjustment_2_id:number;
+    adjustment_2:number;    
+    hours_2:number;
+    rate_2:number;
+    revenue_2:string;
 
-    adjustment3_id:number;
-    adjustment3:number;    
-    hours3:number;
-    rate3:number;
-    revenue3:string;
+    adjustment_3_id:number;
+    adjustment_3:number;    
+    hours_3:number;
+    rate_3:number;
+    revenue_3:string;
 
-    adjustment4_id:number;
-    adjustment4:number;    
-    hours4:number;
-    rate4:number;
-    revenue4:string;
+    adjustment_4_id:number;
+    adjustment_4:number;    
+    hours_4:number;
+    rate_4:number;
+    revenue_4:string;
 
-    adjustment5_id:number;
-    adjustment5:number;    
-    hours5:number;
-    rate5:number;
-    revenue5:string;
+    adjustment_5_id:number;
+    adjustment_5:number;    
+    hours_5:number;
+    rate_5:number;
+    revenue_5:string;
 
-    adjustment6_id:number;
-    adjustment6:number;    
-    hours6:number;
-    rate6:number;
-    revenue6:string;
+    adjustment_6_id:number;
+    adjustment_6:number;    
+    hours_6:number;
+    rate_6:number;
+    revenue_6:string;
 }

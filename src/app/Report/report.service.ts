@@ -77,52 +77,46 @@ export class ReportService{
 				}
 
 				if(index == 1){
-					reportType.adjustment2_id = report.reportAdjusments[index].id;
-					reportType.adjustment2 = report.reportAdjusments[index].adjustment;
-					reportType.hours2 = report.reportAdjusments[index].hours;
-					reportType.rate2 = report.reportAdjusments[index].rate;
-					reportType.revenue2 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_2_id = report.reportAdjusments[index].id;
+					reportType.adjustment_2 = report.reportAdjusments[index].adjustment;
+					reportType.hours_2 = report.reportAdjusments[index].hours;
+					reportType.rate_2 = report.reportAdjusments[index].rate;
+					reportType.revenue_2 = report.reportAdjusments[index].revenue;
 				}
 
 				if(index == 2){
-					reportType.adjustment3_id = report.reportAdjusments[index].id;
-					reportType.adjustment3 = report.reportAdjusments[index].adjustment;
-					reportType.hours3 = report.reportAdjusments[index].hours;
-					reportType.rate3 = report.reportAdjusments[index].rate;
-					reportType.revenue3 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_3_id = report.reportAdjusments[index].id;
+					reportType.adjustment_3 = report.reportAdjusments[index].adjustment;
+					reportType.hours_3 = report.reportAdjusments[index].hours;
+					reportType.rate_3 = report.reportAdjusments[index].rate;
+					reportType.revenue_3 = report.reportAdjusments[index].revenue;
 				}
 
 				if(index == 3){
-					reportType.adjustment4_id = report.reportAdjusments[index].id;
-					reportType.adjustment4 = report.reportAdjusments[index].adjustment;
-					reportType.hours4 = report.reportAdjusments[index].hours;
-					reportType.rate4 = report.reportAdjusments[index].rate;
-					reportType.revenue4 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_4_id = report.reportAdjusments[index].id;
+					reportType.adjustment_4 = report.reportAdjusments[index].adjustment;
+					reportType.hours_4 = report.reportAdjusments[index].hours;
+					reportType.rate_4 = report.reportAdjusments[index].rate;
+					reportType.revenue_4 = report.reportAdjusments[index].revenue;
 				}
 
 				if(index == 4){
-					reportType.adjustment5_id = report.reportAdjusments[index].id;
-					reportType.adjustment5 = report.reportAdjusments[index].adjustment;
-					reportType.hours5 = report.reportAdjusments[index].hours;
-					reportType.rate5 = report.reportAdjusments[index].rate;
-					reportType.revenue5 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_5_id = report.reportAdjusments[index].id;
+					reportType.adjustment_5 = report.reportAdjusments[index].adjustment;
+					reportType.hours_5 = report.reportAdjusments[index].hours;
+					reportType.rate_5 = report.reportAdjusments[index].rate;
+					reportType.revenue_5 = report.reportAdjusments[index].revenue;
 				}
 
 				if(index == 5){
-					reportType.adjustment6_id = report.reportAdjusments[index].id;
-					reportType.adjustment6 = report.reportAdjusments[index].adjustment;
-					reportType.hours6 = report.reportAdjusments[index].hours;
-					reportType.rate6 = report.reportAdjusments[index].rate;
-					reportType.revenue6 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_6_id = report.reportAdjusments[index].id;
+					reportType.adjustment_6 = report.reportAdjusments[index].adjustment;
+					reportType.hours_6 = report.reportAdjusments[index].hours;
+					reportType.rate_6 = report.reportAdjusments[index].rate;
+					reportType.revenue_6 = report.reportAdjusments[index].revenue;
 				}
 			}
 			
-
-			console.log(reportType["adjustment" + (0 + 1)]);
-
-			console.log(reportType);
-			
-
 			reportTypes.push(reportType);
 		})
 		

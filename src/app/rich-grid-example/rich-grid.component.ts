@@ -144,24 +144,26 @@ export class RichGridComponent {
                 
                 children: [
                     {
-                        headerName: "Hours", field: "hours1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Hours", field: "hours_1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Adjustment", field: "adjustment_1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false, editable: true
                     },
                     {
-                        headerName: "Rate", field: "rate1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        headerName: "Rate", field: "rate_1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Revenue",valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue1.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                            console.log(params.data.revenue_1);
+                            
+                            return "CAD" + " " + params.data.revenue_1.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
                         },filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false, valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue1=(params.data.hours1 - params.data.adjustment1)*params.data.rate1
-                            return params.data.revenue1;
+                            params.data.revenue_1=(params.data.hours_1 - params.data.adjustment_1)*params.data.rate_1
+                            return params.data.revenue_1;
                           }
                     },
                 ]
@@ -229,7 +231,7 @@ export class RichGridComponent {
                 children: [
                     {
                         headerName: "Hours", field: "hours4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Adjustment", field: "adjustment4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -237,7 +239,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Rate", field: "rate4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
@@ -257,7 +259,7 @@ export class RichGridComponent {
                 children: [
                     {
                         headerName: "Hours", field: "hours5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Adjustment", field: "adjustment5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -265,7 +267,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Rate", field: "rate5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
@@ -336,28 +338,42 @@ export class RichGridComponent {
 
     private onCellValueChanged($event) {
 
+
+        var col_number = $event.colDef.field.split("_")[1];
+        var idFiled = "adjustment_" + col_number + "_id";
+        var adjustment = "adjustment_" + col_number;
+        var hoursFiled = "hours_" + col_number;
+        var rateFiled = "rate_" + col_number;
+
         console.log("data..");        
         console.log("field name : " + $event.colDef.field);       
         console.log("project id :" + $event.node.data.reportId); 
-        console.log("adj val : " + $event.node.data[$event.colDef.field]);         
-        console.log("adj id : " + $event.node.data[$event.colDef.field + "_id"]);   
+        console.log("adj val : " + $event.node.data[adjustment]);         
+        console.log("adj id : " + $event.node.data[idFiled]);   
+        console.log("hours : " + $event.node.data[hoursFiled ]);       
+        console.log("rate : " + $event.node.data[rateFiled ]);       
+
 
         
         console.log(this.updatedValues);        
         
-        if(this.updatedValues.filter(data => $event.node.data[$event.colDef.field + "_id"] === data.id ).length > 0)
+        if(this.updatedValues.filter(data => $event.node.data[idFiled] === data.id ).length > 0)
         {
             console.log("containts..");
             this.updatedValues.forEach(data => {
-                if(data.id === $event.node.data[$event.colDef.field + "_id"]){
-                    data.adjusment = $event.node.data[$event.colDef.field];
+                if(data.id === $event.node.data[idFiled]){
+                    data.adjusment = $event.node.data[adjustment];
+                    data.hours = $event.node.data[hoursFiled];
+                    data.rate = $event.node.data[rateFiled];
                 }                   
             });                        
         }else{
             console.log("push..");   
             var newValueChanges: Adjustment= new Adjustment();
-            newValueChanges.id = $event.node.data[$event.colDef.field + "_id"];
-            newValueChanges.adjusment = $event.node.data[$event.colDef.field];
+            newValueChanges.id = $event.node.data[idFiled];
+            newValueChanges.adjusment = $event.node.data[adjustment];
+            newValueChanges.hours = $event.node.data[hoursFiled];
+            newValueChanges.rate = $event.node.data[rateFiled];
             this.updatedValues.push(newValueChanges);
         }
 

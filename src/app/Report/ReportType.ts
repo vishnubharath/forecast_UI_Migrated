@@ -21,11 +21,11 @@ export class ReportType{
     portfolio:string;    
     poc:string;
 
-    adjustment1_id:number;
-    adjustment1:number;    
-    hours1:number;
-    rate1:number;
-    revenue1:string;
+    adjustment_1_id:number;
+    adjustment_1:number;    
+    hours_1:number;
+    rate_1:number;
+    revenue_1:string;
 
     adjustment2_id:number;
     adjustment2:number;    

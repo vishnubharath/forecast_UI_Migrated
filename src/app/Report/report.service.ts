@@ -69,11 +69,11 @@ export class ReportService{
 			for (let index = 0; index < report.reportAdjusments.length; index++) {
 
 				if(index == 0){
-					reportType.adjustment1_id = report.reportAdjusments[index].id;
-					reportType.adjustment1 = report.reportAdjusments[index].adjustment;
-					reportType.hours1 = report.reportAdjusments[index].hours;
-					reportType.rate1 = report.reportAdjusments[index].rate;
-					reportType.revenue1 = report.reportAdjusments[index].revenue;
+					reportType.adjustment_1_id = report.reportAdjusments[index].id;
+					reportType.adjustment_1 = report.reportAdjusments[index].adjustment;
+					reportType.hours_1 = report.reportAdjusments[index].hours;
+					reportType.rate_1 = report.reportAdjusments[index].rate;
+					reportType.revenue_1 = report.reportAdjusments[index].revenue;
 				}
 
 				if(index == 1){

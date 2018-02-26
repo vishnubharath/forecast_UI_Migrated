@@ -13,6 +13,7 @@ import {DateComponent} from "../date-component/date.component";
 import {HeaderComponent} from "../header-component/header.component";
 import { ReportService } from "../Report/report.service";
 import { Report } from "../Report/report";
+import { ReportType } from "../Report/ReportType";
 
 @Component({
     selector: 'rich-grid',
@@ -24,8 +25,9 @@ export class RichGridComponent {
 
     private gridOptions:GridOptions;
     public showGrid:boolean;
-    public rowData:Report[];
-    public updatedData:Report[] = new Array<Report>();
+    public serviceRowData:Report[];
+    public rowData:ReportType[];
+    public updatedData:ReportType[] = new Array<ReportType>();
     private columnDefs:any[];
     public rowCount:string;
     public dateComponentFramework:DateComponent;
@@ -54,7 +56,11 @@ export class RichGridComponent {
 
     private createRowData() {
         console.log("enter into create Row data");
-        this._reportservice.getCurrentReport().subscribe(rowdata =>this.rowData=rowdata,err => {
+        this._reportservice.getCurrentReport().subscribe(rowdata =>{
+            this.serviceRowData=rowdata; 
+            this.rowData = this._reportservice.convertReport(this.serviceRowData);
+            console.log(rowdata);
+        },err => {
             console.log(err);
         });
         console.log("inside the create row data"+this.rowData)
@@ -79,7 +85,7 @@ export class RichGridComponent {
                         width: 150, pinned: true
                     },
                     {
-                        headerName: "HR Grade", field: "hrGrade",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "HR Grade", field: "associateGrade",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false
                     },
                     {
@@ -137,24 +143,140 @@ export class RichGridComponent {
                 
                 children: [
                     {
-                        headerName: "Hours", field: "hours",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "Hours", field: "hours1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Adjustment", field: "adjustment",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "Adjustment", field: "adjustment1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Rate", field: "rate",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "Rate", field: "rate1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false
                     },
                     {
-                        headerName: "Revenue", field: "revenue",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        headerName: "Revenue", field: "revenue1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
                         width: 150, pinned: false
                     },
                 ]
             },
             
+            {
+                headerName: 'March',
+                
+                children: [
+                    {
+                        headerName: "Hours", field: "hours2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Adjustment", field: "adjustment2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Rate", field: "rate2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Revenue", field: "revenue2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                ]
+            },
+
+            {
+                headerName: 'April',
+                
+                children: [
+                    {
+                        headerName: "Hours", field: "hours3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Adjustment", field: "adjustment3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Rate", field: "rate3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Revenue", field: "revenue3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                ]
+            },
+
+            {
+                headerName: 'May',
+                
+                children: [
+                    {
+                        headerName: "Hours", field: "hours4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Adjustment", field: "adjustment4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Rate", field: "rate4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Revenue", field: "revenue4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                ]
+            },
+
+            {
+                headerName: 'June',
+                
+                children: [
+                    {
+                        headerName: "Hours", field: "hours5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Adjustment", field: "adjustment5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Rate", field: "rate5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Revenue", field: "revenue5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                ]
+            },
+            
+
+            {
+                headerName: 'July',
+                
+                children: [
+                    {
+                        headerName: "Hours", field: "hours6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Adjustment", field: "adjustment6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Rate", field: "rate6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                    {
+                        headerName: "Revenue", field: "revenue6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
+                        width: 150, pinned: false
+                    },
+                ]
+            },
+           
         ];
     }
 

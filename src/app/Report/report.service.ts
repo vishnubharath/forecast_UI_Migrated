@@ -6,6 +6,7 @@ import { Constants } from '../constants';
 import { Report } from './report';
 import { error } from 'util';
 import {ReportType} from './ReportType'
+import { Adjustment } from './Adjustments';
 
 @Injectable()
 export class ReportService{
@@ -27,8 +28,8 @@ export class ReportService{
 	}
 
 
-	Reportsave(reports:ReportType[]):Promise<ReportType> {
-		return this._http.post(Constants.base_url+'reports/saveRowRecord',reports).toPromise().then((res:Response)=>res.json())
+	reportsave(adjustments:Adjustment[]):Promise<ReportType> {
+		return this._http.post(Constants.base_url+'reports/saveRowRecord',adjustments).toPromise().then((res:Response)=>res.json())
            .catch(error=>console.log(error));
 		
 	}
@@ -68,6 +69,7 @@ export class ReportService{
 			for (let index = 0; index < report.reportAdjusments.length; index++) {
 
 				if(index == 0){
+					reportType.adjustment1_id = report.reportAdjusments[index].id;
 					reportType.adjustment1 = report.reportAdjusments[index].adjustment;
 					reportType.hours1 = report.reportAdjusments[index].hours;
 					reportType.rate1 = report.reportAdjusments[index].rate;
@@ -75,6 +77,7 @@ export class ReportService{
 				}
 
 				if(index == 1){
+					reportType.adjustment2_id = report.reportAdjusments[index].id;
 					reportType.adjustment2 = report.reportAdjusments[index].adjustment;
 					reportType.hours2 = report.reportAdjusments[index].hours;
 					reportType.rate2 = report.reportAdjusments[index].rate;
@@ -82,6 +85,7 @@ export class ReportService{
 				}
 
 				if(index == 2){
+					reportType.adjustment3_id = report.reportAdjusments[index].id;
 					reportType.adjustment3 = report.reportAdjusments[index].adjustment;
 					reportType.hours3 = report.reportAdjusments[index].hours;
 					reportType.rate3 = report.reportAdjusments[index].rate;
@@ -89,6 +93,7 @@ export class ReportService{
 				}
 
 				if(index == 3){
+					reportType.adjustment4_id = report.reportAdjusments[index].id;
 					reportType.adjustment4 = report.reportAdjusments[index].adjustment;
 					reportType.hours4 = report.reportAdjusments[index].hours;
 					reportType.rate4 = report.reportAdjusments[index].rate;
@@ -96,6 +101,7 @@ export class ReportService{
 				}
 
 				if(index == 4){
+					reportType.adjustment5_id = report.reportAdjusments[index].id;
 					reportType.adjustment5 = report.reportAdjusments[index].adjustment;
 					reportType.hours5 = report.reportAdjusments[index].hours;
 					reportType.rate5 = report.reportAdjusments[index].rate;
@@ -103,6 +109,7 @@ export class ReportService{
 				}
 
 				if(index == 5){
+					reportType.adjustment6_id = report.reportAdjusments[index].id;
 					reportType.adjustment6 = report.reportAdjusments[index].adjustment;
 					reportType.hours6 = report.reportAdjusments[index].hours;
 					reportType.rate6 = report.reportAdjusments[index].rate;

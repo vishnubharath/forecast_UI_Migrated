@@ -21,31 +21,37 @@ export class ReportType{
     portfolio:string;    
     poc:string;
 
+    adjustment1_id:number;
     adjustment1:number;    
     hours1:number;
     rate1:number;
     revenue1:string;
 
+    adjustment2_id:number;
     adjustment2:number;    
     hours2:number;
     rate2:number;
     revenue2:string;
 
+    adjustment3_id:number;
     adjustment3:number;    
     hours3:number;
     rate3:number;
     revenue3:string;
 
+    adjustment4_id:number;
     adjustment4:number;    
     hours4:number;
     rate4:number;
     revenue4:string;
 
+    adjustment5_id:number;
     adjustment5:number;    
     hours5:number;
     rate5:number;
     revenue5:string;
 
+    adjustment6_id:number;
     adjustment6:number;    
     hours6:number;
     rate6:number;

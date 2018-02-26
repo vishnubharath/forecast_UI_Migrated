@@ -14,6 +14,7 @@ import {HeaderComponent} from "../header-component/header.component";
 import { ReportService } from "../Report/report.service";
 import { Report } from "../Report/report";
 import { ReportType } from "../Report/ReportType";
+import { Adjustment } from "../Report/Adjustments";
 
 @Component({
     selector: 'rich-grid',
@@ -27,13 +28,13 @@ export class RichGridComponent {
     public showGrid:boolean;
     public serviceRowData:Report[];
     public rowData:ReportType[];
-    public updatedData:ReportType[] = new Array<ReportType>();
     private columnDefs:any[];
     public rowCount:string;
     public dateComponentFramework:DateComponent;
     public HeaderGroupComponent = HeaderGroupComponent;
     public _reportservice:ReportService;
    
+    private updatedValues : Adjustment[] = [];
 
     constructor(_reportservice:ReportService) {
         // we pass an empty gridOptions in, so we can grab the api out
@@ -44,7 +45,7 @@ export class RichGridComponent {
         this.showGrid = true;
         this.gridOptions.dateComponentFramework = DateComponent;
         this.gridOptions.defaultColDef = {
-            editable: true,
+            editable: false,
             width: 100,
             headerComponentFramework : <{new():HeaderComponent}>HeaderComponent,
             headerComponentParams : {
@@ -148,7 +149,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate1",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -171,7 +172,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate2",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -194,7 +195,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate3",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -217,7 +218,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate4",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -240,7 +241,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate5",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -264,7 +265,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Adjustment", field: "adjustment6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false, editable: true
                     },
                     {
                         headerName: "Rate", field: "rate6",filter: "agTextColumnFilter",sortingOrder: ["asc", "desc"],
@@ -305,23 +306,31 @@ export class RichGridComponent {
 
     private onCellValueChanged($event) {
 
-        console.log(this.updatedData);
-
-        if(this.updatedData.filter(data => $event.node.data.reportId === data.reportId ).length > 0)
+        console.log("data..");        
+        console.log("field name : " + $event.colDef.field);       
+        console.log("project id :" + $event.node.data.reportId); 
+        console.log("adj val : " + $event.node.data[$event.colDef.field]);         
+        console.log("adj id : " + $event.node.data[$event.colDef.field + "_id"]);   
+        
+        console.log(this.updatedValues);        
+        
+        if(this.updatedValues.filter(data => $event.node.data[$event.colDef.field + "_id"] === data.id ).length > 0)
         {
             console.log("containts..");
-            this.updatedData.forEach(data => {
-                if(data.reportId === $event.node.data.reportId){
-                    data = $event.node.data;
+            this.updatedValues.forEach(data => {
+                if(data.id === $event.node.data[$event.colDef.field + "_id"]){
+                    data.adjusment = $event.node.data[$event.colDef.field];
                 }                   
             });                        
         }else{
-            console.log("push..");            
-            this.updatedData.push(this.rowData.filter(rw =>  $event.node.data.reportId === rw.reportId )[0]);
+            console.log("push..");   
+            var newValueChanges: Adjustment= new Adjustment();
+            newValueChanges.id = $event.node.data[$event.colDef.field + "_id"];
+            newValueChanges.adjusment = $event.node.data[$event.colDef.field];
+            this.updatedValues.push(newValueChanges);
         }
-        
-        
-        console.log(this.updatedData);
+
+        console.log(this.updatedValues);
 
         console.log('onCellValueChanged: ' + $event.oldValue + ' to ' + $event.newValue+' '+$event.rowIndex+' '+$event.node.data.projectId +" "+$event.node.data.projectName);
     }
@@ -388,8 +397,8 @@ export class RichGridComponent {
     }
     
     public saveUpdated(){
-        this._reportservice.Reportsave(this.updatedData).catch(err=> console.log(err));
-        console.log(this.updatedData);
+        this._reportservice.reportsave(this.updatedValues).catch(err=> console.log(err));
+        console.log(this.updatedValues);
     }
 
     

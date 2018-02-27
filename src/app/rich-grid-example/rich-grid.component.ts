@@ -458,6 +458,8 @@ export class RichGridComponent {
         var params = {
             skipHeader: false,
             columnGroups: true,
+            fileName: "ForeCaseReport",
+            sheetName: "Sheet 1"
           };
         this.gridOptions.api.exportDataAsExcel(params);
       }

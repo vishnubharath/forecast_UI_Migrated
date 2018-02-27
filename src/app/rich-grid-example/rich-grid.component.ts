@@ -451,9 +451,9 @@ export class RichGridComponent {
         );
         console.log(this.updatedValues);
     }
-
-
-
-
+    onBtExport() {
+        this.gridOptions.api.exportDataAsExcel();
+      }
+     
 }
 

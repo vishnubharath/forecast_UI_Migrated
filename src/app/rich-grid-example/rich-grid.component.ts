@@ -57,11 +57,14 @@ export class RichGridComponent {
 
     private createRowData() {
         console.log("enter into create Row data");
+        this.hideprogress = false;
         this._reportservice.getCurrentReport().subscribe(rowdata => {
             this.serviceRowData = rowdata;
             this.rowData = this._reportservice.convertReport(this.serviceRowData);
             console.log(rowdata);
+            this.hideprogress = true;
         }, err => {
+            this.hideprogress = true;
             console.log(err);
         });
         console.log("inside the create row data" + this.rowData)
@@ -69,10 +72,10 @@ export class RichGridComponent {
 
     private createColumnDefs() {
         this.columnDefs = [
-            {
-                headerName: '#', width: 30, checkboxSelection: true, suppressSorting: true,
-                suppressMenu: true, pinned: true
-            },
+            // {
+            //     headerName: '#', width: 30, checkboxSelection: true, suppressSorting: true,
+            //     suppressMenu: true, pinned: true
+            // },
             {
                 headerName: 'Employee ',
 
@@ -452,7 +455,11 @@ export class RichGridComponent {
         console.log(this.updatedValues);
     }
     onBtExport() {
-        this.gridOptions.api.exportDataAsExcel();
+        var params = {
+            skipHeader: false,
+            columnGroups: true,
+          };
+        this.gridOptions.api.exportDataAsExcel(params);
       }
      
 }

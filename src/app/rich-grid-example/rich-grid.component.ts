@@ -12,9 +12,11 @@ import { HeaderGroupComponent } from "../header-group-component/header-group.com
 import { DateComponent } from "../date-component/date.component";
 import { HeaderComponent } from "../header-component/header.component";
 import { ReportService } from "../Report/report.service";
+import { ProjectService } from "../Report/project.service";
 import { Report } from "../Report/report";
 import { ReportType } from "../Report/ReportType";
 import { Adjustment } from "../Report/Adjustments";
+import { Project } from "../Report/Project";
 
 @Component({
     selector: 'rich-grid',
@@ -27,18 +29,22 @@ export class RichGridComponent {
     private gridOptions: GridOptions;
     public showGrid: boolean;
     public serviceRowData: Report[];
+    public projects: Project[];
+    public chosenProject:string[];
     public rowData: ReportType[];
     private columnDefs: any[];
     public rowCount: string;
     public dateComponentFramework: DateComponent;
     public HeaderGroupComponent = HeaderGroupComponent;
     public _reportservice: ReportService;
+    public _projectService: ProjectService;
     public hideprogress: boolean = true;
     private updatedValues: Adjustment[] = [];
 
-    constructor(_reportservice: ReportService) {
+    constructor(_reportservice: ReportService, _projectService: ProjectService ) {
         // we pass an empty gridOptions in, so we can grab the api out
         this._reportservice = _reportservice;
+        this._projectService = _projectService;
         this.gridOptions = <GridOptions>{};
         this.createRowData();
         this.createColumnDefs();
@@ -67,6 +73,14 @@ export class RichGridComponent {
             this.hideprogress = true;
             console.log(err);
         });
+
+        this._projectService.getAllProjects().subscribe(projects => {
+            this.projects = projects;
+            console.log("projects ");
+            console.log(projects);
+            
+        });
+
         console.log("inside the create row data" + this.rowData)
     }
 
@@ -463,6 +477,26 @@ export class RichGridComponent {
           };
         this.gridOptions.api.exportDataAsExcel(params);
       }
+
+    getReports(){
+
+        console.log(this.chosenProject);
+        
+        var projects: Project[] = [];
+
+        this.chosenProject.forEach( id => 
+            {
+                var project :Project = new Project();
+                project.projectId = parseInt(id);
+                project.projectName = "test";
+                projects.push(project);
+            });
+
+        this._reportservice.getReportForProject(this.chosenProject)
+            .subscribe( data => { this.rowData = this._reportservice.convertReport(data)}
+            );
+
+    }
      
 }
 

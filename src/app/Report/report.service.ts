@@ -7,6 +7,7 @@ import { Report } from './report';
 import { error } from 'util';
 import {ReportType} from './ReportType'
 import { Adjustment } from './Adjustments';
+import { Project } from './Project';
 
 @Injectable()
 export class ReportService{
@@ -18,6 +19,23 @@ export class ReportService{
 	getCurrentReport():Observable<Report[]>{
 		return this._http
 		.get(Constants.base_url+'reports/all' )
+		.map((res:Response) => res.json())
+		.catch(error=>{
+			let errMsg = (error.message) ? error.message :
+				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+			console.error(errMsg); // log to console instead
+			return Observable.throw(errMsg);
+		});
+	}
+	getReportForProject(projects:string[]){
+
+		var query:string = "?requestBy=";
+		for(var i = 0;i<projects.length; i++){
+			query = query + projects[i]+",";
+		}
+		
+		return this._http
+		.get(Constants.base_url+'reports/project'+query )
 		.map((res:Response) => res.json())
 		.catch(error=>{
 			let errMsg = (error.message) ? error.message :

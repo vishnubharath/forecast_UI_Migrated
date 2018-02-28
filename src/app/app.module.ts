@@ -12,6 +12,7 @@ import {DateComponent} from "./date-component/date.component";
 import {HeaderComponent} from "./header-component/header.component";
 import {HeaderGroupComponent} from "./header-group-component/header-group.component";
 import { ReportService } from "./Report/report.service";
+import { ProjectService } from "./Report/project.service";
 
 @NgModule({
     imports: [
@@ -34,7 +35,7 @@ import { ReportService } from "./Report/report.service";
         HeaderComponent,
         HeaderGroupComponent
     ],
-    providers: [ReportService],
+    providers: [ReportService, ProjectService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

@@ -4,4 +4,8 @@ export class ReportAdjusment{
     hours:number;
     rate:number;
     revenue:string;
+    actualMonth:string;
+    forecastedMonth:string;
+    forecastedYear:number;
+   
 }

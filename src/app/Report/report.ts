@@ -5,13 +5,13 @@ export class Report{
     employeeId:number;    
     associateId:number;    
     associateName:string;    
-    city:string;    
-    location:string;    
+    associateCity:string;    
+    locationType:string;    
     customerId:number;    
     customerName:string;    
     projectId:number;    
     projectName:string;    
-    billability:string;    
+    billableType:string;    
     associateGrade:string;    
     allocStartDate:number;    
     projectBillability:string;    
@@ -22,5 +22,5 @@ export class Report{
     lastUpdatedTime:number;    
     portfolio:string;    
     poc:string;
-    reportAdjusments:ReportAdjusment[]
+    reportAdjustmentEntity:ReportAdjusment[]
     }

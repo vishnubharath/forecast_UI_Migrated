@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from "@angular/core";
 import { GridOptions } from "ag-grid/main";
 
 import ProficiencyFilter from '../filters/proficiencyFilter';
-
+import {MatDialog} from '@angular/material';
 
 
 // only import this if you are using the ag-Grid-Enterprise
@@ -17,6 +17,7 @@ import { Report } from "../Report/report";
 import { ReportType } from "../Report/ReportType";
 import { Adjustment } from "../Report/Adjustments";
 import { Project } from "../Report/Project";
+import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
 
 @Component({
     selector: 'rich-grid',
@@ -40,8 +41,12 @@ export class RichGridComponent {
     public _projectService: ProjectService;
     public hideprogress: boolean = true;
     private updatedValues: Adjustment[] = [];
+    public selectedRow:boolean=false;
+    public selectedRowIndex;
+    public editable:boolean=false;
+    public  duplicaterowData: ReportType[]=[];
 
-    constructor(_reportservice: ReportService, _projectService: ProjectService ) {
+    constructor(_reportservice: ReportService, _projectService: ProjectService ,public dialog: MatDialog) {
         // we pass an empty gridOptions in, so we can grab the api out
         this._reportservice = _reportservice;
         this._projectService = _projectService;
@@ -66,6 +71,7 @@ export class RichGridComponent {
         this.hideprogress = false;
         this._reportservice.getCurrentReport().subscribe(rowdata => {
             this.serviceRowData = rowdata;
+            this.createDynamicColumn(this.serviceRowData[0])
             this.rowData = this._reportservice.convertReport(this.serviceRowData);
             console.log(rowdata);
             this.hideprogress = true;
@@ -83,13 +89,52 @@ export class RichGridComponent {
 
         console.log("inside the create row data" + this.rowData)
     }
-
+    private createDynamicColumn(reportdata:Report){
+        console.log("Length of the record"+reportdata.reportAdjustmentEntity.length)
+               
+                for(let i=0;i<reportdata.reportAdjustmentEntity.length;i++){
+    
+              var params=  {
+                        headerName: reportdata.reportAdjustmentEntity[i].forecastedMonth,
+        
+                        children: [
+                            {
+                                headerName: "Hours", field: "hours_"+[i+1], sortingOrder: ["asc", "desc"],filter: "agTextColumnFilter",
+                                width: 150, pinned: false, editable: true
+                            },
+                            {
+                                headerName: "Adjustment", field: "adjustment_"+[i+1], filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                                width: 150, pinned: false, editable: true
+                            },
+                            {
+                                headerName: "Rate", field: "rate_"+[i+1], filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                                width: 150, pinned: false, editable: true
+                            },
+                            {
+                                headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+                                    let hours=params.data["hours_"+[i+1]];
+                                    let adjustment=params.data["adjustment_"+[i+1]];
+                                    let rate=params.data["rate_"+[i+1]];
+                                    params.data["revenue_"+[i+1]]=(hours - adjustment) * rate;
+                                    return params.data["revenue_"+[i+1]];
+                                }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                                width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+                                    return "CAD" + " " + params.data["revenue_"+[i+1]].toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+                                }
+                            }
+                        ]
+                    }
+                    this.columnDefs.push(params);   
+            }
+            this.gridOptions.api.setColumnDefs(this.columnDefs);
+            this.gridOptions.api.redrawRows();
+        }
     private createColumnDefs() {
         this.columnDefs = [
-            // {
-            //     headerName: '#', width: 30, checkboxSelection: true, suppressSorting: true,
-            //     suppressMenu: true, pinned: true
-            // },
+            {
+                headerName: '#', width: 30, checkboxSelection: true, suppressSorting: true,
+                suppressMenu: true, pinned: true
+            },
             {
                 headerName: 'Employee ',
 
@@ -108,7 +153,7 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Location", field: "location", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false,editable:true
                     },
                     {
                         headerName: "City", field: "city", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
@@ -156,176 +201,176 @@ export class RichGridComponent {
                 ]
             },
 
-            {
-                headerName: 'Feb',
+            // {
+            //     headerName: 'Feb',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueFormatter: function RevenueFormater(params) {
-                            console.log(params.data.revenue_1);
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_1", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueFormatter: function RevenueFormater(params) {
+            //                 console.log(params.data.revenue_1);
 
-                            return "CAD" + " " + params.data.revenue_1.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_1 = (params.data.hours_1 - params.data.adjustment_1) * params.data.rate_1
-                            return params.data.revenue_1;
-                        }
-                    },
-                ]
-            },
+            //                 return "CAD" + " " + params.data.revenue_1.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_1 = (params.data.hours_1 - params.data.adjustment_1) * params.data.rate_1
+            //                 return params.data.revenue_1;
+            //             }
+            //         },
+            //     ]
+            // },
 
-            {
-                headerName: 'March',
+            // {
+            //     headerName: 'March',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_2 = (params.data.hours_2 - params.data.adjustment_2) * params.data.rate_2
-                            return params.data.revenue_2;
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue_2.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }
-                    },
-                ]
-            },
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_2", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_2 = (params.data.hours_2 - params.data.adjustment_2) * params.data.rate_2
+            //                 return params.data.revenue_2;
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+            //                 return "CAD" + " " + params.data.revenue_2.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }
+            //         },
+            //     ]
+            // },
 
-            {
-                headerName: 'April',
+            // {
+            //     headerName: 'April',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_3 = (params.data.hours_3 - params.data.adjustment_3) * params.data.rate_3
-                            return params.data.revenue_3;
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue_3.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }
-                    },
-                ]
-            },
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_3", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_3 = (params.data.hours_3 - params.data.adjustment_3) * params.data.rate_3
+            //                 return params.data.revenue_3;
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+            //                 return "CAD" + " " + params.data.revenue_3.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }
+            //         },
+            //     ]
+            // },
 
-            {
-                headerName: 'May',
+            // {
+            //     headerName: 'May',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_4 = (params.data.hours_4 - params.data.adjustment_4) * params.data.rate_4
-                            return params.data.revenue_4;
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue_4.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }
-                    },
-                ]
-            },
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_4", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_4 = (params.data.hours_4 - params.data.adjustment_4) * params.data.rate_4
+            //                 return params.data.revenue_4;
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+            //                 return "CAD" + " " + params.data.revenue_4.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }
+            //         },
+            //     ]
+            // },
 
-            {
-                headerName: 'June',
+            // {
+            //     headerName: 'June',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_5 = (params.data.hours_5 - params.data.adjustment_5) * params.data.rate_5
-                            return params.data.revenue_5;
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue_5.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }
-                    },
-                ]
-            },
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_5", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_5 = (params.data.hours_5 - params.data.adjustment_5) * params.data.rate_5
+            //                 return params.data.revenue_5;
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+            //                 return "CAD" + " " + params.data.revenue_5.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }
+            //         },
+            //     ]
+            // },
 
 
-            {
-                headerName: 'July',
+            // {
+            //     headerName: 'July',
 
-                children: [
-                    {
-                        headerName: "Hours", field: "hours_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Adjustment", field: "adjustment_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Rate", field: "rate_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, editable: true
-                    },
-                    {
-                        headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
-                            params.data.revenue_6 = (params.data.hours_6 - params.data.adjustment_6) * params.data.rate_6
-                            return params.data.revenue_6;
-                        }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
-                            return "CAD" + " " + params.data.revenue_6.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
-                        }
-                    },
-                ]
-            },
+            //     children: [
+            //         {
+            //             headerName: "Hours", field: "hours_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Adjustment", field: "adjustment_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Rate", field: "rate_6", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, editable: true
+            //         },
+            //         {
+            //             headerName: "Revenue", valueGetter: function aPlusBValueGetter(params) {
+            //                 params.data.revenue_6 = (params.data.hours_6 - params.data.adjustment_6) * params.data.rate_6
+            //                 return params.data.revenue_6;
+            //             }, filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+            //             width: 150, pinned: false, valueFormatter: function RevenueFormater(params) {
+            //                 return "CAD" + " " + params.data.revenue_6.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,");
+            //             }
+            //         },
+            //     ]
+            // },
 
         ];
     }
@@ -351,6 +396,9 @@ export class RichGridComponent {
 
     private onCellClicked($event) {
         console.log('onCellClicked: ' + $event.rowIndex + ' ' + $event.colDef.field);
+        if($event.rowIndex!=this.selectedRowIndex){
+            this.editable=false;
+        }
     }
 
     private onCellValueChanged($event) {
@@ -369,18 +417,36 @@ export class RichGridComponent {
         console.log("adj id : " + $event.node.data[idFiled]);
         console.log("hours : " + $event.node.data[hoursFiled]);
         console.log("rate : " + $event.node.data[rateFiled]);
-
+        console.log("project id : " + $event.node.data["projectId"]);
+        console.log("associate id : " + $event.node.data["associateId"]);
 
 
         console.log(this.updatedValues);
 
-        if (this.updatedValues.filter(data => $event.node.data[idFiled] === data.id).length > 0) {
+        if($event.node.data.reportId===null){
+            // if (this.duplicaterowData.filter(data => $event.node.data[idFiled] === data).length > 0) {
+                 console.log("Duplicate record changes..");
+                 this.duplicaterowData.forEach(data => {
+                     if (data.associateId === $event.node.data["associateId"] && data.projectId === $event.node.data["projectId"]) {
+                         // data.adjusment = $event.node.data[adjustment];
+                         // data.hours = $event.node.data[hoursFiled];
+                         // data.rate = $event.node.data[rateFiled];
+                         // data.projectId=$event.node.data["projectId"];
+                         // data.associateId=$event.node.data["associateId"];
+                         data[$event.colDef.field]=$event.newValue;
+                     }
+                 });
+          //   }
+         }else if (this.updatedValues.filter(data => $event.node.data[idFiled] === data.id).length > 0) {
             console.log("containts..");
             this.updatedValues.forEach(data => {
                 if (data.id === $event.node.data[idFiled]) {
                     data.adjusment = $event.node.data[adjustment];
                     data.hours = $event.node.data[hoursFiled];
                     data.rate = $event.node.data[rateFiled];
+                    data.projectId=$event.node.data["projectId"];
+                    data.associateId=$event.node.data["associateId"];
+                    data.locationType=$event.node.data["location"];
                 }
             });
         } else {
@@ -390,11 +456,28 @@ export class RichGridComponent {
             newValueChanges.adjusment = $event.node.data[adjustment];
             newValueChanges.hours = $event.node.data[hoursFiled];
             newValueChanges.rate = $event.node.data[rateFiled];
+            newValueChanges.rowIndex=$event.rowIndex;
+            newValueChanges.projectId=$event.node.data["projectId"];
+            newValueChanges.associateId=$event.node.data["associateId"];
+            newValueChanges.locationType=$event.node.data["location"];
             this.updatedValues.push(newValueChanges);
         }
 
         console.log(this.updatedValues);
-
+ // this.updatedValues.forEach(data => {
+        //     console.log("===============");
+            
+        //     console.log(data.rowIndex);
+            
+        //     this.gridOptions.getRowStyle = function(params) {
+        //         console.log(params.node.rowIndex);
+        //         console.log(data.rowIndex);
+        //         console.log("====================");
+                
+        //             if (data.rowIndex === params.node.rowIndex) {
+        //                 return { background: 'green' }
+        //             }
+        //     }});
         console.log('onCellValueChanged: ' + $event.oldValue + ' to ' + $event.newValue + ' ' + $event.rowIndex + ' ' + $event.node.data.projectId + " " + $event.node.data.projectName);
     }
 
@@ -417,6 +500,14 @@ export class RichGridComponent {
 
     private onSelectionChanged() {
         console.log('selectionChanged');
+        this.editable=true
+        if(this.gridOptions.api.getSelectedRows().length>0){
+            this.selectedRow=true;
+            this.selectedRowIndex=this.gridOptions.api.getSelectedNodes()[0].childIndex;
+        }else{
+            this.selectedRow=false;
+            this.selectedRowIndex="";
+        }
     }
 
     private onBeforeFilterChanged() {
@@ -461,12 +552,23 @@ export class RichGridComponent {
 
     public saveUpdated() {
         this.hideprogress = false;
-        this._reportservice.reportsave(this.updatedValues).then(data => {
-            this.hideprogress = true;
-            //alert("Updated");
-        }).catch(err => { console.log(err); this.hideprogress = true; }
-        );
-        console.log(this.updatedValues);
+        
+        if(this.duplicaterowData.length>0){
+            this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
+                this.hideprogress = true;
+                //alert("Updated");
+            }).catch(err => { console.log(err); this.hideprogress = true; }
+            );
+            console.log(this.duplicaterowData);
+        }
+        if(this.updatedValues.length>0){
+            this._reportservice.reportsave(this.updatedValues).then(data => {
+                this.hideprogress = true;
+                //alert("Updated");
+            }).catch(err => { console.log(err); this.hideprogress = true; }
+            );
+            console.log(this.updatedValues);
+        }
     }
     onBtExport() {
         var params = {
@@ -497,6 +599,36 @@ export class RichGridComponent {
             .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
             );
 
+    }
+
+
+    onDuplicateRow(){
+        if(this.selectedRow){
+          var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
+          console.log(rowData_record);
+          console.log(rowData_record);
+          this.duplicaterowData.push(rowData_record[0]);
+          this.gridOptions.api.updateRowData({ add: rowData_record,addIndex: this.selectedRowIndex+1 });
+          rowData_record=null;
+          // this.gridOptions.api.startEditingCell({
+          //     rowIndex: 0,
+          //     colKey: "associateId"
+          //   });
+          //   this.gridOptions.api.setFocusedCell(0, "associateId")
+            
+        }
+      console.log("data from duplicate "+this.duplicaterowData);
+      
+    }
+
+    openDialog(){
+        const dialogRef = this.dialog.open(UpdateReportDialog, {
+           
+          });
+      
+          dialogRef.afterClosed().subscribe(result => {
+            console.log(`Dialog result: ${result}`);
+          });
     }
      
 }

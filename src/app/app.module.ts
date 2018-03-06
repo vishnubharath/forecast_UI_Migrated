@@ -14,11 +14,27 @@ import {HeaderGroupComponent} from "./header-group-component/header-group.compon
 import { ReportService } from "./Report/report.service";
 import { ProjectService } from "./Report/project.service";
 
+
+import { MatButtonModule, MatCheckboxModule, MatInputModule } from '@angular/material';
+import { MatDialogModule } from '@angular/material/dialog';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { UpdateReportDialog } from './Dialog/update-report-dialog.component';
+
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
+        BrowserAnimationsModule,
+        MatButtonModule, MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule,
+        MatDialogModule, MatGridListModule, MatInputModule,MatIconModule,
+        MatFormFieldModule,
     JsonpModule,
         AgGridModule.withComponents(
             [
@@ -33,10 +49,13 @@ import { ProjectService } from "./Report/project.service";
         RichGridComponent,
         DateComponent,
         HeaderComponent,
-        HeaderGroupComponent
+        HeaderGroupComponent,UpdateReportDialog
     ],
     providers: [ReportService, ProjectService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [
+        UpdateReportDialog
+      ]
 })
 export class AppModule {
 }

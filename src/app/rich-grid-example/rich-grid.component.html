@@ -1,8 +1,44 @@
+<mat-toolbar color="primary" role="header">  
+    <mat-toolbar-row>
+        <mat-icon class="app-icon">assignment_turned_in</mat-icon>
+        <span style="padding-left: 10px">Forecast Costing & Reports</span>
+        <span class="headder-spacer"></span>
+        <span>
+                <img *ngIf="hideprogress == false" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif" style="width: 80px;">
+        </span>
+    </mat-toolbar-row>
+</mat-toolbar>
+<mat-card style="margin: 5px;" >
+    <button mat-raised-button (click)="onBtExport()" >Export As Excel</button>
+    <span class="controls-spacing"></span>
+    <button mat-raised-button (click)="createRowData()" >Refresh Data</button>
+    <span class="controls-spacing"></span>
+    <button mat-raised-button (click)="saveUpdated()" >Save</button>
+    <span class="controls-spacing"></span>
+    <input mat-raised-button (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Filter Results"/>
+    <span class="controls-spacing"></span>
+    <input matInput placeholder="Project" aria-label="Project" [matAutocomplete]="auto2" [formControl]="projectCtrl">
+    <mat-autocomplete #auto2="matAutocomplete">
+        <mat-option *ngFor="let project of filteredProjectsObs | async" [value]="project.projectId" (click)="autoCompleate()" >
+            <span>{{ project.projectName }}</span>
+        </mat-option>
+    </mat-autocomplete> 
+    
+    
+    <mat-card style="margin: 5px;" *ngIf="chosenProjectArray.length > 0">
+        <mat-chip-list >
+            <mat-chip *ngFor="let chip of chosenProjectArray" selected="true" [color]="chip.color" style="padding:5px; margin: 5px">
+            {{chip}}
+            <mat-icon matChipRemove >cancel</mat-icon>
+            </mat-chip>
+        </mat-chip-list>
+        <button mat-raised-button (click)="getReports()" style="margin: 5px" >Fetch</button>
+    </mat-card>
+
+</mat-card>
 <div id='top'>
-    <h1>Forecast Costing & Reports  <img *ngIf="hideprogress == false" src="https://loading.io/spinners/color-bar/index.colorful-progress-loader.gif" alt="colorful progress bar"></h1>    
     <div style="padding: 4px;">
-        <div style="float: right;">
-           
+        <div style="float: right;">                       
         </div>
         <!-- <div>
             <b>Employees Skills and Contact Details</b>
@@ -30,6 +66,7 @@
         </div> -->
         <div style="clear: both;"></div>
         <div style="padding: 4px;" class="toolbar">
+                
             <label >
                 <input type="button"  value="Export As Excel" (click)="onBtExport()"/>
                 

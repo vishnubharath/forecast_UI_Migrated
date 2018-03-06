@@ -48,6 +48,10 @@ export class RichGridComponent {
     public _projectService: ProjectService;
     public hideprogress: boolean = true;
     private updatedValues: Adjustment[] = [];
+    public selectedRow:boolean=false;
+    public selectedRowIndex;
+    public editable:boolean=false;
+    public  duplicaterowData: ReportType[]=[];
 
     //Controls
     projectCtrl: FormControl;
@@ -645,13 +649,13 @@ export class RichGridComponent {
     }
 
     openDialog(){
-        const dialogRef = this.dialog.open(UpdateReportDialog, {
+        /**const dialogRef = this.dialog.open(UpdateReportDialog, {
            
           });
       
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
-          });
+          }); **/
     }
     
 

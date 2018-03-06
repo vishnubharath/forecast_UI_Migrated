@@ -1,0 +1,14 @@
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.headder-spacer{
+    flex: 1 1 auto;
+ }
+
+ .controls-spacing {
+     padding : 5px;
+ }
+
+ .header-toolbar {
+    position: fixed;
+    z-index: 2;
+}

@@ -492,8 +492,9 @@ export class RichGridComponent {
                 projects.push(project);
             });
 
+        this.hideprogress = false;
         this._reportservice.getReportForProject(this.chosenProject)
-            .subscribe( data => { this.rowData = this._reportservice.convertReport(data)}
+            .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
             );
 
     }

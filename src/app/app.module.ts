@@ -1,11 +1,9 @@
 import {NgModule} from "@angular/core";
 import {BrowserModule} from "@angular/platform-browser";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { HttpModule, JsonpModule } from '@angular/http';
 // ag-grid
 import {AgGridModule} from "ag-grid-angular/main";
-// application
-import {AppComponent} from "./app.component";
 // rich grid
 import {RichGridComponent} from "./rich-grid-example/rich-grid.component";
 import {DateComponent} from "./date-component/date.component";
@@ -13,28 +11,33 @@ import {HeaderComponent} from "./header-component/header.component";
 import {HeaderGroupComponent} from "./header-group-component/header-group.component";
 import { ReportService } from "./Report/report.service";
 import { ProjectService } from "./Report/project.service";
+// application
+import {AppComponent} from "./app.component";
 
-
-import { MatButtonModule, MatCheckboxModule, MatInputModule } from '@angular/material';
-import { MatDialogModule } from '@angular/material/dialog';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSortModule } from '@angular/material/sort';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatIconModule } from '@angular/material/icon';
-import { UpdateReportDialog } from './Dialog/update-report-dialog.component';
+//material
+import {MatButtonModule} from '@angular/material/button';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatIconModule} from '@angular/material/icon';
+import {MatCardModule} from '@angular/material/card';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatSelectModule} from '@angular/material/select';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
+        ReactiveFormsModule,
         HttpModule,
-        BrowserAnimationsModule,
-        MatButtonModule, MatCheckboxModule, MatTableModule, MatPaginatorModule, MatSortModule,
-        MatDialogModule, MatGridListModule, MatInputModule,MatIconModule,
-        MatFormFieldModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        MatIconModule,
+        MatSelectModule,
+        MatChipsModule,
+        MatToolbarModule,
+        MatCardModule,        
+        MatAutocompleteModule,
     JsonpModule,
         AgGridModule.withComponents(
             [
@@ -49,13 +52,10 @@ import { UpdateReportDialog } from './Dialog/update-report-dialog.component';
         RichGridComponent,
         DateComponent,
         HeaderComponent,
-        HeaderGroupComponent,UpdateReportDialog
+        HeaderGroupComponent
     ],
     providers: [ReportService, ProjectService],
-    bootstrap: [AppComponent],
-    entryComponents: [
-        UpdateReportDialog
-      ]
+    bootstrap: [AppComponent]
 })
 export class AppModule {
 }

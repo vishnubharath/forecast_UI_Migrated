@@ -1,5 +1,9 @@
 import { Component, ViewEncapsulation } from "@angular/core";
 import { GridOptions } from "ag-grid/main";
+import {FormControl} from '@angular/forms';
+import {Observable} from 'rxjs/Observable';
+import {startWith} from 'rxjs/operators/startWith';
+import {map} from 'rxjs/operators/map';
 
 import ProficiencyFilter from '../filters/proficiencyFilter';
 import {MatDialog} from '@angular/material';
@@ -31,7 +35,10 @@ export class RichGridComponent {
     public showGrid: boolean;
     public serviceRowData: Report[];
     public projects: Project[];
+    public filteredProjects: Project[];
+    public filteredProjectsObs : Observable<any[]>;
     public chosenProject:string[];
+    public chosenProjectArray:Array<String> = new Array<String>();
     public rowData: ReportType[];
     private columnDefs: any[];
     public rowCount: string;
@@ -41,12 +48,11 @@ export class RichGridComponent {
     public _projectService: ProjectService;
     public hideprogress: boolean = true;
     private updatedValues: Adjustment[] = [];
-    public selectedRow:boolean=false;
-    public selectedRowIndex;
-    public editable:boolean=false;
-    public  duplicaterowData: ReportType[]=[];
 
-    constructor(_reportservice: ReportService, _projectService: ProjectService ,public dialog: MatDialog) {
+    //Controls
+    projectCtrl: FormControl;
+
+    constructor(_reportservice: ReportService, _projectService: ProjectService ) {
         // we pass an empty gridOptions in, so we can grab the api out
         this._reportservice = _reportservice;
         this._projectService = _projectService;
@@ -64,8 +70,25 @@ export class RichGridComponent {
             }
         }
 
+        //Control
+        this.projectCtrl = new FormControl();
+        this.projectCtrl.valueChanges.subscribe( value => { 
+            console.log("test .."  + value) 
+            
+            this.filteredProjects = this.projects.filter(project =>
+                project.projectName.toLowerCase().indexOf((value + "").toLowerCase()) === 0);
+            
+            this.filteredProjectsObs = new Observable<Project[]>(
+                observer => {
+                    observer.next(this.filteredProjects);
+                }
+
+            );
+        });
+
     }
 
+   
     private createRowData() {
         console.log("enter into create Row data");
         this.hideprogress = false;
@@ -629,6 +652,20 @@ export class RichGridComponent {
           dialogRef.afterClosed().subscribe(result => {
             console.log(`Dialog result: ${result}`);
           });
+    }
+    
+
+    autoCompleate(){
+        console.log("auto ..." + this.projectCtrl.value);
+        //this.chosenProject[0] = this.projectCtrl.value;
+        this.chosenProjectArray.push(this.projectCtrl.value)
+        console.log(this.chosenProject);
+        console.log(this.chosenProjectArray);       
+        console.log(this.chosenProjectArray.toString().split(','));
+
+        this.chosenProject = this.chosenProjectArray.toString().split(',');
+        console.log(this.chosenProject);      
+        
     }
      
 }

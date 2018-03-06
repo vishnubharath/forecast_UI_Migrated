@@ -88,7 +88,8 @@ export class ReportService{
 			recordData.poc=record.poc;
 			var reportAdjusments:ReportAdjusment[]  = [];
 			for(let i=0;i<12;i++){
-				if(record["adjustment_"+[i+1]]!=null && record["adjustment_"+[i+1]]!=""){
+				//if(record["adjustment_"+[i+1]]!=null || record["adjustment_"+[i+1]]!="" || record["adjustment_"+[i+1]+"_id"]!=null || record["hours_"+[i+1]]!=null){
+					if(!(record["adjustment_"+[i+1]+"_id"]===undefined)){
 					var reportAdjusment:ReportAdjusment = new ReportAdjusment();
 					//reportAdjusment.id=record["adjustment_"+[i+1]+"_id"];
 					reportAdjusment.adjustment=record["adjustment_"+[i+1]];
@@ -237,7 +238,7 @@ export class ReportService{
 			
 			for (let index = 0; index < 12; index++) {
 				if(report["adjustment_"+[index+1]+"_id"]!=null && report["adjustment_"+[index+1]+"_id"]!=""){
-				//reportType["adjustment_"+[index+1]+"_id"] = report["adjustment_"+[index+1]+"_id"];
+				reportType["adjustment_"+[index+1]+"_id"] = report["adjustment_"+[index+1]+"_id"];
 				reportType["adjustment_"+[index+1]] = report["adjustment_"+[index+1]];
 				reportType["hours_"+[index+1]]= report["hours_"+[index+1]];
 				reportType["rate_"+[index+1]] = report["rate_"+[index+1]];

@@ -28,6 +28,16 @@ export class ReportService{
 			return Observable.throw(errMsg);
 		});
 	}
+
+	deleteReport(deleteRecord:ReportType[]){
+		return this._http.post(Constants.base_url+'reports/deleteRecords',this.convertDuplicatReport(deleteRecord)).map((res:Response) => res.json())
+		.catch(error=>{
+			let errMsg = (error.message) ? error.message :
+				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+			console.error(errMsg); // log to console instead
+			return Observable.throw(errMsg);
+		});
+	}
 	getReportForProject(projects:string[]){
 
 		var query:string = "?requestBy=";

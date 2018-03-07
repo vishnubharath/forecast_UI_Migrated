@@ -75,7 +75,8 @@
             <input (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Type text to filter..."/>
             <button (click)="saveUpdated()">Save</button>
             <button (click)="onDuplicateRow()"  [disabled]="!selectedRow" >Duplicate Row</button>
-            <button (click)="openDialog()">Add Data</button>
+            <button (click)="onDeleteRow()"  [disabled]="!selectedRow" >Delete Row</button>
+            <button (click)="showDialog = !showDialog" class="btn">Add Data</button>
             
         </div>
         <div style="padding: 4px;"  class="toolbar">
@@ -89,6 +90,10 @@
                 </select>
             </div>            
         </div>
+        <app-dialog [(visible)]="showDialog">
+            <h1>Hello World</h1>
+            <button (click)="showDialog = !showDialog" class="btn">Close</button>
+          </app-dialog>
         <div>
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
 

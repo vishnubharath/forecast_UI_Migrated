@@ -21,7 +21,7 @@ import { Report } from "../Report/report";
 import { ReportType } from "../Report/ReportType";
 import { Adjustment } from "../Report/Adjustments";
 import { Project } from "../Report/Project";
-import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
+//import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
 
 @Component({
     selector: 'rich-grid',
@@ -57,7 +57,7 @@ export class RichGridComponent {
     public  errorData: ReportType[]=[];
     public  parentRowData = new Map();
     private rowClassRules;
-
+    showDialog = false;
     //Controls
     projectCtrl: FormControl;
 
@@ -469,7 +469,7 @@ export class RichGridComponent {
 
         console.log(this.updatedValues);
 
-        if($event.node.data.reportId===null){
+        if($event.node.data.reportId===undefined){
             // if (this.duplicaterowData.filter(data => $event.node.data[idFiled] === data).length > 0) {
                  console.log("Duplicate record changes..");
                  this.duplicaterowData.forEach(data => {
@@ -698,14 +698,23 @@ export class RichGridComponent {
       
     }
 
+    onDeleteRow(){
+        if(this.selectedRow){
+            var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
+            this._reportservice.deleteReport(rowData_record).subscribe(result => {
+                console.log(result);
+            });
+        } 
+    }
+
     openDialog(){
-        /**const dialogRef = this.dialog.open(UpdateReportDialog, {
+        // const dialogRef = this.dialog.open(UpdateReportDialog, {
            
-          });
+        //   });
       
-          dialogRef.afterClosed().subscribe(result => {
-            console.log(`Dialog result: ${result}`);
-          }); **/
+        //   dialogRef.afterClosed().subscribe(result => {
+        //     console.log(`Dialog result: ${result}`);
+        //   }); 
     }
     
 

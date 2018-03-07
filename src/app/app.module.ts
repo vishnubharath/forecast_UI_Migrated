@@ -23,10 +23,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
 import {MatChipsModule} from '@angular/material/chips';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DialogComponent } from "./rich-grid-example/dialog.component";
+
+
 
 @NgModule({
     imports: [
         BrowserModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         HttpModule,
@@ -52,10 +57,13 @@ import {MatChipsModule} from '@angular/material/chips';
         RichGridComponent,
         DateComponent,
         HeaderComponent,
-        HeaderGroupComponent
+        HeaderGroupComponent,DialogComponent
     ],
     providers: [ReportService, ProjectService],
     bootstrap: [AppComponent]
+    // entryComponents: [
+    //     UpdateReportDialog
+    //   ]
 })
 export class AppModule {
 }

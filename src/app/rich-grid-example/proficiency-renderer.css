@@ -41,3 +41,10 @@ label {
 .ag-menu {
     z-index: 50;
 }
+
+.ag-fresh .duplicated-row {
+    background-color: lightgreen !important;
+}
+ .ag-fresh .duplicated_row_error {
+    background-color: lightcoral !important;
+}

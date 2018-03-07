@@ -48,10 +48,15 @@ export class RichGridComponent {
     public _projectService: ProjectService;
     public hideprogress: boolean = true;
     private updatedValues: Adjustment[] = [];
+    private updatedRowData: ReportType[] = [];
     public selectedRow:boolean=false;
     public selectedRowIndex;
     public editable:boolean=false;
     public  duplicaterowData: ReportType[]=[];
+    //public parentRowData: ReportType[]=[];
+    public  errorData: ReportType[]=[];
+    public  parentRowData = new Map();
+    private rowClassRules;
 
     //Controls
     projectCtrl: FormControl;
@@ -90,6 +95,20 @@ export class RichGridComponent {
             );
         });
 
+
+        this.rowClassRules = {
+            "duplicated-row": function(params){
+                return params.data.reportId===undefined;
+            }
+            // "duplicated_row_error": function(params){
+            //     if(params.data.reportId===undefined){
+            //             return true;
+            //     }
+            //     return false
+            // }
+            
+
+          };
     }
 
    
@@ -464,30 +483,37 @@ export class RichGridComponent {
                      }
                  });
           //   }
-         }else if (this.updatedValues.filter(data => $event.node.data[idFiled] === data.id).length > 0) {
+         }else if (this.updatedRowData.filter(data => $event.node.data[idFiled] === data[idFiled]).length > 0) {
             console.log("containts..");
-            this.updatedValues.forEach(data => {
-                if (data.id === $event.node.data[idFiled]) {
-                    data.adjusment = $event.node.data[adjustment];
-                    data.hours = $event.node.data[hoursFiled];
-                    data.rate = $event.node.data[rateFiled];
-                    data.projectId=$event.node.data["projectId"];
-                    data.associateId=$event.node.data["associateId"];
-                    data.locationType=$event.node.data["location"];
+            this.updatedRowData.forEach(data => {
+                if (data[idFiled] === $event.node.data[idFiled]) {
+                    // data.adjusment = $event.node.data[adjustment];
+                    // data.hours = $event.node.data[hoursFiled];
+                    // data.rate = $event.node.data[rateFiled];
+                    // data.projectId=$event.node.data["projectId"];
+                    // data.associateId=$event.node.data["associateId"];
+                    // data.locationType=$event.node.data["location"];
+                    data[$event.colDef.field]=$event.newValue;
                 }
             });
         } else {
             console.log("push..");
             var newValueChanges: Adjustment = new Adjustment();
-            newValueChanges.id = $event.node.data[idFiled];
-            newValueChanges.adjusment = $event.node.data[adjustment];
-            newValueChanges.hours = $event.node.data[hoursFiled];
-            newValueChanges.rate = $event.node.data[rateFiled];
-            newValueChanges.rowIndex=$event.rowIndex;
-            newValueChanges.projectId=$event.node.data["projectId"];
-            newValueChanges.associateId=$event.node.data["associateId"];
-            newValueChanges.locationType=$event.node.data["location"];
-            this.updatedValues.push(newValueChanges);
+            // newValueChanges.id = $event.node.data[idFiled];
+            // newValueChanges.adjusment = $event.node.data[adjustment];
+            // newValueChanges.hours = $event.node.data[hoursFiled];
+            // newValueChanges.rate = $event.node.data[rateFiled];
+            // newValueChanges.rowIndex=$event.rowIndex;
+            // newValueChanges.projectId=$event.node.data["projectId"];
+            // newValueChanges.associateId=$event.node.data["associateId"];
+            // newValueChanges.locationType=$event.node.data["location"];
+           // var rowData_record: ReportType[]   =this._reportservice.createDuplicateRow($event.node.data);
+           console.log($event.node.data);
+           var tmp =$event.node.data;
+            this.updatedRowData.push(tmp);
+            console.log(this.updatedRowData);
+            
+            //this.updatedValues.push(newValueChanges);
         }
 
         console.log(this.updatedValues);
@@ -580,22 +606,43 @@ export class RichGridComponent {
     public saveUpdated() {
         this.hideprogress = false;
         
-        if(this.duplicaterowData.length>0){
-            this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
-                this.hideprogress = true;
-                //alert("Updated");
-            }).catch(err => { console.log(err); this.hideprogress = true; }
-            );
+      //  if(this.duplicaterowData.length>0){
+            let isParentCopy:Boolean;
+            this.duplicaterowData.forEach(data=>{
+                if(this.parentRowData.has(data.associateId+"-"+data.projectId+"-"+data.location)){
+                    this.errorData.push(data);
+                }
+            });
+            if( this.errorData.length===0){
+                this.updatedRowData.forEach(rowData=>{
+                    this.duplicaterowData.push(rowData);
+                });
+                //Final Data send to server 
+                console.log("Final data");
+                console.log(this.duplicaterowData);
+                
+                
+                this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
+                    this.hideprogress = true;
+                    //alert("Updated");
+                }).catch(err => { console.log(err); this.hideprogress = true; }
+                );
+            }else{
+                //aleart box
+                console.log("Error data ");
+                console.log(this.errorData);
+            }
+            //color part
             console.log(this.duplicaterowData);
-        }
-        if(this.updatedValues.length>0){
-            this._reportservice.reportsave(this.updatedValues).then(data => {
-                this.hideprogress = true;
-                //alert("Updated");
-            }).catch(err => { console.log(err); this.hideprogress = true; }
-            );
-            console.log(this.updatedValues);
-        }
+       // }
+        // if(this.updatedValues.length>0){
+        //     this._reportservice.reportsave(this.updatedValues).then(data => {
+        //         this.hideprogress = true;
+        //         //alert("Updated");
+        //     }).catch(err => { console.log(err); this.hideprogress = true; }
+        //     );
+        //     console.log(this.updatedValues);
+        // }
     }
     onBtExport() {
         var params = {
@@ -635,6 +682,7 @@ export class RichGridComponent {
           console.log(rowData_record);
           console.log(rowData_record);
           this.duplicaterowData.push(rowData_record[0]);
+          this.parentRowData.set(rowData_record[0].associateId+"-"+rowData_record[0].projectId+"-"+rowData_record[0].location,rowData_record[0]);
           this.gridOptions.api.updateRowData({ add: rowData_record,addIndex: this.selectedRowIndex+1 });
           rowData_record=null;
           // this.gridOptions.api.startEditingCell({
@@ -645,6 +693,8 @@ export class RichGridComponent {
             
         }
       console.log("data from duplicate "+this.duplicaterowData);
+      console.log(this.duplicaterowData);
+      
       
     }
 

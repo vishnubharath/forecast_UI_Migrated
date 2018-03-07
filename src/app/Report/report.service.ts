@@ -96,6 +96,8 @@ export class ReportService{
 					reportAdjusment.hours=record["hours_"+[i+1]];
 					reportAdjusment.rate=record["rate_"+[i+1]];
 					reportAdjusment.revenue=record["revenue_"+[i+1]];
+					reportAdjusment.forecastedMonth=record["forecastedMonth_"+[i+1]];
+					reportAdjusment.forecastedYear=record["forecastedYear_"+[i+1]];
 					reportAdjusments.push(reportAdjusment);
 				}
 			}
@@ -144,6 +146,9 @@ export class ReportService{
 				reportType["hours_"+[index+1]]= report.reportAdjustmentEntity[index].hours;
 				reportType["rate_"+[index+1]] = report.reportAdjustmentEntity[index].rate;
 				reportType["revenue_"+[index+1]]  = report.reportAdjustmentEntity[index].revenue;
+				reportType["forecastedMonth_"+[index+1]]  = report.reportAdjustmentEntity[index].forecastedMonth;
+				reportType["forecastedYear_"+[index+1]]  = report.reportAdjustmentEntity[index].forecastedYear;
+
 
 		
 			}
@@ -246,6 +251,8 @@ export class ReportService{
 				reportType["associateId"]  = report.associateId;
 				reportType["projectId"]  = report.projectId;
 				reportType["locationType"]  = report.location;
+				reportType["forecastedYear_"+[index+1]]  = report["forecastedYear_"+[index+1]];
+				reportType["forecastedMonth_"+[index+1]]  = report["forecastedMonth_"+[index+1]];
 				}
 		
 				

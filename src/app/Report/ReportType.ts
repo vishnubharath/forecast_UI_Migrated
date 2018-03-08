@@ -147,4 +147,7 @@ export class ReportType{
     forecastedMonth_12:string;
     forecastedYear_12:number;
     _12_id:number;
+
+    reportDataType:String
+
 }

@@ -515,6 +515,7 @@ export class RichGridComponent {
            // var rowData_record: ReportType[]   =this._reportservice.createDuplicateRow($event.node.data);
            console.log($event.node.data);
            var tmp =$event.node.data;
+            tmp.reportDataType="Update";
             this.updatedRowData.push(tmp);
             console.log(this.updatedRowData);
             
@@ -629,7 +630,9 @@ export class RichGridComponent {
                 
                 this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
                     this.hideprogress = true;
-                    //alert("Updated");
+                    this.duplicaterowData=null;
+                    this.errorData=null;
+                    this.updatedRowData=null;
                 }).catch(err => { console.log(err); this.hideprogress = true; }
                 );
             }else{
@@ -683,8 +686,11 @@ export class RichGridComponent {
 
     onDuplicateRow(){
         if(this.selectedRow){
+            console.log(this.gridOptions.api.getSelectedRows());
+            
           var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
-          console.log(rowData_record);
+          rowData_record[0].reportDataType="duplicate";
+          console.log("duplicated data check");
           console.log(rowData_record);
           this.duplicaterowData.push(rowData_record[0]);
           this.parentRowData.set(rowData_record[0].associateId+"-"+rowData_record[0].projectId+"-"+rowData_record[0].location,rowData_record[0]);
@@ -747,7 +753,7 @@ export class RichGridComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
       this.addRowData = result;
-      console.log(this.addRowData);
+      console.log(this.addRowData); 
       
     });
   }
@@ -765,16 +771,20 @@ export class RichGridComponent {
   })
   export class DialogOverviewExampleDialog {
   
-    sampleData:ReportAdjusment[];
+   // sampleData:ReportAdjusment[];
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
       @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) {
-        this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
-        console.log("constructor of dialog ");
-        console.log(this.sampleData);
+      //  this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
+      //  console.log("constructor of dialog ");
+        //console.log(this.sampleData);
         
        }
-  
+       submitForm(data){
+           console.log(data);
+           this.dialogRef.close(data);
+           
+       }
     onNoClick(): void {
       this.dialogRef.close();
     }

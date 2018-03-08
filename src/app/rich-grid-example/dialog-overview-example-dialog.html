@@ -1,78 +1,81 @@
+<form #form='ngForm' ngNativeValidate   (ngSubmit)='submitForm(form.value)'>
 <h1 mat-dialog-title>ForeCast Row </h1>
 <div mat-dialog-content>
 
     <p>AssociateName</p>
     <mat-form-field>
-      <input matInput [(ngModel)]="data.associateName">
+      <input required matInput [(ngModel)]="data.associateName" name="associateName">
     </mat-form-field>
   
-    <p>ProjectName</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.projectName">
+  <p>ProjectName</p>
+   <mat-form-field>
+    <input required matInput [(ngModel)]="data.projectName" name="projectName">
   </mat-form-field>
 
   <p>AssociateId</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.associateId">
-  </mat-form-field>
-
-  <p>HR Grdae</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.associateGrade">
+    <input required matInput [(ngModel)]="data.associateId" name="associateId">
   </mat-form-field>
 
   <p>Location Type</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.locationType">
+    <input required  matInput [(ngModel)]="data.locationType" name="locationType">
   </mat-form-field>
+ 
+  <p>HR Grdae</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.associateGrade" name="associateGrade">
+  </mat-form-field>
+
+  
 
   <p>City</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.city">
+    <input matInput [(ngModel)]="data.city" name="city">
   </mat-form-field>
 
   <p>Billability</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.billability">
+    <input matInput [(ngModel)]="data.billability" name="billability">
   </mat-form-field>
 
 
   <p>CustomerId</p>
   <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.customerId">
+    <input  type="number" matInput [(ngModel)]="data.customerId"  name="customerId">
   </mat-form-field>
 
   <p>CustomerName</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.customerName">
+    <input matInput [(ngModel)]="data.customerName" name="customerName">
   </mat-form-field>
 
   <p>ProjectId</p>
   <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.projectId">
+    <input   type="number" matInput [(ngModel)]="data.projectId" name="projectId">
   </mat-form-field>
 
 
   <p>Project Name</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.projectName">
+    <input matInput [(ngModel)]="data.projectName" name="projectName">
   </mat-form-field>
   
 
   <p>Portfolio</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.portfolio">
+    <input matInput [(ngModel)]="data.portfolio" name="portfolio">
   </mat-form-field>
 
 
   <p>POC</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.poc">
+    <input matInput [(ngModel)]="data.poc" name="poc">
   </mat-form-field>
 
   <p>projectBillability</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.projectBillability">
+    <input matInput [(ngModel)]="data.projectBillability"  name="projectBillability">
   </mat-form-field>
 
 
@@ -206,7 +209,7 @@
   <p>rate_6</p>
   <mat-form-field>
     <input  type="number" matInput [(ngModel)]="data.rate_6">
-  </mat-form-field>
+  </mat-form-field>  -->
 
 
   <!-- <div *ngFor="let rowData of sampleData;  let i=index">
@@ -256,12 +259,12 @@
 
   
 </div>
-<div mat-dialog-actions>
+<!-- <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">No Thanks</button>
   <button mat-raised-button [mat-dialog-close]="data" >Ok</button>
-</div>
-
-
+</div> -->
+<button type='submit'>Submit</button>
+</form>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
     can be found in the LICENSE file at http://angular.io/license -->

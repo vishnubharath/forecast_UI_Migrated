@@ -102,7 +102,11 @@ export class ReportService{
 				//if(record["adjustment_"+[i+1]]!=null || record["adjustment_"+[i+1]]!="" || record["adjustment_"+[i+1]+"_id"]!=null || record["hours_"+[i+1]]!=null){
 					if(!(record["adjustment_"+[i+1]+"_id"]===undefined)){
 					var reportAdjusment:ReportAdjusment = new ReportAdjusment();
-					reportAdjusment.id=record["adjustment_"+[i+1]+"_id"];
+					if(record.reportDataType==="duplicate"){
+						reportAdjusment.id=0;
+					}else{
+						reportAdjusment.id=record["adjustment_"+[i+1]+"_id"];
+					}
 					reportAdjusment.adjustment=record["adjustment_"+[i+1]];
 					reportAdjusment.hours=record["hours_"+[i+1]];
 					reportAdjusment.rate=record["rate_"+[i+1]];
@@ -125,7 +129,7 @@ export class ReportService{
 		reports.forEach(report => {
 			
 			var reportType:ReportType = new ReportType();
-
+			reportType.reportId = report.reportId;
 			reportType.allocStartDate = report.allocStartDate;
 			reportType.city = report.associateCity;
 			reportType.associateGrade = report.associateGrade;

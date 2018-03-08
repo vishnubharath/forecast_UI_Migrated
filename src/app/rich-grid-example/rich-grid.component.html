@@ -15,6 +15,19 @@
     <span class="controls-spacing"></span>
     <button mat-raised-button (click)="saveUpdated()" >Save</button>
     <span class="controls-spacing"></span>
+    
+
+    <button mat-raised-button (click)="onDuplicateRow()"  [disabled]="!selectedRow" >Duplicate Row</button>
+    <span class="controls-spacing"></span>
+    <button mat-raised-button  (click)="onDeleteRow()"  [disabled]="!selectedRow" >Delete Row</button>
+    <span class="controls-spacing"></span>
+    <!-- <button mat-raised-button (click)="showDialog = !showDialog" >Add Data</button>
+    <span class="controls-spacing"></span> -->
+    <button mat-raised-button (click)="openDialog()">Add</button>
+    <span class="controls-spacing"></span>
+
+
+
     <input mat-raised-button (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Filter Results"/>
     <span class="controls-spacing"></span>
     <input matInput placeholder="Project" aria-label="Project" [matAutocomplete]="auto2" [formControl]="projectCtrl">
@@ -86,10 +99,10 @@
                 </select>
             </div>            
         </div>
-        <app-dialog [(visible)]="showDialog">
+        <!-- <app-dialog [(visible)]="showDialog">
             <h1>Hello World</h1>
             <button (click)="showDialog = !showDialog" class="btn">Close</button>
-          </app-dialog>
+          </app-dialog> -->
         <div style="margin: 0px 10px 0px 10px">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
 

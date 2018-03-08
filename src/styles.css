@@ -12,3 +12,11 @@
     position: fixed;
     z-index: 2;
 }
+
+.ag-fresh .ag-header {
+    background: antiquewhite;
+}
+
+* {
+    font-family: Courier New;
+  }

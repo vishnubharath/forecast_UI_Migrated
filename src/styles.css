@@ -5,7 +5,7 @@
  }
 
  .controls-spacing {
-     padding : 5px;
+     padding : 3px;
  }
 
  .header-toolbar {
@@ -17,6 +17,33 @@
     background: antiquewhite;
 }
 
+.ag-fresh .ag-row-even {
+    background-color:#fff6ea;
+}
+
+.ag-fresh .ag-row-odd {
+    background-color:#ece6dc;
+}
+
+.mat-stroked-button, .head-control{
+    line-height: 0px;
+    font-size: 10px;
+    line-height: 20px !important;
+    background: #97c1e0;
+    padding: 0px 5px;
+}
+.mat-stroked-button[disabled]{
+    background:#d9e3ea;
+}
+.head-control{
+    background: white;
+    font-family: Lucida Console
+}
+
+.mat-card{
+    background: #e2eef9;
+}
+
 * {
-    font-family: Courier New;
+    font-family: Lucida Console;
   }

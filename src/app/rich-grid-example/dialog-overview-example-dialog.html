@@ -1,13 +1,131 @@
-<h1 mat-dialog-title>Hi {{data.name}}</h1>
+<h1 mat-dialog-title>ForeCast Row </h1>
 <div mat-dialog-content>
-  <p>What's your favorite animal?</p>
+
+    <p>AssociateName</p>
+    <mat-form-field>
+      <input matInput [(ngModel)]="data.associateName">
+    </mat-form-field>
+  
+    <p>ProjectName</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.animal">
+    <input matInput [(ngModel)]="data.projectName">
   </mat-form-field>
+
+  <p>AssociateId</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.associateId">
+  </mat-form-field>
+
+  <p>HR Grdae</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.associateGrade">
+  </mat-form-field>
+
+  <p>Location Type</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.locationType">
+  </mat-form-field>
+
+  <p>City</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.city">
+  </mat-form-field>
+
+  <p>Billability</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.billability">
+  </mat-form-field>
+
+
+  <p>CustomerId</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerId">
+  </mat-form-field>
+
+  <p>CustomerName</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerName">
+  </mat-form-field>
+
+  <p>ProjectId</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.projectId">
+  </mat-form-field>
+
+
+  <p>Project Name</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.projectName">
+  </mat-form-field>
+  
+
+  <p>Portfolio</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.portfolio">
+  </mat-form-field>
+
+
+  <p>POC</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.poc">
+  </mat-form-field>
+
+  <p>projectBillability</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.projectBillability">
+  </mat-form-field>
+
+  
+  <ng-template ngFor let-item [ngForOf]="createRange(5)" let currentElementIndex="index+1">
+      <!-- <li>{{currentElementIndex}} Something</li> -->
+
+      <p>data.hours_{{currentElementIndex}}</p>
+    <mat-form-field>
+       <input matInput {(ngModel)}="data.hours_[currentElementIndex]">
+    </mat-form-field>
+    </ng-template>
+  
+
+  
+
+
+  
+
+<!-- 
+  <p>HR Grdae</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.associateGrade">
+  </mat-form-field>
+
+
+  <p>CustomerName</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerName">
+  </mat-form-field>
+
+
+  <p>CustomerName</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerName">
+  </mat-form-field>
+
+
+  <p>CustomerName</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerName">
+  </mat-form-field>
+
+
+  <p>CustomerName</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.customerName">
+  </mat-form-field> -->
+
+  
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">No Thanks</button>
-  <button mat-raised-button [mat-dialog-close]="data.animal" cdkFocusInitial>Ok</button>
+  <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
 </div>
 
 

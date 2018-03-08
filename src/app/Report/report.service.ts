@@ -75,7 +75,7 @@ export class ReportService{
 		var serviceRowData: Report[]=[];
 		duplicateRecord.forEach(record=>{
 			var recordData:Report = new Report();
-			//recordData.reportId=  record.reportId;  
+			recordData.reportId=  record.reportId;  
 			recordData.employeeId=record.employeeId;    
 			recordData.associateId=record.associateId;
 			recordData.associateName=record.associateName;  
@@ -101,7 +101,7 @@ export class ReportService{
 				//if(record["adjustment_"+[i+1]]!=null || record["adjustment_"+[i+1]]!="" || record["adjustment_"+[i+1]+"_id"]!=null || record["hours_"+[i+1]]!=null){
 					if(!(record["adjustment_"+[i+1]+"_id"]===undefined)){
 					var reportAdjusment:ReportAdjusment = new ReportAdjusment();
-					//reportAdjusment.id=record["adjustment_"+[i+1]+"_id"];
+					reportAdjusment.id=record["adjustment_"+[i+1]+"_id"];
 					reportAdjusment.adjustment=record["adjustment_"+[i+1]];
 					reportAdjusment.hours=record["hours_"+[i+1]];
 					reportAdjusment.rate=record["rate_"+[i+1]];

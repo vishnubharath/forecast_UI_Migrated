@@ -62,6 +62,8 @@ export class RichGridComponent {
     projectCtrl: FormControl;
     animal: string;
     name: string;
+    public addRowData: ReportType;
+
   
     
     constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog ) {
@@ -739,15 +741,19 @@ export class RichGridComponent {
   openDialog(): void {
     let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '250px',
-      data: { name: this.name, animal: this.animal }
+      data: { data: this.addRowData}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.animal = result;
+      this.addRowData = result;
+      console.log(this.addRowData);
+      
     });
   }
      
+  
+  
 }
 
 
@@ -766,5 +772,11 @@ export class RichGridComponent {
     onNoClick(): void {
       this.dialogRef.close();
     }
-  
+    createRange(){
+        var items: number[] = [];
+        for(var i = 1; i <= 12; i++){
+           items.push(i);
+        }
+        return items;
+      }
   }

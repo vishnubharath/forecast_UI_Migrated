@@ -767,16 +767,13 @@ export class RichGridComponent {
   
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-      @Inject(MAT_DIALOG_DATA) public data: any) { }
+      @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) { }
   
     onNoClick(): void {
       this.dialogRef.close();
     }
     createRange(){
-        var items: number[] = [];
-        for(var i = 1; i <= 12; i++){
-           items.push(i);
-        }
-        return items;
+        console.log(this._reportService.sendingSampleData());
+        return this._reportService.sendingSampleData();
       }
   }

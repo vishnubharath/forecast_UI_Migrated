@@ -13,6 +13,7 @@ import { ReportAdjusment } from './reportAdjusments';
 @Injectable()
 export class ReportService{
 
+	sampleData:Report;
 	constructor(private _http:Http){
 
 	}
@@ -20,7 +21,7 @@ export class ReportService{
 	getCurrentReport():Observable<Report[]>{
 		return this._http
 		.get(Constants.base_url+'reports/all' )
-		.map((res:Response) => res.json())
+		.map((res:Response) => {return res.json();})
 		.catch(error=>{
 			let errMsg = (error.message) ? error.message :
 				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
@@ -118,7 +119,7 @@ export class ReportService{
 	}
 
 	 convertReport(reports:Report[]):ReportType[] {
-
+		this.sampleData=reports[0];
 		var reportTypes:ReportType[]  = [];
 
 		reports.forEach(report => {
@@ -272,5 +273,10 @@ export class ReportService{
 
 
 		return reportTypes;
+	}
+
+
+	public sendingSampleData(){
+		return  this.sampleData;
 	}
 }

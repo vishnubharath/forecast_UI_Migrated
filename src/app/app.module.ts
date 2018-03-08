@@ -5,7 +5,7 @@ import { HttpModule, JsonpModule } from '@angular/http';
 // ag-grid
 import {AgGridModule} from "ag-grid-angular/main";
 // rich grid
-import {RichGridComponent} from "./rich-grid-example/rich-grid.component";
+import {RichGridComponent, DialogOverviewExampleDialog} from "./rich-grid-example/rich-grid.component";
 import {DateComponent} from "./date-component/date.component";
 import {HeaderComponent} from "./header-component/header.component";
 import {HeaderGroupComponent} from "./header-group-component/header-group.component";
@@ -25,7 +25,8 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatChipsModule} from '@angular/material/chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from "./rich-grid-example/dialog.component";
-
+import { MatDialogModule } from "@angular/material";
+import {MatInputModule} from '@angular/material';
 
 
 @NgModule({
@@ -38,6 +39,8 @@ import { DialogComponent } from "./rich-grid-example/dialog.component";
         MatButtonModule,
         MatProgressSpinnerModule,
         MatIconModule,
+        MatDialogModule,
+        MatInputModule,
         MatSelectModule,
         MatChipsModule,
         MatToolbarModule,
@@ -57,10 +60,11 @@ import { DialogComponent } from "./rich-grid-example/dialog.component";
         RichGridComponent,
         DateComponent,
         HeaderComponent,
-        HeaderGroupComponent,DialogComponent
+        HeaderGroupComponent,DialogComponent,DialogOverviewExampleDialog
     ],
     providers: [ReportService, ProjectService],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [RichGridComponent, DialogOverviewExampleDialog],
     // entryComponents: [
     //     UpdateReportDialog
     //   ]

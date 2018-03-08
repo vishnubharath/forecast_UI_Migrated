@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation, Inject } from "@angular/core";
 import { GridOptions } from "ag-grid/main";
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
@@ -6,7 +6,7 @@ import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 
 import ProficiencyFilter from '../filters/proficiencyFilter';
-import {MatDialog} from '@angular/material';
+
 
 
 // only import this if you are using the ag-Grid-Enterprise
@@ -22,7 +22,7 @@ import { ReportType } from "../Report/ReportType";
 import { Adjustment } from "../Report/Adjustments";
 import { Project } from "../Report/Project";
 //import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
-
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 @Component({
     selector: 'rich-grid',
     templateUrl: 'rich-grid.component.html',
@@ -60,8 +60,11 @@ export class RichGridComponent {
     showDialog = false;
     //Controls
     projectCtrl: FormControl;
-
-    constructor(_reportservice: ReportService, _projectService: ProjectService ) {
+    animal: string;
+    name: string;
+  
+    
+    constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog ) {
         // we pass an empty gridOptions in, so we can grab the api out
         this._reportservice = _reportservice;
         this._projectService = _projectService;
@@ -707,15 +710,15 @@ export class RichGridComponent {
         } 
     }
 
-    openDialog(){
-        // const dialogRef = this.dialog.open(UpdateReportDialog, {
+    // openDialog(){
+    //     // const dialogRef = this.dialog.open(UpdateReportDialog, {
            
-        //   });
+    //     //   });
       
-        //   dialogRef.afterClosed().subscribe(result => {
-        //     console.log(`Dialog result: ${result}`);
-        //   }); 
-    }
+    //     //   dialogRef.afterClosed().subscribe(result => {
+    //     //     console.log(`Dialog result: ${result}`);
+    //     //   }); 
+    // }
     
 
     autoCompleate(){
@@ -730,6 +733,38 @@ export class RichGridComponent {
         console.log(this.chosenProject);      
         
     }
+
+  
+
+  openDialog(): void {
+    let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '250px',
+      data: { name: this.name, animal: this.animal }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.animal = result;
+    });
+  }
      
 }
 
+
+
+
+@Component({
+    selector: 'dialog-overview-example-dialog',
+    templateUrl: 'dialog-overview-example-dialog.html',
+  })
+  export class DialogOverviewExampleDialog {
+  
+    constructor(
+      public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+      @Inject(MAT_DIALOG_DATA) public data: any) { }
+  
+    onNoClick(): void {
+      this.dialogRef.close();
+    }
+  
+  }

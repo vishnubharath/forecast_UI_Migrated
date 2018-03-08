@@ -36,6 +36,23 @@
     </mat-card>
 
 </mat-card>
+
+
+<ol>
+    <!-- <li>
+      <mat-form-field>
+        <input matInput [(ngModel)]="name" placeholder="What's your name?">
+      </mat-form-field>
+    </li> -->
+    
+    
+    <!-- </li>
+    <li *ngIf="animal">
+      You chose: <i>{{animal}}</i>
+    </li> -->
+  </ol>
+
+  
 <div id='top'>
     <div style="padding: 4px;">
         <div style="float: right;">                       
@@ -66,18 +83,24 @@
         </div> -->
         <div style="clear: both;"></div>
         <div style="padding: 4px;" class="toolbar">
-                
-            <label >
-                <input type="button"  value="Export As Excel" (click)="onBtExport()"/>
-                
-            </label>
-            <button (click)="createRowData()">Refresh Data</button>
-            <input (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Type text to filter..."/>
-            <button (click)="saveUpdated()">Save</button>
-            <button (click)="onDuplicateRow()"  [disabled]="!selectedRow" >Duplicate Row</button>
-            <button (click)="onDeleteRow()"  [disabled]="!selectedRow" >Delete Row</button>
-            <button (click)="showDialog = !showDialog" class="btn">Add Data</button>
-            
+            <mat-card style="margin: 5px;"  >       
+         <button mat-raised-button  (click)="onBtExport()">Export As Excel</button>
+         <span class="controls-spacing"></span>    
+            <button mat-raised-button (click)="createRowData()">Refresh Data</button>
+            <span class="controls-spacing"></span>
+            <input  mat-raised-button (keyup)="onQuickFilterChanged($event)" type="text" id="quickFilterInput" placeholder="Type text to filter..."/>
+            <span class="controls-spacing"></span>
+            <button mat-raised-button (click)="saveUpdated()">Save</button>
+            <span class="controls-spacing"></span>
+            <button mat-raised-button (click)="onDuplicateRow()"  [disabled]="!selectedRow" >Duplicate Row</button>
+            <span class="controls-spacing"></span>
+            <button mat-raised-button  (click)="onDeleteRow()"  [disabled]="!selectedRow" >Delete Row</button>
+            <span class="controls-spacing"></span>
+            <!-- <button mat-raised-button (click)="showDialog = !showDialog" >Add Data</button>
+            <span class="controls-spacing"></span> -->
+            <button mat-raised-button (click)="openDialog()">Add</button>
+            <span class="controls-spacing"></span>
+        </mat-card>
         </div>
         <div style="padding: 4px;"  class="toolbar">
             <div>

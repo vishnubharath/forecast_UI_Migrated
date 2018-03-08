@@ -765,15 +765,21 @@ export class RichGridComponent {
   })
   export class DialogOverviewExampleDialog {
   
+    sampleData:ReportAdjusment[];
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-      @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) { }
+      @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) {
+        this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
+        console.log("constructor of dialog ");
+        console.log(this.sampleData);
+        
+       }
   
     onNoClick(): void {
       this.dialogRef.close();
     }
-    createRange(){
-        console.log(this._reportService.sendingSampleData());
-        return this._reportService.sendingSampleData();
-      }
+    // createRange(){
+    //     console.log(this._reportService.sendingSampleData());
+    //     return this._reportService.sendingSampleData();
+    //   }
   }

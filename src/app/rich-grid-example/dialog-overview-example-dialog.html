@@ -39,7 +39,7 @@
 
   <p>CustomerId</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.customerId">
+    <input  type="number" matInput [(ngModel)]="data.customerId">
   </mat-form-field>
 
   <p>CustomerName</p>
@@ -49,7 +49,7 @@
 
   <p>ProjectId</p>
   <mat-form-field>
-    <input matInput [(ngModel)]="data.projectId">
+    <input  type="number" matInput [(ngModel)]="data.projectId">
   </mat-form-field>
 
 
@@ -75,15 +75,148 @@
     <input matInput [(ngModel)]="data.projectBillability">
   </mat-form-field>
 
-  
-  <ng-template ngFor let-item [ngForOf]="createRange(5)" let-currentElementIndex="index+1">
-      <!-- <li>{{currentElementIndex}} Something</li> -->
 
-      <p>data.hours_{{currentElementIndex}}</p>
+
+  <p>forecastedMonth_1</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.forecastedMonth_1">
+  </mat-form-field>
+  <p>forecastedYear_1</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.forecastedYear_1">
+  </mat-form-field>
+  <p>hours_1</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.hours_1">
+  </mat-form-field>
+  <p>adjustment_1</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.adjustment_1">
+  </mat-form-field>
+  <p>rate_1</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_1">
+  </mat-form-field>
+  
+
+
+  <p>forecastedMonth_2</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.forecastedMonth_2">
+  </mat-form-field>
+  <p>forecastedYear_2</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.forecastedYear_2">
+  </mat-form-field>
+  <p>hours_2</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.hours_2">
+  </mat-form-field>
+  <p>adjustment_2</p>
+  <mat-form-field>
+    <input type="number"  matInput [(ngModel)]="data.adjustment_2">
+  </mat-form-field>
+  <p>rate_2</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_2">
+  </mat-form-field>
+
+  <p>forecastedMonth_3</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.forecastedMonth_3">
+  </mat-form-field>
+  <p>forecastedYear_3</p>
+  <mat-form-field>
+    <input   type="number" matInput [(ngModel)]="data.forecastedYear_3">
+  </mat-form-field>
+  <p>hours_3</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.hours_3">
+  </mat-form-field>
+  <p>adjustment_3</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.adjustment_3">
+  </mat-form-field>
+  <p>rate_3</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_3">
+  </mat-form-field>
+
+
+  <p>forecastedMonth_4</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.forecastedMonth_4">
+  </mat-form-field>
+  <p>forecastedYear_4</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.forecastedYear_4">
+  </mat-form-field>
+  <p>hours_4</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.hours_4">
+  </mat-form-field>
+  <p>adjustment_4</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.adjustment_4">
+  </mat-form-field>
+  <p>rate_4</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_4">
+  </mat-form-field>
+
+
+  <p>forecastedMonth_5</p>
+  <mat-form-field>
+    <input matInput [(ngModel)]="data.forecastedMonth_5">
+  </mat-form-field>
+  <p>forecastedYear_5</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.forecastedYear_5">
+  </mat-form-field>
+  <p>hours_5</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.hours_5">
+  </mat-form-field>
+  <p>adjustment_5</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.adjustment_5">
+  </mat-form-field>
+  <p>rate_5</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_5">
+  </mat-form-field>
+
+
+  <p>forecastedMonth_6</p>
+  <mat-form-field>
+    <input   matInput [(ngModel)]="data.forecastedMonth_6">
+  </mat-form-field>
+  <p>forecastedYear_6</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.forecastedYear_6">
+  </mat-form-field>
+  <p>hours_6</p>
+  <mat-form-field>
+    <input   type="number" matInput [(ngModel)]="data.hours_6">
+  </mat-form-field>
+  <p>adjustment_6</p>
+  <mat-form-field>
+    <input type="number"  matInput [(ngModel)]="data.adjustment_6">
+  </mat-form-field>
+  <p>rate_6</p>
+  <mat-form-field>
+    <input  type="number" matInput [(ngModel)]="data.rate_6">
+  </mat-form-field>
+
+
+  <!-- <div *ngFor="let rowData of sampleData;  let i=index">
+       <li>{{currentElementIndex}} Something</li> 
+
+       <p>{{rowData.forecastedMonth}}</p> 
     <mat-form-field>
-       <input matInput [(ngModel)]="data.hours_">
+       <input matInput [(ngModel)]="data.adjustment_id]">
     </mat-form-field>
-    </ng-template>
+  </div>  -->
   
 
   
@@ -125,7 +258,7 @@
 </div>
 <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">No Thanks</button>
-  <button mat-raised-button [mat-dialog-close]="data" cdkFocusInitial>Ok</button>
+  <button mat-raised-button [mat-dialog-close]="data" >Ok</button>
 </div>
 
 

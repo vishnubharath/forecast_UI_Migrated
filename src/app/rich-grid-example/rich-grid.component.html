@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" role="header">  
+<mat-toolbar color="primary" role="header" style="background: #336386">  
     <mat-toolbar-row>
         <mat-icon class="app-icon">assignment_turned_in</mat-icon>
         <span style="padding-left: 10px">Forecast Costing & Reports</span>
@@ -8,8 +8,8 @@
         </span>
     </mat-toolbar-row>
 </mat-toolbar>
-<mat-card style="margin: 5px;" >
-    <button mat-raised-button (click)="onBtExport()" >Export As Excel</button>
+<mat-toolbar style="background: aliceblue;" >
+    <button mat-stroked-button (click)="onBtExport()" style="background: darkturquoise;padding: 0px 5px;" >Export As Excel</button>
     <span class="controls-spacing"></span>
     <button mat-raised-button (click)="createRowData()" >Refresh Data</button>
     <span class="controls-spacing"></span>
@@ -35,7 +35,7 @@
         <button mat-raised-button (click)="getReports()" style="margin: 5px" >Fetch</button>
     </mat-card>
 
-</mat-card>
+</mat-toolbar>
 
 
 <ol>
@@ -53,36 +53,9 @@
   </ol>
 
   
-<div id='top'>
-    <div style="padding: 4px;">
-        <div style="float: right;">                       
-        </div>
-        <!-- <div>
-            <b>Employees Skills and Contact Details</b>
-            {{rowCount}}
-        </div> -->         
-    </div>
-    <div style="clear: both;"></div>
-
-    
-
-        <!-- Because we are using the Angular ID (ie #ag-grid marker), we have to have all the items that use
-             that marker inside the same ng-if as the grid -->
-
-        <!-- <div style="padding: 4px;" class="toolbar">
-            <span>
-                Grid API:
-                <button (click)="gridOptions.api.selectAll()">Select All</button>
-                <button (click)="gridOptions.api.deselectAll()">Clear Selection</button>
-            </span>
-            <span style="margin-left: 20px;">
-                Column API:
-                <button (click)="gridOptions.columnApi.setColumnVisible('country', false)">Hide Country Column</button>
-                <button (click)="gridOptions.columnApi.setColumnVisible('country', true)">Show Country Column</button>
-            </span>
-        </div> -->
+<div>
         <div style="clear: both;"></div>
-        <div style="padding: 4px;" class="toolbar">
+        <div style="padding: 4px;" class="toolbar" style="display: none">
             <mat-card style="margin: 5px;"  >       
          <button mat-raised-button  (click)="onBtExport()">Export As Excel</button>
          <span class="controls-spacing"></span>    
@@ -102,7 +75,7 @@
             <span class="controls-spacing"></span>
         </mat-card>
         </div>
-        <div style="padding: 4px;"  class="toolbar">
+        <div style="padding: 4px;"  class="toolbar" style="display: none">
             <div>
                 <span>Project : </span>
                 <button (click)="getReports()">Check</button>
@@ -117,7 +90,7 @@
             <h1>Hello World</h1>
             <button (click)="showDialog = !showDialog" class="btn">Close</button>
           </app-dialog>
-        <div>
+        <div style="margin: 0px 10px 0px 10px">
         <ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
 
         [rowClassRules]="rowClassRules"

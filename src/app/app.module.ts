@@ -28,6 +28,7 @@ import { DialogComponent } from "./rich-grid-example/dialog.component";
 import { MatDialogModule, MatDatepickerInput, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
 import {MatInputModule} from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
+import { ToastModule } from "ng2-toastr";
 
 @NgModule({
     imports: [
@@ -50,7 +51,8 @@ import {MatMenuModule} from '@angular/material/menu';
         MatCardModule,        
         MatAutocompleteModule,
         MatMenuModule,
-    JsonpModule,
+        JsonpModule,
+        ToastModule.forRoot(),
         AgGridModule.withComponents(
             [
                 DateComponent,

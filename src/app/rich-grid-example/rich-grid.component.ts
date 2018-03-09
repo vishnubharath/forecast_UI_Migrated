@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, ViewContainerRef } from "@angular/core";
 import { GridOptions } from "ag-grid/main";
 import {FormControl} from '@angular/forms';
 import {Observable} from 'rxjs/Observable';
@@ -24,6 +24,7 @@ import { Project } from "../Report/Project";
 //import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ReportAdjusment } from "../Report/reportAdjusments";
+import { ToastsManager } from 'ng2-toastr';
 @Component({
     selector: 'rich-grid',
     templateUrl: 'rich-grid.component.html',
@@ -51,6 +52,7 @@ export class RichGridComponent {
     private updatedValues: Adjustment[] = [];
     private updatedRowData: ReportType[] = [];
     public selectedRow:boolean=false;
+    public addNewRow:boolean=false;
     public selectedRowIndex;
     public editable:boolean=false;
     public  duplicaterowData: ReportType[]=[];
@@ -58,17 +60,17 @@ export class RichGridComponent {
     public  errorData: ReportType[]=[];
     public  parentRowData = new Map();
     private rowClassRules;
-    showDialog = false;
+    
     //Controls
     projectCtrl: FormControl;
-    animal: string;
-    name: string;
+   
     public addRowData: ReportType;
 
   
     
-    constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog ) {
+    constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog,public toastr: ToastsManager, vcr: ViewContainerRef ) {
         // we pass an empty gridOptions in, so we can grab the api out
+        this.toastr.setRootViewContainerRef(vcr);
         this._reportservice = _reportservice;
         this._projectService = _projectService;
         this.gridOptions = <GridOptions>{};
@@ -627,6 +629,7 @@ export class RichGridComponent {
         
       //  if(this.duplicaterowData.length>0){
             let isParentCopy:Boolean;
+            var errormsg="";
             this.duplicaterowData.forEach(data=>{
                 if(this.parentRowData.has(data.associateId+"-"+data.projectId+"-"+data.location)){
                     this.errorData.push(data);
@@ -646,12 +649,21 @@ export class RichGridComponent {
                     this.duplicaterowData=null;
                     this.errorData=null;
                     this.updatedRowData=null;
+                    this.addNewRow=true;
                 }).catch(err => { console.log(err); this.hideprogress = true; }
                 );
             }else{
                 //aleart box
                 console.log("Error data ");
                 console.log(this.errorData);
+                errormsg="Records are already available for below combination(Associate Id - Project Id - Location Type).\n\n Please validate below records in list \n\n\n************************ \n\n";
+                this.errorData.forEach(data=>{
+                    errormsg=errormsg+data.associateId+"-"+data.projectId+"-"+data.location+"\n ";
+                });
+                errormsg= errormsg+'\n\n************************'
+                this.toastr.error(errormsg, 'Error!');
+               this.errorData = [];
+                
             }
             //color part
             console.log(this.duplicaterowData);
@@ -674,7 +686,9 @@ export class RichGridComponent {
           };
         this.gridOptions.api.exportDataAsExcel(params);
       }
-
+      showSuccess() {
+        this.toastr.success('You are awesome!', 'Success!');
+      }
     getReports(){
 
         console.log(this.chosenProject);
@@ -692,7 +706,9 @@ export class RichGridComponent {
         this.hideprogress = false;
         this._reportservice.getReportForProject(this.chosenProject)
             .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
-            );
+            ,error=>{
+                this.toastr.error(error, 'Error!');
+            });
 
     }
 
@@ -714,7 +730,7 @@ export class RichGridComponent {
           //     colKey: "associateId"
           //   });
           //   this.gridOptions.api.setFocusedCell(0, "associateId")
-            
+          this.toastr.success('Data Duplicated', 'Success!');
         }
       console.log("data from duplicate "+this.duplicaterowData);
       console.log(this.duplicaterowData);
@@ -725,9 +741,34 @@ export class RichGridComponent {
     onDeleteRow(){
         if(this.selectedRow){
             var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
-            this._reportservice.deleteReport(rowData_record).subscribe(result => {
-                console.log(result);
-            });
+            if(rowData_record[0].reportId!=undefined){
+                this._reportservice.deleteReport(rowData_record).subscribe(result => {
+                    console.log(result);
+                    this.toastr.success('Data Deleted', 'Success!');
+                },error=>{
+                    this.toastr.error(error, 'Error!');
+                });
+            }else{
+                var selectedData = this.gridOptions.api.getSelectedRows();
+                this.gridOptions.api.updateRowData({ remove: selectedData });
+                var index=this.duplicaterowData.indexOf(selectedData[0]);
+                console.log(this.duplicaterowData);
+                this.duplicaterowData.splice(index,1);
+                console.log("from delete else part");
+                console.log(this.duplicaterowData);
+                
+                // var associateId=selectedData[0].associateId;
+                // var projectId=selectedData[0].associateId;
+                // var location=selectedData[0].location;
+                // let index=0;
+                // this.duplicaterowData.forEach(data=>{
+                //     index++;
+                //     if(this.parentRowData.has(data.associateId===associateId && data.projectId===projectId && data.location===location)){
+                //         data.
+                //     }
+                // });
+            }
+            
         } 
     }
 
@@ -775,7 +816,17 @@ export class RichGridComponent {
         console.log(result.from);
     
       if(result.from==="save"){
-        this._reportservice.duplicateReportSave(this._reportservice.convertData(result));
+        this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
+            this.toastr.success('Data Added', 'Success!'); 
+           // var record:ReportType=this._reportservice.convertData(result)[0];
+            this.gridOptions.api.updateRowData({ add: this._reportservice.convertData(result) });
+        }).catch(error=>{
+                this.toastr.error(error, 'Error!');
+        });
+      }else{
+          console.log("inside cancel");
+         // this.toastr.error('This is not good!', 'Oops!');
+          
       }
       
     });

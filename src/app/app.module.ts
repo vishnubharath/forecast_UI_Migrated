@@ -27,7 +27,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from "./rich-grid-example/dialog.component";
 import { MatDialogModule, MatDatepickerInput, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
 import {MatInputModule} from '@angular/material';
-
+import {MatMenuModule} from '@angular/material/menu';
 
 @NgModule({
     imports: [
@@ -49,6 +49,7 @@ import {MatInputModule} from '@angular/material';
         MatToolbarModule,
         MatCardModule,        
         MatAutocompleteModule,
+        MatMenuModule,
     JsonpModule,
         AgGridModule.withComponents(
             [

@@ -77,6 +77,7 @@ export class RichGridComponent {
         this.createRowData();
         this.createColumnDefs();
         this.showGrid = true;
+        this.addNewRow=true;
         this.gridOptions.dateComponentFramework = DateComponent;
         this.gridOptions.defaultColDef = {
             editable: false,
@@ -123,6 +124,7 @@ export class RichGridComponent {
     private createRowData() {
         console.log("enter into create Row data");
         this.hideprogress = false;
+        this.addNewRow=true;
         this._reportservice.getCurrentReport().subscribe(rowdata => {
             this.serviceRowData = rowdata;
             this.createDynamicColumn(this.serviceRowData[0])
@@ -533,7 +535,7 @@ export class RichGridComponent {
             tmp.reportDataType="Update";
             this.updatedRowData.push(tmp);
             console.log(this.updatedRowData);
-            
+            this.addNewRow=false;
             //this.updatedValues.push(newValueChanges);
         }
 
@@ -800,7 +802,7 @@ export class RichGridComponent {
 
   openDialog(): void {
     let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '250px',
+      width: '75%',
       data: { data: this.addRowData}
     });
 
@@ -819,7 +821,7 @@ export class RichGridComponent {
         this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
             this.toastr.success('Data Added', 'Success!'); 
            // var record:ReportType=this._reportservice.convertData(result)[0];
-            this.gridOptions.api.updateRowData({ add: this._reportservice.convertData(result) });
+           // this.gridOptions.api.updateRowData({ add: this._reportservice.convertData(result) });
         }).catch(error=>{
                 this.toastr.error(error, 'Error!');
         });

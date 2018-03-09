@@ -23,6 +23,7 @@ import { Adjustment } from "../Report/Adjustments";
 import { Project } from "../Report/Project";
 //import { UpdateReportDialog } from "../Dialog/update-report-dialog.component";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import { ReportAdjusment } from "../Report/reportAdjusments";
 @Component({
     selector: 'rich-grid',
     templateUrl: 'rich-grid.component.html',
@@ -236,6 +237,18 @@ export class RichGridComponent {
                     {
                         headerName: "Project Name", field: "projectName", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
                         width: 150, pinned: true
+                    },
+                    {
+                        headerName: "Allocation StartDate", field: "allocStartDate", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                        width: 150
+                    },
+                    {
+                        headerName: "Allocation Enddate", field: "allocEnddate", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                        width: 150
+                    },
+                    {
+                        headerName: "Allocation Percentage", field: "allocationPercentage", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
+                        width: 150
                     },
                     {
                         headerName: "Portfolio", field: "portfolio", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
@@ -752,8 +765,18 @@ export class RichGridComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
-      this.addRowData = result;
-      console.log(this.addRowData); 
+      //this.addRowData = result;
+      //console.log(this.addRowData); 
+    //   var report:ReportType[]=[];
+    //   console.log(this._reportservice.convertData(result));
+      
+    //   report.push(this._reportservice.convertData(result))
+    //   console.log(report);
+        console.log(result.from);
+    
+      if(result.from==="save"){
+        this._reportservice.duplicateReportSave(this._reportservice.convertData(result));
+      }
       
     });
   }
@@ -771,17 +794,18 @@ export class RichGridComponent {
   })
   export class DialogOverviewExampleDialog {
   
-   // sampleData:ReportAdjusment[];
+    sampleData:ReportAdjusment[];
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
       @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) {
-      //  this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
-      //  console.log("constructor of dialog ");
-        //console.log(this.sampleData);
+        this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
+        console.log("constructor of dialog ");
+        console.log(this.sampleData);
         
        }
        submitForm(data){
            console.log(data);
+           data.from="save";
            this.dialogRef.close(data);
            
        }

@@ -25,7 +25,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatChipsModule} from '@angular/material/chips';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DialogComponent } from "./rich-grid-example/dialog.component";
-import { MatDialogModule } from "@angular/material";
+import { MatDialogModule, MatDatepickerInput, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
 import {MatInputModule} from '@angular/material';
 
 
@@ -41,8 +41,11 @@ import {MatInputModule} from '@angular/material';
         MatIconModule,
         MatDialogModule,
         MatInputModule,
+        MatDatepickerModule,
+        MatDialogModule,
         MatSelectModule,
         MatChipsModule,
+        MatNativeDateModule,
         MatToolbarModule,
         MatCardModule,        
         MatAutocompleteModule,

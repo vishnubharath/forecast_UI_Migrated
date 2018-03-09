@@ -59,7 +59,7 @@ export class ReportService{
 
 
 	reportsave(adjustments:Adjustment[]):Promise<ReportType> {
-		return this._http.post(Constants.base_url+'reports/saveRowRecord',adjustments).toPromise().then((res:Response)=>res.json())
+		return this._http.post(Constants.base_url+'reports/saveRecords',adjustments).toPromise().then((res:Response)=>res.json())
            .catch(error=>console.log(error));
 		
 	}
@@ -68,7 +68,7 @@ export class ReportService{
 	duplicateReportSave(duplicateRecord:ReportType[]):Promise<ReportType> {
 		console.log(this.convertDuplicatReport(duplicateRecord));
 		
-		return this._http.post(Constants.base_url+'reports/duplicateRecordSave',this.convertDuplicatReport(duplicateRecord)).toPromise().then(res=>{console.log("duplicateRecordSave response"+res);return res.json()})
+		return this._http.post(Constants.base_url+'reports/saveRecords',this.convertDuplicatReport(duplicateRecord)).toPromise().then(res=>{console.log("duplicateRecordSave response"+res);return res.json()})
            .catch(error=>console.log(error));
 	}
 
@@ -89,6 +89,8 @@ export class ReportService{
 			recordData.billableType=record.billability; 
 			recordData.associateGrade=record.associateGrade;
 			recordData.allocStartDate=record.allocStartDate; 
+			recordData.allocationPercentage=record.allocationPercentage; 
+			recordData.allocEnddate=record.allocEnddate; 
 			recordData.projectBillability=record.projectBillability;
 			recordData.forecastPeriodFrom=record.forecastPeriodFrom;
 			recordData.forecastPeriodTo=record.forecastPeriodTo;    
@@ -114,6 +116,18 @@ export class ReportService{
 					reportAdjusment.forecastedMonth=record["forecastedMonth_"+[i+1]];
 					reportAdjusment.forecastedYear=record["forecastedYear_"+[i+1]];
 					reportAdjusments.push(reportAdjusment);
+				}else if(record.reportDataType==="NewData"){
+					if(record["adjustment_"+[i+1]]!=undefined && record["adjustment_"+[i+1]]!=null){
+						var reportAdjusment:ReportAdjusment = new ReportAdjusment();
+						reportAdjusment.id=0;
+						reportAdjusment.adjustment=record["adjustment_"+[i+1]];
+						reportAdjusment.hours=record["hours_"+[i+1]];
+						reportAdjusment.rate=record["rate_"+[i+1]];
+						reportAdjusment.revenue=record["revenue_"+[i+1]];
+						reportAdjusment.forecastedMonth=record["forecastedMonth_"+[i+1]];
+						reportAdjusment.forecastedYear=record["forecastedYear_"+[i+1]];
+						reportAdjusments.push(reportAdjusment);
+					}
 				}
 			}
 			recordData.reportAdjustmentEntity=reportAdjusments;
@@ -131,6 +145,7 @@ export class ReportService{
 			var reportType:ReportType = new ReportType();
 			reportType.reportId = report.reportId;
 			reportType.allocStartDate = report.allocStartDate;
+			reportType.allocEnddate = report.allocEnddate;
 			reportType.city = report.associateCity;
 			reportType.associateGrade = report.associateGrade;
 			reportType.associateId = report.associateId;
@@ -142,6 +157,9 @@ export class ReportService{
 			reportType.forecastedOn = report.forecastedOn;
 			reportType.forecastPeriodFrom = report.forecastPeriodFrom;
 			reportType.forecastPeriodTo = report.forecastPeriodTo;
+			reportType.allocStartDate = report.allocStartDate;
+			reportType.allocEnddate = report.allocEnddate;
+			reportType.allocationPercentage = report.allocationPercentage;
 			reportType.lastUpdatedTime = report.lastUpdatedTime;
 			reportType.lastUpdatedUser = report.lastUpdatedUser;
 			reportType.location = report.locationType;
@@ -255,6 +273,9 @@ export class ReportService{
 			reportType.projectBillability = report.projectBillability;
 			reportType.projectId = report.projectId;
 			reportType.projectName = report.projectName;
+			reportType.allocationPercentage = report.allocationPercentage;
+			reportType.allocStartDate = report.allocStartDate;
+			reportType.allocEnddate = report.allocEnddate;
 			
 			for (let index = 0; index < 12; index++) {
 				if(report["adjustment_"+[index+1]+"_id"]!=null && report["adjustment_"+[index+1]+"_id"]!=""){
@@ -281,6 +302,63 @@ export class ReportService{
 
 
 	public sendingSampleData(){
+		
 		return  this.sampleData;
 	}
+
+convertData(record:any):ReportType[]{
+console.log("inside convertData");
+console.log(record);
+
+
+	var reports:ReportType[]  = [];
+	var report:ReportType = new ReportType();
+	for(let i=0;i<12;i++){
+		if(record["adjustment_"+[i]]!=undefined && record["adjustment_"+[i]]!=null){
+			report["adjustment_"+[i+1]]=record["adjustment_"+[i]];
+		}
+		if(record["hours_"+[i]]!=undefined && record["hours_"+[i]]!=null){
+			report["hours_"+[i+1]]=record["hours_"+[i]];
+		}
+		if(record["rate_"+[i]]!=undefined && record["rate_"+[i]]!=null){
+			report["rate_"+[i+1]]=record["rate_"+[i]];
+		}
+		if(record["forecastedMonth_year_"+[i]]!=undefined && record["forecastedMonth_year_"+[i]]!=null){
+			var tmp=record["forecastedMonth_year_"+[i]].split("-");
+			report["forecastedMonth_"+[i+1]]=tmp[0];
+			report["forecastedYear_"+[i+1]]=tmp[1];
+		}
+		if(record["hours_"+[i]]!=undefined && record["hours_"+[i]]!=null){
+			report["revenue_"+[i+1]]=(record["hours_"+[i]] - record["adjustment_"+[i]]) * record["rate_"+[i]];
+		}
+	}
+	report["associateName"]=record["associateName"];
+	report["projectName"]=record["projectName"];
+	report["associateId"]=record["associateId"];
+	report["location"]=record["locationType"];
+	report["projectId"]=record["projectId"];
+	report["associateGrade"]=record["associateGrade"];
+	report["city"]=record["city"];
+	report["billability"]=record["billability"];
+	report["customerId"]=record["customerId"];
+	report["customerName"]=record["customerName"];
+	report["portfolio"]=record["portfolio"];
+	report["poc"]=record["poc"];
+	report["projectBillability"]=record["projectBillability"];
+	report["allocStartDate"]=record["allocStartDate"];
+	report["allocationPercentage"]=record["allocationPercentage"];
+	report["allocEnddate"]=record["allocEnddate"];
+	report.reportDataType="NewData";
+	reports.push(report);
+	console.log("final data ...");
+	console.log(reports);
+	
+	
+	return reports;
+
+	
+	
+}
+	
+	
 }

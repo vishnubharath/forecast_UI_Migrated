@@ -344,12 +344,16 @@ console.log(record);
 	report["customerName"]=record["customerName"];
 	report["portfolio"]=record["portfolio"];
 	report["poc"]=record["poc"];
-	report["reportId"]="";
+	
 	report["projectBillability"]=record["projectBillability"];
 	//report["allocStartDate"]=record["allocStartDate"].toLocaleDateString();
-	report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];
+	if(record["allocStartDate"]!=null){
+		report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];
+	}
+	if(record["allocEndDate"]!=null){
+		report["allocEndDate"]=record["allocEndDate"].toISOString().split('T')[0];
+	}
 	report["allocationPercentage"]=record["allocationPercentage"];
-	report["allocEndDate"]=record["allocEndDate"].toISOString().split('T')[0];
 	report.reportDataType="NewData";
 	reports.push(report);
 	console.log("final data ...");

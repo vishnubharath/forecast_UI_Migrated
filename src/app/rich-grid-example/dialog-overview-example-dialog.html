@@ -2,12 +2,12 @@
 <h1 mat-dialog-title>ForeCast Row </h1>
 <div mat-dialog-content>
 
-<div>
-  <label >AssociateId  </label>
+
+  <P >AssociateId  </P>
   <mat-form-field>
     <input required matInput type="number" [(ngModel)]="data.associateId" name="associateId">
   </mat-form-field>
-</div>
+
    <p>AssociateName</p>
     <mat-form-field>
       <input required matInput [(ngModel)]="data.associateName" name="associateName">
@@ -83,16 +83,16 @@
 
   <p>Allocation StartDate</p>
   <mat-form-field>
-    <input matInput [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"  >
+    <input matInput [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"   >
     <mat-datepicker-toggle matSuffix [for]="allocStartDate"></mat-datepicker-toggle>
-    <mat-datepicker #allocStartDate></mat-datepicker>
+    <mat-datepicker #allocStartDate ></mat-datepicker>
   </mat-form-field>
 
   <p>Allocation EndDate</p>
   <mat-form-field>
     <input matInput [matDatepicker]="allocEndDate" [ngModel]  name="allocEndDate" >
     <mat-datepicker-toggle matSuffix [for]="allocEndDate"></mat-datepicker-toggle>
-    <mat-datepicker #allocEndDate></mat-datepicker>
+    <mat-datepicker #allocEndDate ></mat-datepicker>
   </mat-form-field>
 
 <div *ngFor="let rowData of sampleData;  let i=index">

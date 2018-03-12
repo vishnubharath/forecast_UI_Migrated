@@ -63,7 +63,7 @@ export class RichGridComponent {
     public  errorData: ReportType[]=[];
     public  parentRowData = new Map();
     private rowClassRules;
-    
+    private getMainMenuItems;
     //Controls
     projectCtrl: FormControl;
    
@@ -128,6 +128,79 @@ export class RichGridComponent {
             
 
           };
+
+
+          this.getMainMenuItems = function getMainMenuItems(params) {
+            switch (params.column.getId()) {
+              case "athlete":
+                var athleteMenuItems = params.defaultItems.slice(0);
+                athleteMenuItems.push({
+                  name: "ag-Grid Is Great",
+                  action: function() {
+                    console.log("ag-Grid is great was selected");
+                  }
+                });
+                athleteMenuItems.push({
+                  name: "Casio Watch",
+                  action: function() {
+                    console.log("People who wear casio watches are cool");
+                  }
+                });
+                athleteMenuItems.push({
+                  name: "Custom Sub Menu",
+                  subMenu: [
+                    {
+                      name: "Black",
+                      action: function() {
+                        console.log("Black was pressed");
+                      }
+                    },
+                    {
+                      name: "White",
+                      action: function() {
+                        console.log("White was pressed");
+                      }
+                    },
+                    {
+                      name: "Grey",
+                      action: function() {
+                        console.log("Grey was pressed");
+                      }
+                    }
+                  ]
+                });
+                return athleteMenuItems;
+              case "age":
+                return [
+                  {
+                    name: "Joe Abercrombie",
+                    action: function() {
+                      console.log("He wrote a book");
+                    },
+                    icon: '<img src="../images/lab.png" style="width: 14px;"/>'
+                  },
+                  {
+                    name: "Larsson",
+                    action: function() {
+                      console.log("He also wrote a book");
+                    },
+                    checked: true
+                  },
+                  "destroyColumnComps"
+                ];
+              case "country":
+                var countryMenuItems = [];
+                var itemsToExclude = ["separator", "pinSubMenu", "valueAggSubMenu"];
+                params.defaultItems.forEach(function(item) {
+                  if (itemsToExclude.indexOf(item) < 0) {
+                    countryMenuItems.push(item);
+                  }
+                });
+                return countryMenuItems;
+              default:
+                return params.defaultItems;
+            }
+          };
     }
 
    
@@ -135,6 +208,11 @@ export class RichGridComponent {
         console.log("enter into create Row data");
         this.hideprogress = false;
         this.addNewRow=true;
+        this.duplicaterowData=[];
+        this.errorData=[];
+        this.updatedRowData=[];
+        this.selectedRow=false;
+        this.selectedRowIndex="";
         this._reportservice.getCurrentReport().subscribe(rowdata => {
             this.serviceRowData = rowdata;
             this.createDynamicColumn(this.serviceRowData[1])
@@ -456,9 +534,9 @@ export class RichGridComponent {
                 
                 this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
                     this.hideprogress = true;
-                    this.duplicaterowData=null;
-                    this.errorData=null;
-                    this.updatedRowData=null;
+                    this.duplicaterowData=[];
+                    this.errorData=[];
+                    this.updatedRowData=[];
                     this.addNewRow=true;
                 }).catch(err => { console.log(err); this.hideprogress = true; }
                 );
@@ -525,6 +603,7 @@ export class RichGridComponent {
                 this._reportservice.deleteReport(rowData_record).subscribe(result => {
                     console.log(result);
                     this.toastr.success('Data Deleted', 'Success!');
+                    this.createRowData();
                 },error=>{
                     this.toastr.error(error, 'Error!');
                 });
@@ -555,12 +634,11 @@ export class RichGridComponent {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
         console.log(result.from);
+        console.log(result);
     
       if(result.from==="save"){
         this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
             this.toastr.success('Data Added', 'Success!'); 
-           // var record:ReportType=this._reportservice.convertData(result)[0];
-           // this.gridOptions.api.updateRowData({ add: this._reportservice.convertData(result) });
         }).catch(error=>{
                 this.toastr.error(error, 'Error!');
         });

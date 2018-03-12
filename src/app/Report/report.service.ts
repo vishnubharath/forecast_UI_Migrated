@@ -31,11 +31,11 @@ export class ReportService{
 	}
 
 	deleteReport(deleteRecord:ReportType[]){
-		return this._http.post(Constants.base_url+'reports/deleteRecords',this.convertDuplicatReport(deleteRecord)).map((res:Response) => res.json())
+		return this._http.post(Constants.base_url+'reports/deleteRecords',this.convertDuplicatReport(deleteRecord))
 		.catch(error=>{
 			let errMsg = (error.message) ? error.message :
 				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-			console.error(errMsg); // log to console instead
+			console.error(error); // log to console instead
 			return Observable.throw(errMsg);
 		});
 	}
@@ -88,9 +88,12 @@ export class ReportService{
 			recordData.projectName=record.projectName; 
 			recordData.billableType=record.billability; 
 			recordData.associateGrade=record.associateGrade;
-			recordData.allocStartDate=record.allocStartDate; 
+			var d=new Date(record.allocStartDate);
+
+			recordData.allocStartDate=d; 
 			recordData.allocationPercentage=record.allocationPercentage; 
-			recordData.allocEndDate=record.allocEndDate; 
+			d=new Date(record.allocEndDate);
+			recordData.allocEndDate=d; 
 			recordData.projectBillability=record.projectBillability;
 			recordData.forecastPeriodFrom=record.forecastPeriodFrom;
 			recordData.forecastPeriodTo=record.forecastPeriodTo;    
@@ -133,7 +136,6 @@ export class ReportService{
 			recordData.reportAdjustmentEntity=reportAdjusments;
 			serviceRowData.push(recordData);
 		});
-		console.log("Delete data");
 		console.log(serviceRowData);
 		return serviceRowData;
 	}
@@ -147,8 +149,10 @@ export class ReportService{
 			
 			var reportType:ReportType = new ReportType();
 			reportType.reportId = report.reportId;
-			reportType.allocStartDate = report.allocStartDate;
-			reportType.allocEndDate = report.allocEndDate;
+			var d = new Date(report.allocStartDate);
+			reportType.allocStartDate = d.toISOString().split('T')[0];
+			 d = new Date(report.allocEndDate);
+			reportType.allocEndDate = d.toISOString().split('T')[0];
 			reportType.city = report.associateCity;
 			reportType.associateGrade = report.associateGrade;
 			reportType.associateId = report.associateId;
@@ -296,12 +300,12 @@ console.log(record);
 	
 	report["projectBillability"]=record["projectBillability"];
 	//report["allocStartDate"]=record["allocStartDate"].toLocaleDateString();
-	if(record["allocStartDate"]!=null){
+	//if(record["allocStartDate"]!=null){
 		report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];
-	}
-	if(record["allocEndDate"]!=null){
+	//}
+	//if(record["allocEndDate"]!=null){
 		report["allocEndDate"]=record["allocEndDate"].toISOString().split('T')[0];
-	}
+	//}
 	report["allocationPercentage"]=record["allocationPercentage"];
 	report.reportDataType="NewData";
 	reports.push(report);

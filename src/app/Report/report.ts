@@ -1,4 +1,5 @@
 import {ReportAdjusment} from './reportAdjusments'
+
 export class Report{
 
     reportId: number;    
@@ -13,8 +14,8 @@ export class Report{
     projectName:string;    
     billableType:string;    
     associateGrade:string;    
-    allocStartDate:string;  
-    allocEndDate:string; 
+    allocStartDate:Date;  
+    allocEndDate:Date; 
     allocationPercentage:string;     
     projectBillability:string;    
     forecastPeriodFrom:number;    

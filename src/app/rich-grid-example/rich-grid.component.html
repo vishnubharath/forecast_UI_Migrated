@@ -58,6 +58,8 @@
 
 <div style="margin: 0px 10px 0px 10px">
 	<ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
+		[getMainMenuItems]="getMainMenuItems"
+		[enableFilter]="true"
 		[rowClassRules]="rowClassRules" [gridOptions]="gridOptions"
 		[columnDefs]="columnDefs" [showToolPanel]="showToolPanel"
 		[rowData]="rowData" [excelStyles]="excelStyles" enableColResize

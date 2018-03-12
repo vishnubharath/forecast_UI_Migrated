@@ -1,11 +1,13 @@
 <mat-toolbar color="primary" role="header" style="background: #336386">
-<mat-toolbar-row> <mat-icon class="app-icon">assignment_turned_in</mat-icon>
-<span style="padding-left: 10px">Forecast & Reports</span> <span
-	class="headder-spacer"></span> <span> <img
-	*ngIf="hideprogress == false"
-	src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif"
-	style="width: 80px;">
-</span> </mat-toolbar-row> </mat-toolbar>
+<mat-toolbar-row> 
+	<img src="https://www.cognizant.com/content/dam/cognizant_foundation/Dotcomimage/COG-Logo-White.svg" style="width: 80px;">
+
+	<span style="padding-left: 33%">Forecast & Reports</span> 
+	<span class="headder-spacer"></span> 
+	<span style="width: 80px;">
+		<img *ngIf="hideprogress == false" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif" style="width: 80px;">
+	</span> 
+</mat-toolbar-row> </mat-toolbar>
 <div style="padding: 5px 5px 10px 10px">
 		
 	<div style="padding-top: 5px;"> 
@@ -22,10 +24,7 @@
 					[matChipInputAddOnBlur]="addOnBlur"
 					(matChipInputTokenEnd)="add($event)"
 					[matAutocomplete]="auto2" [formControl]="projectCtrl" style="margin: 0px"/>
-			<span class="controls-spacing"></span> 
-			<button mat-stroked-button (click)="getReports()">
-				Get Projects
-			</button>
+			<span class="controls-spacing"></span> 			
 		</mat-chip-list>	
 		<mat-autocomplete #auto2="matAutocomplete"> 
 			<mat-option *ngFor="let project of filteredProjectsObs | async"
@@ -37,11 +36,13 @@
 
 	<div style="padding-top: 5px;">			
 		<input matInput class="head-control" (keyup)="onQuickFilterChanged($event)" type="text"
-			id="quickFilterInput" placeholder="Filter Results" />
-		<span class="controls-spacing"></span> 
-		<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
-		<span class="controls-spacing"></span>
-		<button mat-stroked-button (click)="createRowData()">Refresh Data</button>
+			id="quickFilterInput" placeholder="Filter Results" style="width: 50%;" />		
+		<div style="float: right" >
+			<span class="controls-spacing"></span> 
+			<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
+			<span class="controls-spacing"></span>
+			<button mat-stroked-button (click)="createRowData()">Refresh Data</button>
+		</div>
 	</div>
 
 	<div style="padding-top: 5px;">

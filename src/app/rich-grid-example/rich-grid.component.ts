@@ -817,6 +817,7 @@ export class RichGridComponent {
       if(project) {
         this.projects = this.projects.filter( proj => proj.projectId + "" != value );
         this.chosenProject.push(project);
+        this.getReports();
       } 
     }
   
@@ -832,6 +833,7 @@ export class RichGridComponent {
     if (index >= 0) {
       this.chosenProject.splice(index, 1);
       this.projects.push(project)
+      this.getReports();
     }
   }
 
@@ -845,6 +847,7 @@ export class RichGridComponent {
     if(project) {
         this.projects = this.projects.filter( proj => proj.projectId + "" != projectSelected.projectId );      
         this.chosenProject.push(project);
+        this.getReports();
     }
     
     console.log(project);    
@@ -860,6 +863,7 @@ export class RichGridComponent {
     
     if(projects.length <= 0) {
         this.toastr.info('Please chose projects for querying','Please Chose Projects');
+        this.createRowData();
         return;
     }
 

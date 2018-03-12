@@ -25,22 +25,30 @@
 	<span class="controls-spacing"></span>
 	<button mat-stroked-button   (click)="openDialog()">Add</button>
 
-	<span class="controls-spacing"></span> <input class="head-control"
-		matInput placeholder="Project" aria-label="Project"
-		[matAutocomplete]="auto2" [formControl]="projectCtrl">
-	<mat-autocomplete #auto2="matAutocomplete"> <mat-option
-		*ngFor="let project of filteredProjectsObs | async"
-		[value]="project.projectId" (click)="autoCompleate()"> <span>{{
-		project.projectName }}</span> </mat-option> </mat-autocomplete>
-
-	<mat-card style="margin: 5px;" *ngIf="chosenProjectArray.length > 0">
-	<mat-chip-list> <mat-chip
-		*ngFor="let chip of chosenProjectArray" selected="true"
-		[color]="chip.color" style="padding:5px; margin: 5px">
-	{{chip}} <mat-icon matChipRemove>cancel</mat-icon> </mat-chip> </mat-chip-list>
-	<button mat-stroked-button (click)="getReports()" style="margin: 5px">Get
-		Projects</button>
-	</mat-card>
+	<div style="padding-top: 5px;"> 
+		<mat-chip-list #chipList>
+			<mat-chip *ngFor="let project of chosenProject" [selectable]="selectable"
+						[removable]="removable" (remove)="remove(project)">
+				{{project.projectName}}
+				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+			</mat-chip>
+			<input matInput placeholder="Project"
+					[matChipInputFor]="chipList"
+					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+					[matChipInputAddOnBlur]="addOnBlur"
+					(matChipInputTokenEnd)="add($event)"
+					[matAutocomplete]="auto2" [formControl]="projectCtrl"/>
+			<button mat-stroked-button (click)="getReports()" style="margin: 5px">
+				Get Projects
+			</button>
+		</mat-chip-list>	
+		<mat-autocomplete #auto2="matAutocomplete"> 
+			<mat-option *ngFor="let project of filteredProjectsObs | async"
+				[value]="project.projectId" (click)="autoComplete(project)" > 
+				<span>{{project.projectName }}</span> 
+			</mat-option> 
+		</mat-autocomplete>
+	</div>
 </div>
 
 <div style="margin: 0px 10px 0px 10px">

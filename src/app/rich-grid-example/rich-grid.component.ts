@@ -5,6 +5,9 @@ import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 
+import {MatChipInputEvent} from '@angular/material';
+import {ENTER, COMMA} from '@angular/cdk/keycodes';
+
 import ProficiencyFilter from '../filters/proficiencyFilter';
 
 
@@ -39,7 +42,7 @@ export class RichGridComponent {
     public projects: Project[];
     public filteredProjects: Project[];
     public filteredProjectsObs : Observable<any[]>;
-    public chosenProject:string[];
+    public chosenProject:Array<Project> = new Array<Project>();
     public chosenProjectArray:Array<String> = new Array<String>();
     public rowData: ReportType[];
     private columnDefs: any[];
@@ -65,6 +68,13 @@ export class RichGridComponent {
     projectCtrl: FormControl;
    
     public addRowData: ReportType;
+
+    // Chips Config
+    selectable: boolean = true;
+    removable: boolean = true;
+    addOnBlur: boolean = true;
+    // Enter, comma
+    separatorKeysCodes = [ENTER, COMMA];
 
   
     
@@ -691,28 +701,8 @@ export class RichGridComponent {
       showSuccess() {
         this.toastr.success('You are awesome!', 'Success!');
       }
-    getReports(){
 
-        console.log(this.chosenProject);
-        
-        var projects: Project[] = [];
-
-        this.chosenProject.forEach( id => 
-            {
-                var project :Project = new Project();
-                project.projectId = parseInt(id);
-                project.projectName = "test";
-                projects.push(project);
-            });
-
-        this.hideprogress = false;
-        this._reportservice.getReportForProject(this.chosenProject)
-            .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
-            ,error=>{
-                this.toastr.error(error, 'Error!');
-            });
-
-    }
+   
 
 
     onDuplicateRow(){
@@ -773,30 +763,9 @@ export class RichGridComponent {
             
         } 
     }
-
-    // openDialog(){
-    //     // const dialogRef = this.dialog.open(UpdateReportDialog, {
-           
-    //     //   });
-      
-    //     //   dialogRef.afterClosed().subscribe(result => {
-    //     //     console.log(`Dialog result: ${result}`);
-    //     //   }); 
-    // }
     
 
-    autoCompleate(){
-        console.log("auto ..." + this.projectCtrl.value);
-        //this.chosenProject[0] = this.projectCtrl.value;
-        this.chosenProjectArray.push(this.projectCtrl.value)
-        console.log(this.chosenProject);
-        console.log(this.chosenProjectArray);       
-        console.log(this.chosenProjectArray.toString().split(','));
-
-        this.chosenProject = this.chosenProjectArray.toString().split(',');
-        console.log(this.chosenProject);      
-        
-    }
+   
 
   
 
@@ -833,7 +802,72 @@ export class RichGridComponent {
       
     });
   }
-     
+
+  add(event: MatChipInputEvent): void {
+    let input = event.input;
+    let value = event.value;
+  
+    // Add our fruit
+    if ((value || '').trim()) {
+      
+      
+      
+      let project  = this.projects.filter( proj => proj.projectId + "" === value )[0];
+
+      if(project) {
+        this.projects = this.projects.filter( proj => proj.projectId + "" != value );
+        this.chosenProject.push(project);
+      } 
+    }
+  
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+  
+  remove(project: any): void {
+    let index = this.chosenProject.indexOf(project);
+  
+    if (index >= 0) {
+      this.chosenProject.splice(index, 1);
+      this.projects.push(project)
+    }
+  }
+
+  autoComplete(projectSelected:any){
+    console.log("->");    
+    this.projectCtrl.setValue("");  
+    
+    let project  = this.projects.filter( proj => proj.projectId + "" === projectSelected.projectId + "")[0];      
+    
+
+    if(project) {
+        this.projects = this.projects.filter( proj => proj.projectId + "" != projectSelected.projectId );      
+        this.chosenProject.push(project);
+    }
+    
+    console.log(project);    
+  }
+
+  getReports(){
+
+    console.log(this.chosenProject);
+    
+    var projects: string[] = [];
+    
+    this.chosenProject.forEach(cp => projects.push(cp.projectId+""));    
+
+    this.hideprogress = false;
+    this._reportservice.getReportForProject(projects)
+        .subscribe( data => {
+             this.rowData = this._reportservice.convertReport(data); 
+             this.hideprogress = true;}
+        ,error=>{
+            this.toastr.error(error, 'Error!');
+        }); 
+
+}
   
   
 }

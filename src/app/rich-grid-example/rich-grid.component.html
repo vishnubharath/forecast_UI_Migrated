@@ -6,38 +6,22 @@
 	src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif"
 	style="width: 80px;">
 </span> </mat-toolbar-row> </mat-toolbar>
-<div style="padding: 10px">
-	<button mat-stroked-button (click)="onBtExport()">Export As
-		Excel</button>
-	<span class="controls-spacing"></span>
-	<button mat-stroked-button (click)="createRowData()">Refresh
-		Data</button>
-	<span class="controls-spacing"></span>
-	<button mat-stroked-button (click)="saveUpdated()">Save</button>
-	<span class="controls-spacing"></span> <input class="head-control"
-		mat-raised-button (keyup)="onQuickFilterChanged($event)" type="text"
-		id="quickFilterInput" placeholder="Filter Results" />
-	<button mat-stroked-button (click)="onDuplicateRow()"
-		[disabled]="!selectedRow">Duplicate Row</button>
-	<span class="controls-spacing"></span>
-	<button mat-stroked-button (click)="onDeleteRow()"
-		[disabled]="!selectedRow">Delete Row</button>
-	<span class="controls-spacing"></span>
-	<button mat-stroked-button   (click)="openDialog()">Add</button>
-
+<div style="padding: 5px 5px 10px 10px">
+		
 	<div style="padding-top: 5px;"> 
 		<mat-chip-list #chipList>
-			<mat-chip *ngFor="let project of chosenProject" [selectable]="selectable"
+			<mat-chip style="  margin-right: 5px" *ngFor="let project of chosenProject" [selectable]="selectable"
 						[removable]="removable" (remove)="remove(project)">
 				{{project.projectName}}
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
+			
 			<input matInput placeholder="Project"
 					[matChipInputFor]="chipList"
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 					[matChipInputAddOnBlur]="addOnBlur"
 					(matChipInputTokenEnd)="add($event)"
-					[matAutocomplete]="auto2" [formControl]="projectCtrl"/>
+					[matAutocomplete]="auto2" [formControl]="projectCtrl" style="margin: 0px"/>
 			<button mat-stroked-button (click)="getReports()" style="margin: 5px">
 				Get Projects
 			</button>
@@ -48,6 +32,25 @@
 				<span>{{project.projectName }}</span> 
 			</mat-option> 
 		</mat-autocomplete>
+	</div>
+
+	<div style="padding-top: 5px;">			
+		<input matInput class="head-control" (keyup)="onQuickFilterChanged($event)" type="text"
+			id="quickFilterInput" placeholder="Filter Results" />
+		<span class="controls-spacing"></span> 
+		<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
+		<span class="controls-spacing"></span>
+		<button mat-stroked-button (click)="createRowData()">Refresh Data</button>
+	</div>
+
+	<div style="padding-top: 5px;">
+		<button mat-stroked-button (click)="saveUpdated()">Save</button>
+		<span class="controls-spacing"></span>
+		<button mat-stroked-button   (click)="openDialog()">Add Row</button>
+		<span class="controls-spacing"></span>
+		<button mat-stroked-button (click)="onDeleteRow()" [disabled]="!selectedRow">Delete Row</button>
+		<span class="controls-spacing"></span>
+		<button mat-stroked-button (click)="onDuplicateRow()" [disabled]="!selectedRow">Duplicate Row</button>
 	</div>
 </div>
 

@@ -857,9 +857,11 @@ export class RichGridComponent {
         
        }
        submitForm(data){
-           console.log(data);
+        console.log("from dialog ");
+       
            data.from="save";
            this.dialogRef.close(data);
+       
            
        }
     onNoClick(): void {

@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" role="header" style="background: #336386">
+<mat-toolbar color="primary" role="header" style="background: #285682">
 <mat-toolbar-row> 
 	<img src="https://www.cognizant.com/content/dam/cognizant_foundation/Dotcomimage/COG-Logo-White.svg" style="width: 80px;">
 
@@ -18,7 +18,7 @@
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
 			
-			<input matInput placeholder="Project" class="head-control"
+			<input matInput placeholder="Filter by project" class="head-control"
 					[matChipInputFor]="chipList"
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 					[matChipInputAddOnBlur]="addOnBlur"
@@ -36,7 +36,7 @@
 
 	<div style="padding-top: 5px;">			
 		<input matInput class="head-control" (keyup)="onQuickFilterChanged($event)" type="text"
-			id="quickFilterInput" placeholder="Filter Results" style="width: 50%;" />		
+			id="quickFilterInput" placeholder="Filter by project to view data" style="width: 50%;" />		
 		<div style="float: right" >
 			<span class="controls-spacing"></span> 
 			<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>

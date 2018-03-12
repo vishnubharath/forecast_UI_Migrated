@@ -856,7 +856,12 @@ export class RichGridComponent {
     
     var projects: string[] = [];
     
-    this.chosenProject.forEach(cp => projects.push(cp.projectId+""));    
+    this.chosenProject.forEach(cp => projects.push(cp.projectId+"")); 
+    
+    if(projects.length <= 0) {
+        this.toastr.info('Please chose projects for querying','Please Chose Projects');
+        return;
+    }
 
     this.hideprogress = false;
     this._reportservice.getReportForProject(projects)

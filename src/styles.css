@@ -37,7 +37,7 @@
 }
 .head-control{
     background: white;
-    font-family: Lucida Console
+    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 }
 
 .mat-card{
@@ -45,5 +45,5 @@
 }
 
 * {
-    font-family: Lucida Console;
+    font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
   }

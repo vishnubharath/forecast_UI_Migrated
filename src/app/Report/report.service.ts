@@ -56,7 +56,7 @@ export class ReportService{
 			return Observable.throw(errMsg);
 		});
 	}
-
+	
 
 	reportsave(adjustments:Adjustment[]):Promise<ReportType> {
 		return this._http.post(Constants.base_url+'reports/saveRecords',adjustments).toPromise().then((res:Response)=>res.json())
@@ -90,7 +90,7 @@ export class ReportService{
 			recordData.associateGrade=record.associateGrade;
 			recordData.allocStartDate=record.allocStartDate; 
 			recordData.allocationPercentage=record.allocationPercentage; 
-			recordData.allocEnddate=record.allocEnddate; 
+			recordData.allocEndDate=record.allocEndDate; 
 			recordData.projectBillability=record.projectBillability;
 			recordData.forecastPeriodFrom=record.forecastPeriodFrom;
 			recordData.forecastPeriodTo=record.forecastPeriodTo;    
@@ -145,7 +145,7 @@ export class ReportService{
 			var reportType:ReportType = new ReportType();
 			reportType.reportId = report.reportId;
 			reportType.allocStartDate = report.allocStartDate;
-			reportType.allocEnddate = report.allocEnddate;
+			reportType.allocEndDate = report.allocEndDate;
 			reportType.city = report.associateCity;
 			reportType.associateGrade = report.associateGrade;
 			reportType.associateId = report.associateId;
@@ -158,7 +158,7 @@ export class ReportService{
 			reportType.forecastPeriodFrom = report.forecastPeriodFrom;
 			reportType.forecastPeriodTo = report.forecastPeriodTo;
 			reportType.allocStartDate = report.allocStartDate;
-			reportType.allocEnddate = report.allocEnddate;
+			reportType.allocEndDate = report.allocEndDate;
 			reportType.allocationPercentage = report.allocationPercentage;
 			reportType.lastUpdatedTime = report.lastUpdatedTime;
 			reportType.lastUpdatedUser = report.lastUpdatedUser;
@@ -275,7 +275,7 @@ export class ReportService{
 			reportType.projectName = report.projectName;
 			reportType.allocationPercentage = report.allocationPercentage;
 			reportType.allocStartDate = report.allocStartDate;
-			reportType.allocEnddate = report.allocEnddate;
+			reportType.allocEndDate = report.allocEndDate;
 			
 			for (let index = 0; index < 12; index++) {
 				if(report["adjustment_"+[index+1]+"_id"]!=null && report["adjustment_"+[index+1]+"_id"]!=""){
@@ -344,10 +344,16 @@ console.log(record);
 	report["customerName"]=record["customerName"];
 	report["portfolio"]=record["portfolio"];
 	report["poc"]=record["poc"];
+	
 	report["projectBillability"]=record["projectBillability"];
-	report["allocStartDate"]=record["allocStartDate"];
+	//report["allocStartDate"]=record["allocStartDate"].toLocaleDateString();
+	if(record["allocStartDate"]!=null){
+		report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];
+	}
+	if(record["allocEndDate"]!=null){
+		report["allocEndDate"]=record["allocEndDate"].toISOString().split('T')[0];
+	}
 	report["allocationPercentage"]=record["allocationPercentage"];
-	report["allocEnddate"]=record["allocEnddate"];
 	report.reportDataType="NewData";
 	reports.push(report);
 	console.log("final data ...");

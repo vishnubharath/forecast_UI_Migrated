@@ -12,7 +12,7 @@ export class ReportType{
     billability:string;    
     associateGrade:string;    
     allocStartDate:string;   
-    allocEnddate:string; 
+    allocEndDate:string; 
     allocationPercentage:string;   
     projectBillability:string;    
     forecastPeriodFrom:number;    

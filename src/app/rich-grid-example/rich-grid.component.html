@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" role="header" style="background: #336386">
 <mat-toolbar-row> <mat-icon class="app-icon">assignment_turned_in</mat-icon>
-<span style="padding-left: 10px">Forecast Costing & Reports</span> <span
+<span style="padding-left: 10px">Forecast & Reports</span> <span
 	class="headder-spacer"></span> <span> <img
 	*ngIf="hideprogress == false"
 	src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif"
@@ -10,19 +10,20 @@
 		
 	<div style="padding-top: 5px;"> 
 		<mat-chip-list #chipList>
-			<mat-chip style="  margin-right: 5px" *ngFor="let project of chosenProject" [selectable]="selectable"
+			<mat-chip style=" margin-right: 5px" *ngFor="let project of chosenProject" [selectable]="selectable"
 						[removable]="removable" (remove)="remove(project)">
 				{{project.projectName}}
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
 			
-			<input matInput placeholder="Project"
+			<input matInput placeholder="Project" class="head-control"
 					[matChipInputFor]="chipList"
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 					[matChipInputAddOnBlur]="addOnBlur"
 					(matChipInputTokenEnd)="add($event)"
 					[matAutocomplete]="auto2" [formControl]="projectCtrl" style="margin: 0px"/>
-			<button mat-stroked-button (click)="getReports()" style="margin: 5px">
+			<span class="controls-spacing"></span> 
+			<button mat-stroked-button (click)="getReports()">
 				Get Projects
 			</button>
 		</mat-chip-list>	

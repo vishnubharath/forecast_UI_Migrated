@@ -44,7 +44,7 @@
 		</mat-chip-list>	
 		<mat-autocomplete #auto2="matAutocomplete"> 
 			<mat-option *ngFor="let project of filteredProjectsObs | async"
-				[value]="project.projectId"> 
+				[value]="project.projectId" (click)="autoComplete(project)" > 
 				<span>{{project.projectName }}</span> 
 			</mat-option> 
 		</mat-autocomplete>

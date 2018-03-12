@@ -765,18 +765,7 @@ export class RichGridComponent {
     }
     
 
-    autoCompleate(){
-        console.log("auto ..." + this.projectCtrl.value);
-        //this.chosenProject[0] = this.projectCtrl.value;
-        this.chosenProjectArray.push(this.projectCtrl.value)
-        console.log(this.chosenProject);
-        console.log(this.chosenProjectArray);       
-        console.log(this.chosenProjectArray.toString().split(','));
-
-        //this.chosenProject = this.chosenProjectArray.toString().split(',');
-        console.log(this.chosenProject);      
-        
-    }
+   
 
   
 
@@ -824,13 +813,11 @@ export class RichGridComponent {
       
       
       let project  = this.projects.filter( proj => proj.projectId + "" === value )[0];
-      console.log(this.projects);
-      console.log(project);
 
-      this.projects = this.projects.filter( proj => proj.projectId + "" != value );
-      console.log(this.projects);
-
-      this.chosenProject.push(project);
+      if(project) {
+        this.projects = this.projects.filter( proj => proj.projectId + "" != value );
+        this.chosenProject.push(project);
+      } 
     }
   
     // Reset the input value
@@ -846,6 +833,21 @@ export class RichGridComponent {
       this.chosenProject.splice(index, 1);
       this.projects.push(project)
     }
+  }
+
+  autoComplete(projectSelected:any){
+    console.log("->");    
+    this.projectCtrl.setValue("");  
+    
+    let project  = this.projects.filter( proj => proj.projectId + "" === projectSelected.projectId + "")[0];      
+    
+
+    if(project) {
+        this.projects = this.projects.filter( proj => proj.projectId + "" != projectSelected.projectId );      
+        this.chosenProject.push(project);
+    }
+    
+    console.log(project);    
   }
 
   getReports(){

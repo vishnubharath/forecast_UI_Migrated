@@ -5,6 +5,9 @@ import {Observable} from 'rxjs/Observable';
 import {startWith} from 'rxjs/operators/startWith';
 import {map} from 'rxjs/operators/map';
 
+import {MatChipInputEvent} from '@angular/material';
+import {ENTER, COMMA} from '@angular/cdk/keycodes';
+
 import ProficiencyFilter from '../filters/proficiencyFilter';
 
 
@@ -39,7 +42,7 @@ export class RichGridComponent {
     public projects: Project[];
     public filteredProjects: Project[];
     public filteredProjectsObs : Observable<any[]>;
-    public chosenProject:string[];
+    public chosenProject:Array<string> = new Array<string>();
     public chosenProjectArray:Array<String> = new Array<String>();
     public rowData: ReportType[];
     private columnDefs: any[];
@@ -65,6 +68,13 @@ export class RichGridComponent {
     projectCtrl: FormControl;
    
     public addRowData: ReportType;
+
+    // Chips Config
+    selectable: boolean = true;
+    removable: boolean = true;
+    addOnBlur: boolean = true;
+    // Enter, comma
+    separatorKeysCodes = [ENTER, COMMA];
 
   
     
@@ -833,7 +843,34 @@ export class RichGridComponent {
       
     });
   }
-     
+
+  add(event: MatChipInputEvent): void {
+    let input = event.input;
+    let value = event.value;
+  
+    // Add our fruit
+    if ((value || '').trim()) {
+      
+      console.log(value);
+      
+      let project  = this.projects.filter( proj => proj.projectId + "" === value )[0];
+      console.log(project);    
+      this.chosenProject.push(project!.projectName);
+    }
+  
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+  
+  remove(fruit: any): void {
+    let index = this.chosenProject.indexOf(fruit);
+  
+    if (index >= 0) {
+      this.chosenProject.splice(index, 1);
+    }
+  }
   
   
 }

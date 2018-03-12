@@ -42,7 +42,7 @@ export class RichGridComponent {
     public projects: Project[];
     public filteredProjects: Project[];
     public filteredProjectsObs : Observable<any[]>;
-    public chosenProject:Array<string> = new Array<string>();
+    public chosenProject:Array<Project> = new Array<Project>();
     public chosenProjectArray:Array<String> = new Array<String>();
     public rowData: ReportType[];
     private columnDefs: any[];
@@ -701,28 +701,8 @@ export class RichGridComponent {
       showSuccess() {
         this.toastr.success('You are awesome!', 'Success!');
       }
-    getReports(){
 
-        console.log(this.chosenProject);
-        
-        var projects: Project[] = [];
-
-        this.chosenProject.forEach( id => 
-            {
-                var project :Project = new Project();
-                project.projectId = parseInt(id);
-                project.projectName = "test";
-                projects.push(project);
-            });
-
-        this.hideprogress = false;
-        this._reportservice.getReportForProject(this.chosenProject)
-            .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
-            ,error=>{
-                this.toastr.error(error, 'Error!');
-            });
-
-    }
+   
 
 
     onDuplicateRow(){
@@ -783,16 +763,6 @@ export class RichGridComponent {
             
         } 
     }
-
-    // openDialog(){
-    //     // const dialogRef = this.dialog.open(UpdateReportDialog, {
-           
-    //     //   });
-      
-    //     //   dialogRef.afterClosed().subscribe(result => {
-    //     //     console.log(`Dialog result: ${result}`);
-    //     //   }); 
-    // }
     
 
     autoCompleate(){
@@ -803,7 +773,7 @@ export class RichGridComponent {
         console.log(this.chosenProjectArray);       
         console.log(this.chosenProjectArray.toString().split(','));
 
-        this.chosenProject = this.chosenProjectArray.toString().split(',');
+        //this.chosenProject = this.chosenProjectArray.toString().split(',');
         console.log(this.chosenProject);      
         
     }
@@ -851,11 +821,16 @@ export class RichGridComponent {
     // Add our fruit
     if ((value || '').trim()) {
       
-      console.log(value);
+      
       
       let project  = this.projects.filter( proj => proj.projectId + "" === value )[0];
-      console.log(project);    
-      this.chosenProject.push(project!.projectName);
+      console.log(this.projects);
+      console.log(project);
+
+      this.projects = this.projects.filter( proj => proj.projectId + "" != value );
+      console.log(this.projects);
+
+      this.chosenProject.push(project);
     }
   
     // Reset the input value
@@ -864,13 +839,37 @@ export class RichGridComponent {
     }
   }
   
-  remove(fruit: any): void {
-    let index = this.chosenProject.indexOf(fruit);
+  remove(project: any): void {
+    let index = this.chosenProject.indexOf(project);
   
     if (index >= 0) {
       this.chosenProject.splice(index, 1);
+      this.projects.push(project)
     }
   }
+
+  getReports(){
+
+    console.log(this.chosenProject);
+    
+    var projects: Project[] = [];
+
+    this.chosenProject.forEach( id => 
+        {
+            var project :Project = new Project();
+            project.projectId = parseInt(id);
+            project.projectName = "test";
+            projects.push(project);
+        });
+
+    this.hideprogress = false;
+    /**this._reportservice.getReportForProject(this.chosenProject)
+        .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
+        ,error=>{
+            this.toastr.error(error, 'Error!');
+        }); **/
+
+}
   
   
 }

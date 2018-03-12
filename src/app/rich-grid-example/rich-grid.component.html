@@ -27,9 +27,9 @@
 
 	<div style="padding-top: 5px;"> 
 		<mat-chip-list #chipList>
-			<mat-chip *ngFor="let fruit of chosenProject" [selectable]="selectable"
-						[removable]="removable" (remove)="remove(fruit)">
-				{{fruit}}
+			<mat-chip *ngFor="let project of chosenProject" [selectable]="selectable"
+						[removable]="removable" (remove)="remove(project)">
+				{{project.projectName}}
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
 			<input matInput placeholder="Project"

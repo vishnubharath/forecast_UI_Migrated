@@ -344,6 +344,7 @@ console.log(record);
 	report["customerName"]=record["customerName"];
 	report["portfolio"]=record["portfolio"];
 	report["poc"]=record["poc"];
+	report["reportId"]="";
 	report["projectBillability"]=record["projectBillability"];
 	//report["allocStartDate"]=record["allocStartDate"].toLocaleDateString();
 	report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];

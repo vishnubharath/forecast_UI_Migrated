@@ -854,22 +854,18 @@ export class RichGridComponent {
 
     console.log(this.chosenProject);
     
-    var projects: Project[] = [];
-
-    this.chosenProject.forEach( id => 
-        {
-            var project :Project = new Project();
-            project.projectId = parseInt(id);
-            project.projectName = "test";
-            projects.push(project);
-        });
+    var projects: string[] = [];
+    
+    this.chosenProject.forEach(cp => projects.push(cp.projectId+""));    
 
     this.hideprogress = false;
-    /**this._reportservice.getReportForProject(this.chosenProject)
-        .subscribe( data => { this.rowData = this._reportservice.convertReport(data); this.hideprogress = true;}
+    this._reportservice.getReportForProject(projects)
+        .subscribe( data => {
+             this.rowData = this._reportservice.convertReport(data); 
+             this.hideprogress = true;}
         ,error=>{
             this.toastr.error(error, 'Error!');
-        }); **/
+        }); 
 
 }
   

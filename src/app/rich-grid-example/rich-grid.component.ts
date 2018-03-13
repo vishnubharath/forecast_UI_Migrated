@@ -161,7 +161,7 @@ export class RichGridComponent {
         //         return params.defaultItems;
         //     }
         //   };
-          this.toastr.info('Please chose projects for querying','Please Chose Projects');
+          this.toastr.info('Please choose projects for querying','Please Choose Projects');
     }
 
    
@@ -190,6 +190,8 @@ export class RichGridComponent {
             console.log("projects ");
             console.log(projects);
             
+        },error=>{
+            this.toastr.error(error,"Error");
         });
 
         console.log("inside the create row data" + this.rowData)
@@ -197,6 +199,8 @@ export class RichGridComponent {
     private createDynamicColumn(reportdata:Report){
         console.log("Length of the record"+reportdata.reportAdjustmentEntity.length)
                
+        this.columnDefs=[];
+        this.createColumnDefs();
                 for(let i=0;i<reportdata.reportAdjustmentEntity.length;i++){
     
               var params=  {
@@ -484,25 +488,35 @@ export class RichGridComponent {
                     this.errorData.push(data);
                 }
             });
-            if( this.errorData.length===0){
-                this.updatedRowData.forEach(rowData=>{
-                    this.duplicaterowData.push(rowData);
-                });
-                //Final Data send to server 
-                console.log("Final data");
-                console.log(this.duplicaterowData);
-                
-                
-                this._reportservice.duplicateReportSave(this.duplicaterowData).then(data => {
+            if( this.errorData.length===0 ){
+                if((this.updatedRowData.length>0 || this.duplicaterowData.length>0)){
+                    this.updatedRowData.forEach(rowData=>{
+                        this.duplicaterowData.push(rowData);
+                    });
+                    //Final Data send to server 
+                    console.log("Final data");
+                    console.log(this.duplicaterowData);
+                    
+                    // if(this.duplicaterowData.length>0){
+                        this._reportservice.finalReportSave(this.duplicaterowData).subscribe(data => {
+                            this.hideprogress = true;
+                            this.duplicaterowData=[];
+                            this.errorData=[];
+                            this.updatedRowData=[];
+                            this.addNewRow=true;
+                            this.getReports();
+                            this.toastr.success("Data Saved","success");
+                        },err => { console.log(err); 
+                            this.toastr.error(err,"Error");
+                            this.hideprogress = true;
+                         });
+                    // }
+                    
+                }else{
+                    this.toastr.warning("Nothing to save","Warning");
                     this.hideprogress = true;
-                    this.duplicaterowData=[];
-                    this.errorData=[];
-                    this.updatedRowData=[];
-                    this.addNewRow=true;
-                    this.getReports();
-                    this.toastr.success("Data Saved","success");
-                }).catch(err => { console.log(err); this.hideprogress = true; }
-                );
+                }
+                
             }else{
                 //aleart box
                 console.log("Error data ");
@@ -559,7 +573,7 @@ export class RichGridComponent {
     }
 
     onDeleteRow(){
-        if(this.selectedRow){
+        if(this.selectedRow && this.duplicaterowData.length==0 && this.updatedRowData.length==0 && this.errorData.length==0 ){
             var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows(),true);
             if(rowData_record[0].reportId!=undefined){
                 console.log("inside if condition ");
@@ -567,7 +581,10 @@ export class RichGridComponent {
                     console.log(result);
                     this.toastr.success('Data Deleted', 'Success!');
                     //this.createRowData();
+                    this.selectedRow=false;
+                    this.selectedRowIndex="";
                     this.getReports();
+
                 },error=>{
                     this.toastr.error(error, 'Error!');
                 });
@@ -581,7 +598,9 @@ export class RichGridComponent {
                 console.log(this.duplicaterowData);
             }
             
-        } 
+        } else{
+            this.toastr.error('Please save unsaved data before proceeding with delete to prevent data loss!! ', 'Error');
+        }
     }
     
 
@@ -590,32 +609,49 @@ export class RichGridComponent {
   
 
   openDialog(): void {
-      if(this.duplicaterowData.length===0 && this.errorData.length===0 && this.updatedRowData.length===0){
+      if(this.rowData===undefined){
+        this.toastr.warning('Please choose any project before adding New Row data!!');
+      }else if(this.duplicaterowData.length===0 && this.errorData.length===0 && this.updatedRowData.length===0 ){
+          if(this.addRowData===undefined){
+            this.addRowData=new ReportType();
+          }
+        this.addRowData.reportDataType="NewData";
         let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
             width: '75%',
-            data: { data: this.addRowData}
+            data:  this.addRowData
           });
       
           dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
               console.log(result.from);
-              console.log(result);
-          
-            if(result.from==="save"){
-              this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
-                  this.toastr.success('Data Added', 'Success!'); 
-              }).catch(error=>{
+              this.addRowData=result;
+              var reports:ReportType[]  = this._reportservice.convertNewData(result);
+              var costing:Boolean=false;
+              var serviceRowData: Report[]=this._reportservice.convertFinalReport(reports);
+              for(let i=0;i<serviceRowData[0].reportAdjustmentEntity.length;i++){
+                  if(serviceRowData[0].reportAdjustmentEntity[i].hours!=undefined || serviceRowData[0].reportAdjustmentEntity[i].rate!=undefined || serviceRowData[0].reportAdjustmentEntity[i].adjustment!=undefined   ){
+                    costing=true;
+                    break;
+                  }
+              }
+                console.log(this._reportservice.convertFinalReport(reports)[0].reportAdjustmentEntity.length);
+              if(costing){
+                if(result.from==="save"){
+                    this._reportservice.finalReportSave(reports).subscribe(resp=>{
+                        this.toastr.success('Data Added', 'Success!'); 
+                        this.getReports();
+                        this.addRowData=new ReportType()
+                    },error=>{
                       this.toastr.error(error, 'Error!');
-              });
-            }else{
-                console.log("inside cancel");
-               // this.toastr.error('This is not good!', 'Oops!');
-                
-            }
-            
-          });
+                   });
+                  }
+              }else{
+                this.toastr.error('Please enter Costing Data of any one month to proceed for addition of new report record.'); 
+              }
+           
+        });
       }else{
-        this.toastr.error('Please complete(save) the Pending process like duplicate row ,changed data ', 'Error');
+        this.toastr.error('Please save unsaved data before adding new data to prevent data loss!! ', 'Error');
       }
     
   }
@@ -669,17 +705,21 @@ export class RichGridComponent {
     
     console.log(project);    
   }
+  
 
   getReports(){
 
     console.log(this.chosenProject);
+    console.log("Enter into getReports");
     
+  
+
     var projects: string[] = [];
     
     this.chosenProject.forEach(cp => projects.push(cp.projectId+"")); 
     
     if(projects.length <= 0) {
-        this.toastr.info('Please chose projects for querying','Please Chose Projects');
+        this.toastr.info('Please choose projects for querying','Please Choose Projects');
         this.rowData=[];
         return;
     }
@@ -687,8 +727,22 @@ export class RichGridComponent {
     this.hideprogress = false;
     this._reportservice.getReportForProject(projects)
         .subscribe( data => {
-             this.rowData = this._reportservice.convertReport(data); 
-             this.createDynamicColumn(data[0])
+            var serviceRowData: Report[]=data;
+             this.rowData = this._reportservice.convertReport(serviceRowData); 
+             if(this.rowData.length>0){
+                 let index=0;
+                 for(let i=0;i<serviceRowData.length;i++){
+                     if(serviceRowData[i].reportAdjustmentEntity.length===6){
+                        index=i;
+                        console.log("index of the record");
+                        console.log(index);
+                        break;
+                     }
+                 }
+                
+                 
+                this.createDynamicColumn(data[index])
+             }
              this.hideprogress = true;}
         ,error=>{
             this.toastr.error(error, 'Error!');

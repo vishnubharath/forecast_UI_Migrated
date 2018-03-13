@@ -32,7 +32,7 @@ export class ReportService{
 	}
 
 	deleteReport(deleteRecord:ReportType[]){
-		return this._http.post(Constants.base_url+'reports/deleteRecords',this.convertDuplicatReport(deleteRecord))
+		return this._http.post(Constants.base_url+'reports/deleteRecords',this.convertFinalReport(deleteRecord))
 		.catch(error=>{
 			let errMsg = (error.message) ? error.message :
 				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
@@ -59,33 +59,32 @@ export class ReportService{
 	}
 	
 
-	reportsave(adjustments:Adjustment[]):Promise<ReportType> {
-		return this._http.post(Constants.base_url+'reports/saveRecords',adjustments).toPromise().then((res:Response)=>res.json())
-           .catch(error=>{
-			let errMsg = (error.message) ? error.message :
-				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-			console.error(errMsg); // log to console instead
-			return Observable.throw(errMsg);
-		});
+	// reportsave(adjustments:Adjustment[]):Promise<ReportType> {
+	// 	return this._http.post(Constants.base_url+'reports/saveRecords',adjustments).toPromise().then((res:Response)=>res.json())
+    //        .catch(error=>{
+	// 		let errMsg = (error.message) ? error.message :
+	// 			error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+	// 		console.error(errMsg); // log to console instead
+	// 		return Observable.throw(errMsg);
+	// 	});
 		
-	}
+	// }
 
 	
-	duplicateReportSave(duplicateRecord:ReportType[]):Promise<ReportType> {
-		console.log(this.convertDuplicatReport(duplicateRecord));
-		
-		return this._http.post(Constants.base_url+'reports/saveRecords',this.convertDuplicatReport(duplicateRecord)).toPromise().then(res=>{console.log("duplicateRecordSave response"+res);return res.json()})
+	finalReportSave(finalRecord:ReportType[]) {
+		console.log(this.convertFinalReport(finalRecord));
+		return this._http.post(Constants.base_url+'reports/saveRecords',this.convertFinalReport(finalRecord))
            .catch(error=>{
 			let errMsg = (error.message) ? error.message :
 				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-			console.error(errMsg); // log to console instead
+			console.error(error); // log to console instead
 			return Observable.throw(errMsg);
 		});
 	}
 
-	convertDuplicatReport(duplicateRecord:ReportType[]){
+	convertFinalReport(finalRecord:ReportType[]){
 		var serviceRowData: Report[]=[];
-		duplicateRecord.forEach(record=>{
+		finalRecord.forEach(record=>{
 			var recordData:Report = new Report();
 			if(record.reportDataType!="duplicate"){
 				recordData.reportId=  record.reportId;  
@@ -117,9 +116,9 @@ export class ReportService{
 			recordData.portfolio=record.portfolio;
 			recordData.poc=record.poc;
 			var reportAdjusments:ReportAdjusment[]  = [];
-			for(let i=0;i<12;i++){
+			for(let i=0;i<6;i++){
 				//if(record["adjustment_"+[i+1]]!=null || record["adjustment_"+[i+1]]!="" || record["adjustment_"+[i+1]+"_id"]!=null || record["hours_"+[i+1]]!=null){
-					if(!(record["adjustment_"+[i+1]+"_id"]===undefined)){
+				if(!(record["adjustment_"+[i+1]+"_id"]===undefined)){
 					var reportAdjusment:ReportAdjusment = new ReportAdjusment();
 					if(record.reportDataType==="duplicate"){
 						reportAdjusment.id=0;
@@ -133,8 +132,8 @@ export class ReportService{
 					reportAdjusment.forecastedMonth=record["forecastedMonth_"+[i+1]];
 					reportAdjusment.forecastedYear=record["forecastedYear_"+[i+1]];
 					reportAdjusments.push(reportAdjusment);
-				}else if(record.reportDataType==="NewData"){
-					if(record["adjustment_"+[i+1]]!=undefined && record["adjustment_"+[i+1]]!=null){
+				} else if(record.reportDataType==="NewData"){
+				//	if(record["adjustment_"+[i+1]]!=undefined || record["hours_"+[i+1]]!=undefined || record["rate_"+[i+1]]!=undefined  ){
 						var reportAdjusment:ReportAdjusment = new ReportAdjusment();
 						reportAdjusment.id=0;
 						reportAdjusment.adjustment=record["adjustment_"+[i+1]];
@@ -144,7 +143,7 @@ export class ReportService{
 						reportAdjusment.forecastedMonth=record["forecastedMonth_"+[i+1]];
 						reportAdjusment.forecastedYear=record["forecastedYear_"+[i+1]];
 						reportAdjusments.push(reportAdjusment);
-					}
+				//	}
 				}
 			}
 			recordData.reportAdjustmentEntity=reportAdjusments;
@@ -155,7 +154,16 @@ export class ReportService{
 	}
 
 	 convertReport(reports:Report[]):ReportType[] {
-		this.sampleData=reports[0];
+		let index=0;
+		for(let i=0;i<reports.length;i++){
+			if(reports[i].reportAdjustmentEntity.length===6){
+			   index=i;
+			   console.log("index of the record");
+			   console.log(index);
+			   break;
+			}
+		}
+		this.sampleData=reports[index];
 		var reportTypes:ReportType[]  = [];
 
 		reports.forEach(report => {
@@ -189,8 +197,6 @@ export class ReportService{
 			reportType.projectId = report.projectId;
 			reportType.projectName = report.projectName;
 			
-			
-
 			for (let index = 0; index < report.reportAdjustmentEntity.length; index++) {
 
 		
@@ -250,7 +256,7 @@ export class ReportService{
 			reportType.allocStartDate = report.allocStartDate;
 			reportType.allocEndDate = report.allocEndDate;
 			
-			for (let index = 0; index < 12; index++) {
+			for (let index = 0; index < 6; index++) {
 				if(report["adjustment_"+[index+1]+"_id"]!=null && report["adjustment_"+[index+1]+"_id"]!=""){
 				reportType["adjustment_"+[index+1]+"_id"] = report["adjustment_"+[index+1]+"_id"];
 				reportType["adjustment_"+[index+1]] = report["adjustment_"+[index+1]];
@@ -279,14 +285,14 @@ export class ReportService{
 		return  this.sampleData;
 	}
 
-convertData(record:any):ReportType[]{
+convertNewData(record:any):ReportType[]{
 console.log("inside convertData");
 console.log(record);
 
 
 	var reports:ReportType[]  = [];
 	var report:ReportType = new ReportType();
-	for(let i=0;i<12;i++){
+	for(let i=0;i<6;i++){
 		if(record["adjustment_"+[i]]!=undefined && record["adjustment_"+[i]]!=null){
 			report["adjustment_"+[i+1]]=record["adjustment_"+[i]];
 		}

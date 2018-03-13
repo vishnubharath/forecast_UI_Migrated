@@ -12,7 +12,17 @@
     position: fixed;
     z-index: 2;
 }
+.ag-header-cell-label .ag-header-cell-text{
+    font-size: 10px;
+   
+}
 
+.ag-fresh .ag-header-group-cell-label {
+    padding: 2px;
+    padding-top: 4px;
+    margin-top: -4px;
+}
+ 
 .ag-fresh .ag-header {
     background: antiquewhite;
 }
@@ -47,3 +57,9 @@
 * {
     font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
   }
+
+
+.ag-header-group-cell{
+    
+    margin-bottom: 60px;
+}

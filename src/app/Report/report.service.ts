@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ViewContainerRef } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable }     from 'rxjs/Observable';
@@ -9,6 +9,7 @@ import {ReportType} from './ReportType'
 import { Adjustment } from './Adjustments';
 import { Project } from './Project';
 import { ReportAdjusment } from './reportAdjusments';
+import { ToastsManager } from 'ng2-toastr';
 
 @Injectable()
 export class ReportService{
@@ -60,7 +61,12 @@ export class ReportService{
 
 	reportsave(adjustments:Adjustment[]):Promise<ReportType> {
 		return this._http.post(Constants.base_url+'reports/saveRecords',adjustments).toPromise().then((res:Response)=>res.json())
-           .catch(error=>console.log(error));
+           .catch(error=>{
+			let errMsg = (error.message) ? error.message :
+				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+			console.error(errMsg); // log to console instead
+			return Observable.throw(errMsg);
+		});
 		
 	}
 
@@ -69,14 +75,22 @@ export class ReportService{
 		console.log(this.convertDuplicatReport(duplicateRecord));
 		
 		return this._http.post(Constants.base_url+'reports/saveRecords',this.convertDuplicatReport(duplicateRecord)).toPromise().then(res=>{console.log("duplicateRecordSave response"+res);return res.json()})
-           .catch(error=>console.log(error));
+           .catch(error=>{
+			let errMsg = (error.message) ? error.message :
+				error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+			console.error(errMsg); // log to console instead
+			return Observable.throw(errMsg);
+		});
 	}
 
 	convertDuplicatReport(duplicateRecord:ReportType[]){
 		var serviceRowData: Report[]=[];
 		duplicateRecord.forEach(record=>{
 			var recordData:Report = new Report();
-			recordData.reportId=  record.reportId;  
+			if(record.reportDataType!="duplicate"){
+				recordData.reportId=  record.reportId;  
+			}
+			
 			recordData.employeeId=record.employeeId;    
 			recordData.associateId=record.associateId;
 			recordData.associateName=record.associateName;  
@@ -182,7 +196,11 @@ export class ReportService{
 		
 				reportType["adjustment_"+[index+1]+"_id"] = report.reportAdjustmentEntity[index].id;
 				reportType["adjustment_"+[index+1]] = report.reportAdjustmentEntity[index].adjustment;
-				reportType["hours_"+[index+1]]= report.reportAdjustmentEntity[index].hours;
+				 if(report.reportAdjustmentEntity[index].hours===undefined){
+				 	reportType["hours_"+[index+1]]=0;
+				 }else{
+					reportType["hours_"+[index+1]]= report.reportAdjustmentEntity[index].hours;
+				 }
 				reportType["rate_"+[index+1]] = report.reportAdjustmentEntity[index].rate;
 				reportType["revenue_"+[index+1]]  = report.reportAdjustmentEntity[index].revenue;
 				reportType["forecastedMonth_"+[index+1]]  = report.reportAdjustmentEntity[index].forecastedMonth;
@@ -200,13 +218,15 @@ export class ReportService{
 		return reportTypes;
 	}
 
-	createDuplicateRow(reports:ReportType[]):ReportType[] {
+	createDuplicateRow(reports:ReportType[],reportID:Boolean):ReportType[] {
 
 		var reportTypes:ReportType[]  = [];
 		reports.forEach(report => {
 			var reportType:ReportType = new ReportType();
 			reportType.allocStartDate = report.allocStartDate;
-			reportType.reportId=report.reportId;
+			if(reportID){
+				reportType.reportId=report.reportId;
+			}
 			reportType.city = report.city;
 			reportType.associateGrade = report.associateGrade;
 			reportType.associateId = report.associateId;
@@ -300,12 +320,18 @@ console.log(record);
 	
 	report["projectBillability"]=record["projectBillability"];
 	//report["allocStartDate"]=record["allocStartDate"].toLocaleDateString();
-	//if(record["allocStartDate"]!=null){
+	if(record["allocStartDate"]!=undefined){
 		report["allocStartDate"]=record["allocStartDate"].toISOString().split('T')[0];
-	//}
-	//if(record["allocEndDate"]!=null){
+	}
+	if(record["allocEndDate"]!=undefined){
 		report["allocEndDate"]=record["allocEndDate"].toISOString().split('T')[0];
-	//}
+		console.log(record["allocEndDate"].toISOString().split('T')[0]);
+		console.log(record["allocEndDate"].toISOString());
+		console.log((record["allocEndDate"].toDateString()));
+		
+		
+		
+	}
 	report["allocationPercentage"]=record["allocationPercentage"];
 	report.reportDataType="NewData";
 	reports.push(report);

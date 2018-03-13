@@ -83,14 +83,14 @@
 
   <p>Allocation StartDate</p>
   <mat-form-field>
-    <input matInput [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"   >
+    <input matInput  [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"  readonly >
     <mat-datepicker-toggle matSuffix [for]="allocStartDate"></mat-datepicker-toggle>
     <mat-datepicker #allocStartDate ></mat-datepicker>
   </mat-form-field>
 
   <p>Allocation EndDate</p>
   <mat-form-field>
-    <input matInput [matDatepicker]="allocEndDate" [ngModel]  name="allocEndDate" >
+    <input matInput  [matDatepicker]="allocEndDate" [ngModel]  name="allocEndDate" readonly>
     <mat-datepicker-toggle matSuffix [for]="allocEndDate"></mat-datepicker-toggle>
     <mat-datepicker #allocEndDate ></mat-datepicker>
   </mat-form-field>

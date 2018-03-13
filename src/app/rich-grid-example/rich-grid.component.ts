@@ -63,7 +63,9 @@ export class RichGridComponent {
     public  errorData: ReportType[]=[];
     public  parentRowData = new Map();
     private rowClassRules;
-    private getMainMenuItems;
+    // private postProcessPopup;
+    // private getMainMenuItems;
+    private defaultColDef;
     //Controls
     projectCtrl: FormControl;
    
@@ -84,10 +86,16 @@ export class RichGridComponent {
         this._reportservice = _reportservice;
         this._projectService = _projectService;
         this.gridOptions = <GridOptions>{};
+        this.defaultColDef = {
+            enableValue: true,
+            enableRowGroup: true,
+            enablePivot: true
+          };
         this.createRowData();
         this.createColumnDefs();
         this.showGrid = true;
         this.addNewRow=true;
+        
         this.gridOptions.dateComponentFramework = DateComponent;
         this.gridOptions.defaultColDef = {
             editable: false,
@@ -105,7 +113,7 @@ export class RichGridComponent {
             
             this.filteredProjects = this.projects.filter(project =>
                 project.projectName.toLowerCase().indexOf((value + "").toLowerCase()) === 0);
-            
+              
             this.filteredProjectsObs = new Observable<Project[]>(
                 observer => {
                     observer.next(this.filteredProjects);
@@ -117,7 +125,10 @@ export class RichGridComponent {
 
         this.rowClassRules = {
             "duplicated-row": function(params){
-                return params.data.reportId===undefined;
+                console.log();
+                if(params.data!=undefined){
+                    return params.data.reportId===undefined;
+                }
             }
             // "duplicated_row_error": function(params){
             //     if(params.data.reportId===undefined){
@@ -128,101 +139,51 @@ export class RichGridComponent {
             
 
           };
+        //   this.postProcessPopup = function(params) {
+        //     if (params.type !== "columnMenu") {
+        //       return;
+        //     }
+        //     var columnId = params.column.getId();
+        //     if (columnId === "gold") {
+        //       var ePopup = params.ePopup;
+        //       var oldTopStr = ePopup.style.top;
+        //       oldTopStr = oldTopStr.substring(0, oldTopStr.indexOf("px"));
+        //       var oldTop = parseInt(oldTopStr);
+        //       var newTop = oldTop + 25;
+        //       ePopup.style.top = newTop + "px";
+        //     }
+        //   };
 
-
-          this.getMainMenuItems = function getMainMenuItems(params) {
-            switch (params.column.getId()) {
-              case "athlete":
-                var athleteMenuItems = params.defaultItems.slice(0);
-                athleteMenuItems.push({
-                  name: "ag-Grid Is Great",
-                  action: function() {
-                    console.log("ag-Grid is great was selected");
-                  }
-                });
-                athleteMenuItems.push({
-                  name: "Casio Watch",
-                  action: function() {
-                    console.log("People who wear casio watches are cool");
-                  }
-                });
-                athleteMenuItems.push({
-                  name: "Custom Sub Menu",
-                  subMenu: [
-                    {
-                      name: "Black",
-                      action: function() {
-                        console.log("Black was pressed");
-                      }
-                    },
-                    {
-                      name: "White",
-                      action: function() {
-                        console.log("White was pressed");
-                      }
-                    },
-                    {
-                      name: "Grey",
-                      action: function() {
-                        console.log("Grey was pressed");
-                      }
-                    }
-                  ]
-                });
-                return athleteMenuItems;
-              case "age":
-                return [
-                  {
-                    name: "Joe Abercrombie",
-                    action: function() {
-                      console.log("He wrote a book");
-                    },
-                    icon: '<img src="../images/lab.png" style="width: 14px;"/>'
-                  },
-                  {
-                    name: "Larsson",
-                    action: function() {
-                      console.log("He also wrote a book");
-                    },
-                    checked: true
-                  },
-                  "destroyColumnComps"
-                ];
-              case "country":
-                var countryMenuItems = [];
-                var itemsToExclude = ["separator", "pinSubMenu", "valueAggSubMenu"];
-                params.defaultItems.forEach(function(item) {
-                  if (itemsToExclude.indexOf(item) < 0) {
-                    countryMenuItems.push(item);
-                  }
-                });
-                return countryMenuItems;
-              default:
-                return params.defaultItems;
-            }
-          };
+        //   this.getMainMenuItems = function getMainMenuItems(params) {
+        //     switch (params.column.getId()) {
+              
+        //       default:
+        //         return params.defaultItems;
+        //     }
+        //   };
+          this.toastr.info('Please chose projects for querying','Please Chose Projects');
     }
 
    
     private createRowData() {
         console.log("enter into create Row data");
-        this.hideprogress = false;
+        //this.hideprogress = false;
         this.addNewRow=true;
         this.duplicaterowData=[];
         this.errorData=[];
         this.updatedRowData=[];
         this.selectedRow=false;
         this.selectedRowIndex="";
-        this._reportservice.getCurrentReport().subscribe(rowdata => {
-            this.serviceRowData = rowdata;
-            this.createDynamicColumn(this.serviceRowData[1])
-            this.rowData = this._reportservice.convertReport(this.serviceRowData);
-            console.log(rowdata);
-            this.hideprogress = true;
-        }, err => {
-            this.hideprogress = true;
-            console.log(err);
-        });
+        // this._reportservice.getCurrentReport().subscribe(rowdata => {
+        //     this.serviceRowData = rowdata;
+        //     this.createDynamicColumn(this.serviceRowData[0])
+        //     this.rowData = this._reportservice.convertReport(this.serviceRowData);
+        //     console.log(rowdata);
+        //     this.hideprogress = true;
+        // }, err => {
+        //     this.hideprogress = true;
+        //     console.log(err);
+        // });
 
         this._projectService.getAllProjects().subscribe(projects => {
             this.projects = projects;
@@ -538,6 +499,8 @@ export class RichGridComponent {
                     this.errorData=[];
                     this.updatedRowData=[];
                     this.addNewRow=true;
+                    this.getReports();
+                    this.toastr.success("Data Saved","success");
                 }).catch(err => { console.log(err); this.hideprogress = true; }
                 );
             }else{
@@ -577,9 +540,9 @@ export class RichGridComponent {
         if(this.selectedRow){
             console.log(this.gridOptions.api.getSelectedRows());
             
-          var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
+          var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows(),false);
           rowData_record[0].reportDataType="duplicate";
-          rowData_record[0].reportId=undefined;
+         
           console.log("duplicated data check");
           console.log(rowData_record);
           this.duplicaterowData.push(rowData_record[0]);
@@ -597,13 +560,14 @@ export class RichGridComponent {
 
     onDeleteRow(){
         if(this.selectedRow){
-            var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows());
+            var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows(),true);
             if(rowData_record[0].reportId!=undefined){
                 console.log("inside if condition ");
                 this._reportservice.deleteReport(rowData_record).subscribe(result => {
                     console.log(result);
                     this.toastr.success('Data Deleted', 'Success!');
-                    this.createRowData();
+                    //this.createRowData();
+                    this.getReports();
                 },error=>{
                     this.toastr.error(error, 'Error!');
                 });
@@ -626,29 +590,34 @@ export class RichGridComponent {
   
 
   openDialog(): void {
-    let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
-      width: '75%',
-      data: { data: this.addRowData}
-    });
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-        console.log(result.from);
-        console.log(result);
-    
-      if(result.from==="save"){
-        this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
-            this.toastr.success('Data Added', 'Success!'); 
-        }).catch(error=>{
-                this.toastr.error(error, 'Error!');
-        });
-      }else{
-          console.log("inside cancel");
-         // this.toastr.error('This is not good!', 'Oops!');
-          
-      }
+      if(this.duplicaterowData.length===0 && this.errorData.length===0 && this.updatedRowData.length===0){
+        let dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+            width: '75%',
+            data: { data: this.addRowData}
+          });
       
-    });
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+              console.log(result.from);
+              console.log(result);
+          
+            if(result.from==="save"){
+              this._reportservice.duplicateReportSave(this._reportservice.convertData(result)).then(resp=>{
+                  this.toastr.success('Data Added', 'Success!'); 
+              }).catch(error=>{
+                      this.toastr.error(error, 'Error!');
+              });
+            }else{
+                console.log("inside cancel");
+               // this.toastr.error('This is not good!', 'Oops!');
+                
+            }
+            
+          });
+      }else{
+        this.toastr.error('Please complete(save) the Pending process like duplicate row ,changed data ', 'Error');
+      }
+    
   }
 
   add(event: MatChipInputEvent): void {
@@ -711,7 +680,7 @@ export class RichGridComponent {
     
     if(projects.length <= 0) {
         this.toastr.info('Please chose projects for querying','Please Chose Projects');
-        this.createRowData();
+        this.rowData=[];
         return;
     }
 
@@ -719,6 +688,7 @@ export class RichGridComponent {
     this._reportservice.getReportForProject(projects)
         .subscribe( data => {
              this.rowData = this._reportservice.convertReport(data); 
+             this.createDynamicColumn(data[0])
              this.hideprogress = true;}
         ,error=>{
             this.toastr.error(error, 'Error!');

@@ -41,7 +41,7 @@
 			<span class="controls-spacing"></span> 
 			<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
 			<span class="controls-spacing"></span>
-			<button mat-stroked-button (click)="createRowData()">Refresh Data</button>
+			<button mat-stroked-button (click)="getReports()">Refresh Data</button>
 		</div>
 	</div>
 
@@ -55,17 +55,29 @@
 		<button mat-stroked-button (click)="onDuplicateRow()" [disabled]="!selectedRow">Duplicate Row</button>
 	</div>
 </div>
-
+<!-- [getMainMenuItems]="getMainMenuItems"
+		[postProcessPopup]="postProcessPopup" -->
+<!-- [showToolPanel]="true" -->
 <div style="margin: 0px 10px 0px 10px">
 	<ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
+
+	#agGrid
+   
+    id="myGrid"
+    
+    [defaultColDef]="defaultColDef"
+    [showToolPanel]="true"
+   
+
 		[getMainMenuItems]="getMainMenuItems"
+		[postProcessPopup]="postProcessPopup"
 		[enableFilter]="true"
 		[rowClassRules]="rowClassRules" [gridOptions]="gridOptions"
 		[columnDefs]="columnDefs" [showToolPanel]="showToolPanel"
 		[rowData]="rowData" [excelStyles]="excelStyles" enableColResize
 		[enableSorting]="true" enableFilter groupHeaders
 		suppressRowClickSelection toolPanelSuppressGroups
-		toolPanelSuppressValues rowHeight="22" rowSelection="single"
+		toolPanelSuppressValues rowHeight="25" rowSelection="single"
 		[sortingOrder]="sortingOrder" (modelUpdated)="onModelUpdated()"
 		(cellClicked)="onCellClicked($event)"
 		(cellDoubleClicked)="onCellDoubleClicked($event)"

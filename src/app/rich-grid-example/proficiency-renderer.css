@@ -1,8 +1,28 @@
-.ag-cell {
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
+.ag-fresh .duplicated-row {
+    background-color: lightgreen !important;
 }
-
+ .ag-fresh .duplicated_row_error {
+    background-color: lightcoral !important;
+} 
+.ag-menu {
+    z-index: 50;
+}
+.div-outer-div {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+}
+.div-percent-value {
+    position: absolute;
+    padding-left: 4px;
+    font-weight: bold;
+    font-size: 10px;
+    z-index: 10;
+}
+label {
+    font-weight: normal !important;
+    background-color:white;
+}
 #top {
     width: 100%;
     margin: 0;
@@ -12,39 +32,13 @@
     left: 0;
  }
 
-label {
-    font-weight: normal !important;
-    background-color:#C6FF00;
-}
-
 .div-percent-bar {
     display: inline-block;
     height: 100%;
     position: relative;
     z-index: 0;
 }
-
-.div-percent-value {
-    position: absolute;
-    padding-left: 4px;
-    font-weight: bold;
-    font-size: 13px;
-    z-index: 10;
-}
-
-.div-outer-div {
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-}
-
-.ag-menu {
-    z-index: 50;
-}
-
-.ag-fresh .duplicated-row {
-    background-color: lightgreen !important;
-}
- .ag-fresh .duplicated_row_error {
-    background-color: lightcoral !important;
+.ag-cell {
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
 }

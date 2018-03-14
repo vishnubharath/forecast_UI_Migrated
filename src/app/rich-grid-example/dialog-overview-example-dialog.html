@@ -1,101 +1,164 @@
-<form #form='ngForm' ngNativeValidate   (ngSubmit)='submitForm(form.value)'>
-<h1 mat-dialog-title>ForeCast Row </h1>
+<mat-toolbar color="primary" role="header" style="background: #285682">
+    <mat-toolbar-row> 
+      <img src="https://www.cognizant.com/content/dam/cognizant_foundation/Dotcomimage/COG-Logo-White.svg" style="width: 80px;">
+    
+      <span style="padding-left: 33%">Add New Forecast Record</span> 
+      <span class="headder-spacer"></span> 
+      <!-- <span style="width: 80px;">
+        <img *ngIf="hideprogress == false" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif" style="width: 80px;">
+      </span>  -->
+      <div *ngIf="hideprogress == false" class="loader" ></div>
+    </mat-toolbar-row> </mat-toolbar>
+<br>
+<br>
+<form #form='ngForm' ngNativeValidate   (ngSubmit)='submitForm(form.value)' style="width: auto; margin-left: 30%; ">
 <div mat-dialog-content>
-
-
-  <P >AssociateId  </P>
-  <mat-form-field>
-    <input required matInput type="number" [(ngModel)]="data.associateId" name="associateId">
-  </mat-form-field>
-
-   <p>AssociateName</p>
+<table >
+  <tr>
+    <td>
+      <P style="font-weight: bold">AssociateId  </P>
+      <mat-form-field>
+        <input required matInput type="number" [(ngModel)]="data.associateId"  name="associateId">
+      </mat-form-field>
+    </td>
+    <div class="addRow"></div>
+    <td>
+       <p style="font-weight: bold">AssociateName</p>
+        <mat-form-field>
+          <input required matInput [(ngModel)]="data.associateName" name="associateName">
+        </mat-form-field>
+      </td>
+  </tr>
+   <tr>
+<td>
+    <p style="font-weight: bold">ProjectName</p>
     <mat-form-field>
-      <input required matInput [(ngModel)]="data.associateName" name="associateName">
+        <mat-select >
+          <mat-option *ngFor="let project of projects" [(ngModel)]="data.projectName"  (click)="onChange(project.projectId,project.projectName)" [(value)]="project.projectName" name="projectName" ngDefaultControl>
+            {{ project.projectName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+</td>
+<td class="addRow"></td>
+<td>
+    <p style="font-weight: bold">ProjectID</p>
+    <mat-form-field>
+        <input  required type="number" matInput [(ngModel)]="selectedProjectID" name="projectId" readonly>
     </mat-form-field>
-
-   
-  <p>ProjectId</p>
-  <mat-form-field>
-    <input  required type="number" matInput [(ngModel)]="data.projectId" name="projectId">
-  </mat-form-field>
-
-  <p>ProjectName</p>
-   <mat-form-field>
-    <input required matInput [(ngModel)]="data.projectName" name="projectName">
-  </mat-form-field>
-
-  
-  <p>CustomerId</p>
+</td>
+</tr>
+<tr>
+<td> <p style="font-weight: bold">CustomerId</p>
   <mat-form-field>
     <input  type="number" matInput [(ngModel)]="data.customerId"  name="customerId">
-  </mat-form-field>
-
-  <p>CustomerName</p>
+  </mat-form-field></td>
+<td class="addRow"></td>
+<td><p style="font-weight: bold">CustomerName</p>
   <mat-form-field>
     <input matInput required [(ngModel)]="data.customerName" name="customerName">
-  </mat-form-field>
-
-
-  <p>Location Type</p>
+  </mat-form-field></td>
+      </tr>
+      <tr>
+        <td>
+          <p style="font-weight: bold">Location Type</p>
+          <mat-form-field>
+              <mat-select >
+                <mat-option *ngFor="let location of locationType" [(ngModel)]="data.locationType"  (click)="onChangeLocation(location)"  [value]="location" name="locationType" ngDefaultControl>
+                  {{ location }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        <td class="addRow"></td>
+        <td><p style="font-weight: bold">City</p>
+          <!-- <mat-form-field>
+            <input matInput required [(ngModel)]="data.city" name="city">
+          </mat-form-field> -->
+          <mat-form-field>
+              <mat-select >
+                <mat-option *ngFor="let city of cityList" [(ngModel)]="data.city"  (click)="onChangecity(city)"  [value]="city" name="city" ngDefaultControl>
+                  {{ city }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+          <td>
+              <p style="font-weight: bold">Allocation Percentage</p>
+              <mat-form-field>
+                <input matInput min="1" max="100" required [(ngModel)]="data.allocationPercentage"  name="allocationPercentage">
+              </mat-form-field>
+          </td>
+          <td class="addRow"></td>
+          <td>
+              <p style="font-weight: bold">HR Grade</p>
+              <mat-form-field>
+                <input matInput [(ngModel)]="data.associateGrade" name="associateGrade">
+              </mat-form-field>
+          </td>
+      </tr>
+      <tr>
+          <td>
+              <p style="font-weight: bold">Billability</p>
+              <!-- <mat-form-field>
+                <input matInput [(ngModel)]="data.billability" name="billability">
+              </mat-form-field> -->
+              <mat-form-field>
+                  <mat-select >
+                    <mat-option *ngFor="let billability of billabilityList" [(ngModel)]="data.billability"  (click)="onChangebillability(billability)"  [value]="billability" name="billability" ngDefaultControl>
+                      {{ billability }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+          </td>
+          <td class="addRow"></td>
+          <td>
+              <p style="font-weight: bold">Portfolio</p>
+              <mat-form-field>
+                <input matInput [(ngModel)]="data.portfolio" name="portfolio">
+              </mat-form-field>
+          </td>
+      </tr>
+      <tr>
+        <td> <p style="font-weight: bold">POC</p>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.poc" name="poc">
+          </mat-form-field></td>
+        <td class="addRow"></td>
+        <td><p style="font-weight: bold">ProjectBillability</p>
+          <mat-form-field>
+            <input matInput [(ngModel)]="data.projectBillability"  name="projectBillability">
+          </mat-form-field>
+        </td>
+      </tr>
+      <tr>
+          <td><p style="font-weight: bold">Allocation StartDate</p>
+            <mat-form-field>
+              <input matInput  [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"  readonly >
+              <mat-datepicker-toggle matSuffix [for]="allocStartDate"></mat-datepicker-toggle>
+              <mat-datepicker #allocStartDate ></mat-datepicker>
+            </mat-form-field></td>
+          <td class="addRow"></td>
+          <td>
+              <p style="font-weight: bold">Allocation EndDate</p>
+              <mat-form-field>
+                <input matInput  [matDatepicker]="allocEndDate" [ngModel]  name="allocEndDate" readonly>
+                <mat-datepicker-toggle matSuffix [for]="allocEndDate"></mat-datepicker-toggle>
+                <mat-datepicker #allocEndDate ></mat-datepicker>
+              </mat-form-field>
+            
+          </td>
+        </tr>
+</table>
+  
+  <!-- <p>Location Type</p>
   <mat-form-field>
     <input required  matInput [(ngModel)]="data.locationType" name="locationType">
-  </mat-form-field>
-
-  <p>City</p>
-  <mat-form-field>
-    <input matInput required [(ngModel)]="data.city" name="city">
-  </mat-form-field>
+  </mat-form-field> -->
   
-  <p>Allocation Percentage</p>
-  <mat-form-field>
-    <input matInput min="1" max="100" required [(ngModel)]="data.allocationPercentage"  name="allocationPercentage">
-  </mat-form-field>
- 
-  <p>HR Grade</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.associateGrade" name="associateGrade">
-  </mat-form-field>
-
-  
-  <p>Billability</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.billability" name="billability">
-  </mat-form-field>
-
-
-  <p>Portfolio</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.portfolio" name="portfolio">
-  </mat-form-field>
-
-
-  <p>POC</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.poc" name="poc">
-  </mat-form-field>
-
-  <p>ProjectBillability</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.projectBillability"  name="projectBillability">
-  </mat-form-field>
-
-  
-
-  <p>Allocation StartDate</p>
-  <mat-form-field>
-    <input matInput  [matDatepicker]="allocStartDate" [ngModel]  name="allocStartDate"  readonly >
-    <mat-datepicker-toggle matSuffix [for]="allocStartDate"></mat-datepicker-toggle>
-    <mat-datepicker #allocStartDate ></mat-datepicker>
-  </mat-form-field>
-
-  <p>Allocation EndDate</p>
-  <mat-form-field>
-    <input matInput  [matDatepicker]="allocEndDate" [ngModel]  name="allocEndDate" readonly>
-    <mat-datepicker-toggle matSuffix [for]="allocEndDate"></mat-datepicker-toggle>
-    <mat-datepicker #allocEndDate ></mat-datepicker>
-  </mat-form-field>
-
-<div *ngFor="let rowData of sampleData;  let i=index">
+<!-- <div *ngFor="let rowData of sampleData;  let i=index">
        <p>{{rowData.forecastedMonth}}</p> 
     <mat-form-field>
         <input matInput [(ngModel)]="rowData.forecastedMonth+'-'+rowData.forecastedYear" name="{{'forecastedMonth_year_'+i}}" readonly="readonly">
@@ -113,195 +176,20 @@
         <input  type="number" matInput [ngModel]  name="{{'rate_'+i}}">
       </mat-form-field> 
      
-  </div>   
-
-
-
-  <!-- <p>forecastedMonth_1</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.forecastedMonth_1">
-  </mat-form-field>
-  <p>forecastedYear_1</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.forecastedYear_1">
-  </mat-form-field>
-  <p>hours_1</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.hours_1">
-  </mat-form-field>
-  <p>adjustment_1</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.adjustment_1">
-  </mat-form-field>
-  <p>rate_1</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_1">
-  </mat-form-field>
-  
-
-
-  <p>forecastedMonth_2</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.forecastedMonth_2">
-  </mat-form-field>
-  <p>forecastedYear_2</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.forecastedYear_2">
-  </mat-form-field>
-  <p>hours_2</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.hours_2">
-  </mat-form-field>
-  <p>adjustment_2</p>
-  <mat-form-field>
-    <input type="number"  matInput [(ngModel)]="data.adjustment_2">
-  </mat-form-field>
-  <p>rate_2</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_2">
-  </mat-form-field>
-
-  <p>forecastedMonth_3</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.forecastedMonth_3">
-  </mat-form-field>
-  <p>forecastedYear_3</p>
-  <mat-form-field>
-    <input   type="number" matInput [(ngModel)]="data.forecastedYear_3">
-  </mat-form-field>
-  <p>hours_3</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.hours_3">
-  </mat-form-field>
-  <p>adjustment_3</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.adjustment_3">
-  </mat-form-field>
-  <p>rate_3</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_3">
-  </mat-form-field>
-
-
-  <p>forecastedMonth_4</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.forecastedMonth_4">
-  </mat-form-field>
-  <p>forecastedYear_4</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.forecastedYear_4">
-  </mat-form-field>
-  <p>hours_4</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.hours_4">
-  </mat-form-field>
-  <p>adjustment_4</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.adjustment_4">
-  </mat-form-field>
-  <p>rate_4</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_4">
-  </mat-form-field>
-
-
-  <p>forecastedMonth_5</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.forecastedMonth_5">
-  </mat-form-field>
-  <p>forecastedYear_5</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.forecastedYear_5">
-  </mat-form-field>
-  <p>hours_5</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.hours_5">
-  </mat-form-field>
-  <p>adjustment_5</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.adjustment_5">
-  </mat-form-field>
-  <p>rate_5</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_5">
-  </mat-form-field>
-
-
-  <p>forecastedMonth_6</p>
-  <mat-form-field>
-    <input   matInput [(ngModel)]="data.forecastedMonth_6">
-  </mat-form-field>
-  <p>forecastedYear_6</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.forecastedYear_6">
-  </mat-form-field>
-  <p>hours_6</p>
-  <mat-form-field>
-    <input   type="number" matInput [(ngModel)]="data.hours_6">
-  </mat-form-field>
-  <p>adjustment_6</p>
-  <mat-form-field>
-    <input type="number"  matInput [(ngModel)]="data.adjustment_6">
-  </mat-form-field>
-  <p>rate_6</p>
-  <mat-form-field>
-    <input  type="number" matInput [(ngModel)]="data.rate_6">
-  </mat-form-field>   -->
-
-
-  <!-- <div *ngFor="let rowData of sampleData;  let i=index">
-       <li>{{currentElementIndex}} Something</li> 
-
-       <p>{{rowData.forecastedMonth}}</p> 
-    <mat-form-field>
-       <input matInput [(ngModel)]="data.adjustment_id]">
-    </mat-form-field>
-  </div>  -->
-  
-
-  
-
-
-  
-
-<!-- 
-  <p>HR Grdae</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.associateGrade">
-  </mat-form-field>
-
-
-  <p>CustomerName</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.customerName">
-  </mat-form-field>
-
-
-  <p>CustomerName</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.customerName">
-  </mat-form-field>
-
-
-  <p>CustomerName</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.customerName">
-  </mat-form-field>
-
-
-  <p>CustomerName</p>
-  <mat-form-field>
-    <input matInput [(ngModel)]="data.customerName">
-  </mat-form-field> -->
-
-  
+  </div>    -->
+ 
 </div>
 <!-- <div mat-dialog-actions>
   <button mat-raised-button (click)="onNoClick()">No Thanks</button>
   <button mat-raised-button [mat-dialog-close]="data" >Ok</button>
 </div> -->
-<button type='submit'>Submit</button>
-<button (click)="onNoClick()">Cancel</button>
+<br>
+<br>
+<div style="padding-left: 10%">
+<button  mat-stroked-button type='submit'>Submit</button>
+<span style="padding-left: 9%"></span> 
+<button  mat-stroked-button (click)="onNoClick()">Cancel</button>
+</div>
 </form>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that

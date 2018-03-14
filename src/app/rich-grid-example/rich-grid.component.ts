@@ -28,6 +28,7 @@ import { Project } from "../Report/Project";
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 import { ReportAdjusment } from "../Report/reportAdjusments";
 import { ToastsManager } from 'ng2-toastr';
+import { Utils } from "../Constant/Utils";
 @Component({
     selector: 'rich-grid',
     templateUrl: 'rich-grid.component.html',
@@ -83,6 +84,7 @@ export class RichGridComponent {
     constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog,public toastr: ToastsManager, vcr: ViewContainerRef ) {
         // we pass an empty gridOptions in, so we can grab the api out
         this.toastr.setRootViewContainerRef(vcr);
+       // this. toastr.op = { positionClass: 'toast-bottom-right' }
         this._reportservice = _reportservice;
         this._projectService = _projectService;
         this.gridOptions = <GridOptions>{};
@@ -162,6 +164,7 @@ export class RichGridComponent {
         //     }
         //   };
           this.toastr.info('Please choose projects for querying','Please Choose Projects');
+          this.rowData=[];
     }
 
    
@@ -204,7 +207,7 @@ export class RichGridComponent {
                 for(let i=0;i<reportdata.reportAdjustmentEntity.length;i++){
     
               var params=  {
-                        headerName: reportdata.reportAdjustmentEntity[i].forecastedMonth,
+                        headerName: reportdata.reportAdjustmentEntity[i].forecastedMonth +"- "+reportdata.reportAdjustmentEntity[i].forecastedYear,
         
                         children: [
                             {
@@ -262,11 +265,18 @@ export class RichGridComponent {
                     },
                     {
                         headerName: "Location", field: "location", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false,editable:true
+                        width: 150, pinned: false,editable:true,cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                          values: ["Onsite","Offshore"]
+                        },
+                        
                     },
                     {
                         headerName: "City", field: "city", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
-                        width: 150, pinned: false
+                        width: 150, pinned: false,editable:true,cellEditor: "agSelectCellEditor",
+                        cellEditorParams: {
+                          values: ["CHENNAI","KOLKATA","LONDON","NEWYORK","PUNE","TORONTO"]
+                        },
                     },
                     {
                         headerName: "Billability", field: "billability", filter: "agTextColumnFilter", sortingOrder: ["asc", "desc"],
@@ -373,7 +383,13 @@ export class RichGridComponent {
 
         console.log(this.updatedValues);
 
-        if($event.node.data.reportId===undefined){
+
+        if($event.node.data.reportId!=undefined && ($event.colDef.field.split("_")[0]==="location" ||$event.colDef.field.split("_")[0]==="city")&& ($event.oldValue!=$event.newValue)){
+            this.toastr.error("Location Type & Associate City can be updated only for duplicate Records!!");
+            $event.node.data[$event.colDef.field.split("_")[0]]=$event.oldValue;
+            this.gridOptions.api.refreshCells({columns:['location','city']})
+           // return;
+        }else if($event.node.data.reportId===undefined){
             // if (this.duplicaterowData.filter(data => $event.node.data[idFiled] === data).length > 0) {
                  console.log("Duplicate record changes..");
                  this.duplicaterowData.forEach(data => {
@@ -406,6 +422,23 @@ export class RichGridComponent {
         console.log(this.updatedValues);
  
         console.log('onCellValueChanged: ' + $event.oldValue + ' to ' + $event.newValue + ' ' + $event.rowIndex + ' ' + $event.node.data.projectId + " " + $event.node.data.projectName);
+       
+        if($event.colDef.field.split("_")[0]==='rate'){
+            let columnsName:string[]=[];     
+            for(let i=col_number;i<=Utils.numberOfMonths;i++){
+                $event.node.data["rate_"+i]=$event.newValue;
+                let hours=$event.node.data["hours_"+[i]];
+                let adjustment=$event.node.data["adjustment_"+[i]];
+                let rate=$event.newValue;
+                $event.node.data["revenue_"+[i]]=(hours - adjustment) * rate;
+                columnsName.push("rate_"+i);
+                columnsName.push("revenue_"+i);
+                columnsName.push("hours_"+i);
+            }
+           // this.gridOptions.api.updateRowData({ update: $event.node.data });
+           this.gridOptions.api.refreshCells({columns:columnsName})
+           console.log($event.node.data);
+        }
     }
 
     private onCellDoubleClicked($event) {
@@ -528,6 +561,7 @@ export class RichGridComponent {
                 errormsg= errormsg+'\n\n************************'
                 this.toastr.error(errormsg, 'Error!');
                this.errorData = [];
+               this.hideprogress = true;
                 
             }
             //color part
@@ -543,9 +577,14 @@ export class RichGridComponent {
           };
         this.gridOptions.api.exportDataAsExcel(params);
       }
-      showSuccess() {
-        this.toastr.success('You are awesome!', 'Success!');
-      }
+
+    //   showSuccess() {
+    //       console.log(this.chosenProject);
+    //       console.log(this.projects);
+          
+          
+    //     this.toastr.success('You are awesome!', 'Success!');
+    //   }
 
    
 
@@ -554,7 +593,7 @@ export class RichGridComponent {
         if(this.selectedRow){
             console.log(this.gridOptions.api.getSelectedRows());
             
-          var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows(),false);
+          var rowData_record: ReportType[]   = new Utils().createDuplicateRow(this.gridOptions.api.getSelectedRows(),false);
           rowData_record[0].reportDataType="duplicate";
          
           console.log("duplicated data check");
@@ -573,9 +612,11 @@ export class RichGridComponent {
     }
 
     onDeleteRow(){
-        if(this.selectedRow && this.duplicaterowData.length==0 && this.updatedRowData.length==0 && this.errorData.length==0 ){
-            var rowData_record: ReportType[]   = this._reportservice.createDuplicateRow(this.gridOptions.api.getSelectedRows(),true);
+        var rowData_record: ReportType[]   = new Utils().createDuplicateRow(this.gridOptions.api.getSelectedRows(),true);
+        if((rowData_record[0].reportId ===undefined)||(this.selectedRow && this.duplicaterowData.length==0 && this.updatedRowData.length==0 && this.errorData.length==0 )){
+            
             if(rowData_record[0].reportId!=undefined){
+                this.hideprogress = false;
                 console.log("inside if condition ");
                 this._reportservice.deleteReport(rowData_record).subscribe(result => {
                     console.log(result);
@@ -584,11 +625,13 @@ export class RichGridComponent {
                     this.selectedRow=false;
                     this.selectedRowIndex="";
                     this.getReports();
-
+                    this.hideprogress = true;
                 },error=>{
                     this.toastr.error(error, 'Error!');
+                    this.hideprogress = true;
                 });
             }else{
+                this.hideprogress = false;
                 var selectedData = this.gridOptions.api.getSelectedRows();
                 this.gridOptions.api.updateRowData({ remove: selectedData });
                 var index=this.duplicaterowData.indexOf(selectedData[0]);
@@ -596,6 +639,8 @@ export class RichGridComponent {
                 this.duplicaterowData.splice(index,1);
                 console.log("from delete else part");
                 console.log(this.duplicaterowData);
+                this.hideprogress = true;
+                this.toastr.success('Data Deleted', 'Success!');
             }
             
         } else{
@@ -609,9 +654,11 @@ export class RichGridComponent {
   
 
   openDialog(): void {
-      if(this.rowData===undefined){
+      if(this.rowData.length===0){
         this.toastr.warning('Please choose any project before adding New Row data!!');
       }else if(this.duplicaterowData.length===0 && this.errorData.length===0 && this.updatedRowData.length===0 ){
+          console.log("inside opendialog");
+          
           if(this.addRowData===undefined){
             this.addRowData=new ReportType();
           }
@@ -623,21 +670,25 @@ export class RichGridComponent {
       
           dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
-              console.log(result.from);
+             // console.log(result.from);
               this.addRowData=result;
-              var reports:ReportType[]  = this._reportservice.convertNewData(result);
-              var costing:Boolean=false;
-              var serviceRowData: Report[]=this._reportservice.convertFinalReport(reports);
-              for(let i=0;i<serviceRowData[0].reportAdjustmentEntity.length;i++){
-                  if(serviceRowData[0].reportAdjustmentEntity[i].hours!=undefined || serviceRowData[0].reportAdjustmentEntity[i].rate!=undefined || serviceRowData[0].reportAdjustmentEntity[i].adjustment!=undefined   ){
-                    costing=true;
-                    break;
-                  }
-              }
-                console.log(this._reportservice.convertFinalReport(reports)[0].reportAdjustmentEntity.length);
-              if(costing){
-                if(result.from==="save"){
-                    this._reportservice.finalReportSave(reports).subscribe(resp=>{
+              console.log(result);
+              
+            //console.log(this._reportservice.convertNewData(result));
+          
+            //   var reports:ReportType[]  = this._reportservice.convertNewData(result);
+            //   var costing:Boolean=false;
+            //   var serviceRowData: Report[]=this._reportservice.convertFinalReport(reports);
+            //   for(let i=0;i<serviceRowData[0].reportAdjustmentEntity.length;i++){
+            //       if(serviceRowData[0].reportAdjustmentEntity[i].hours!=undefined || serviceRowData[0].reportAdjustmentEntity[i].rate!=undefined || serviceRowData[0].reportAdjustmentEntity[i].adjustment!=undefined   ){
+            //         costing=true;
+            //         break;
+            //       }
+            //   }
+                // console.log(this._reportservice.convertFinalReport(reports)[0].reportAdjustmentEntity.length);
+            //   if(costing){
+                if( (result!=undefined) &&(result.from==="save")){
+                    this._reportservice.finalReportSave(this._reportservice.convertNewData(result)).subscribe(resp=>{
                         this.toastr.success('Data Added', 'Success!'); 
                         this.getReports();
                         this.addRowData=new ReportType()
@@ -645,9 +696,9 @@ export class RichGridComponent {
                       this.toastr.error(error, 'Error!');
                    });
                   }
-              }else{
-                this.toastr.error('Please enter Costing Data of any one month to proceed for addition of new report record.'); 
-              }
+            //   }else{
+            //     this.toastr.error('Please enter Costing Data of any one month to proceed for addition of new report record.'); 
+            //   }
            
         });
       }else{
@@ -670,6 +721,7 @@ export class RichGridComponent {
       if(project) {
         this.projects = this.projects.filter( proj => proj.projectId + "" != value );
         this.chosenProject.push(project);
+        this._projectService.choosenProjectlist(this.chosenProject);
         this.getReports();
       } 
     }
@@ -685,6 +737,8 @@ export class RichGridComponent {
   
     if (index >= 0) {
       this.chosenProject.splice(index, 1);
+      this._projectService.choosenProjectlist(this.chosenProject);
+      this._projectService
       this.projects.push(project)
       this.getReports();
     }
@@ -700,6 +754,7 @@ export class RichGridComponent {
     if(project) {
         this.projects = this.projects.filter( proj => proj.projectId + "" != projectSelected.projectId );      
         this.chosenProject.push(project);
+        this._projectService.choosenProjectlist(this.chosenProject);
         this.getReports();
     }
     
@@ -711,7 +766,7 @@ export class RichGridComponent {
 
     console.log(this.chosenProject);
     console.log("Enter into getReports");
-    
+   // this.toastr.info("Refreshing Data...")
   
 
     var projects: string[] = [];
@@ -725,6 +780,11 @@ export class RichGridComponent {
     }
 
     this.hideprogress = false;
+    console.log("projet name ");
+    console.log(projects);
+    
+
+    
     this._reportservice.getReportForProject(projects)
         .subscribe( data => {
             var serviceRowData: Report[]=data;
@@ -732,7 +792,7 @@ export class RichGridComponent {
              if(this.rowData.length>0){
                  let index=0;
                  for(let i=0;i<serviceRowData.length;i++){
-                     if(serviceRowData[i].reportAdjustmentEntity.length===6){
+                     if(serviceRowData[i].reportAdjustmentEntity.length===12){
                         index=i;
                         console.log("index of the record");
                         console.log(index);
@@ -753,32 +813,72 @@ export class RichGridComponent {
   
 }
 
-
-
-
 @Component({
     selector: 'dialog-overview-example-dialog',
     templateUrl: 'dialog-overview-example-dialog.html',
   })
   export class DialogOverviewExampleDialog {
   
-    sampleData:ReportAdjusment[];
+   // sampleData:ReportAdjusment[];
+    locationType:string[];
+    cityList:string[];
+    billabilityList:string[];
+    projects: Project[];
+    selectedProjectID:number;
+    projectName:string;
+    selectedlocation:string;
+    selectedBillabilityType:string;
+    selectedCity:string;
+    
     constructor(
       public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
-      @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService) {
-        this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
+      @Inject(MAT_DIALOG_DATA) public data: any,public _reportService:ReportService, _projectService: ProjectService) {
+        //   if(this._reportService.sendingSampleData()!=undefined){
+        //     this.sampleData=this._reportService.sendingSampleData().reportAdjustmentEntity;
+        //   }
+          
         console.log("constructor of dialog ");
-        console.log(this.sampleData);
+       // console.log(this.sampleData);
+       //var utils =new Utils();
+        this.locationType=Utils.locationType;
+        this.cityList=Utils.cityList;
+        this.billabilityList=Utils.billability;
+        console.log("location");
+        console.log(this.locationType);
         
+        
+        // _projectService.getAllProjects().subscribe(projects => {
+        //     this.projects = projects;
+        //     console.log("projects ");
+        //     console.log(projects);
+        // });
+        this.projects=_projectService.getChoosenProjectlist();
        }
        submitForm(data){
         console.log("from dialog ");
-       
            data.from="save";
+           data.locationType=this.selectedlocation;
+           data.projectName=this.projectName;
+           data.projectId=this.selectedProjectID;
+           data.city=this.selectedCity;
+           data.billability=this.selectedBillabilityType
+           console.log(data);
            this.dialogRef.close(data);
-       
-           
        }
+       onChange(projectID:number,projectName:string) {
+           console.log(projectID);
+        this.projectName=projectName;
+        this.selectedProjectID=projectID;
+      }
+      onChangeLocation(locationType:string){
+          this.selectedlocation=locationType;
+      }
+      onChangecity(city:string){
+        this.selectedCity=city;
+      }
+      onChangebillability(billability:string){
+        this.selectedBillabilityType=billability;
+      }
     onNoClick(): void {
       this.dialogRef.close();
     }

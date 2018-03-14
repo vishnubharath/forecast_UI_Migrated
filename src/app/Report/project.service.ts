@@ -2,16 +2,17 @@ import { Injectable } from '@angular/core';
 import { Http, Response, Headers, RequestOptions, URLSearchParams } from "@angular/http";
 import 'rxjs/Rx';
 import { Observable }     from 'rxjs/Observable';
-import { Constants } from '../constants';
+import { Constants } from '../Constant/constants';
 import { Report } from './report';
 import { error } from 'util';
 import {Project } from './Project'
 
 @Injectable()
 export class ProjectService{
-
+	choosenProject:Array<Project> = new Array<Project>();
+	
 	constructor(private _http:Http){
-
+		
 	}
 
 	getAllProjects():Observable<Project[]>{
@@ -26,4 +27,12 @@ export class ProjectService{
 		});
 	}
 
+	choosenProjectlist(choosenProject:Array<Project>){
+		this.choosenProject=choosenProject
+	}
+	getChoosenProjectlist(){
+		return this.choosenProject;
+	}
+	
+	
 }

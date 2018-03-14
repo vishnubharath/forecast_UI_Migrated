@@ -4,9 +4,10 @@
 
 	<span style="padding-left: 33%">Forecast & Reports</span> 
 	<span class="headder-spacer"></span> 
-	<span style="width: 80px;">
+	<!-- <span style="width: 80px;">
 		<img *ngIf="hideprogress == false" src="https://loading.io/spinners/double-ring/lg.double-ring-spinner.gif" style="width: 80px;">
-	</span> 
+	</span>  -->
+	<div *ngIf="hideprogress == false" class="loader" ></div>
 </mat-toolbar-row> </mat-toolbar>
 <div style="padding: 5px 5px 10px 10px">
 		
@@ -17,7 +18,6 @@
 				{{project.projectName}}
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
 			</mat-chip>
-			
 			<input matInput placeholder="Filter by project" class="head-control"
 					[matChipInputFor]="chipList"
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -36,7 +36,7 @@
 
 	<div style="padding-top: 5px;">			
 		<input matInput class="head-control" (keyup)="onQuickFilterChanged($event)" type="text"
-			id="quickFilterInput" placeholder="Filter by project to view data" style="width: 50%;" />		
+			id="quickFilterInput" placeholder="Filter by data" style="width: 50%;" />		
 		<div style="float: right" >
 			<span class="controls-spacing"></span> 
 			<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
@@ -60,16 +60,10 @@
 <!-- [showToolPanel]="true" -->
 <div style="margin: 0px 10px 0px 10px">
 	<ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
-
-	#agGrid
-   
-    id="myGrid"
-    
-    [defaultColDef]="defaultColDef"
-    [showToolPanel]="false"
-   
-
-		
+		#agGrid
+    	id="myGrid"
+    	[defaultColDef]="defaultColDef"
+    	[showToolPanel]="false"
 		[enableFilter]="true"
 		[rowClassRules]="rowClassRules" [gridOptions]="gridOptions"
 		[columnDefs]="columnDefs" [showToolPanel]="showToolPanel"

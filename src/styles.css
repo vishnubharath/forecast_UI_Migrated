@@ -13,7 +13,7 @@
     z-index: 2;
 }
 .ag-header-cell-label .ag-header-cell-text{
-    font-size: 10px;
+    font-size: 12px;
    
 }
 
@@ -40,12 +40,15 @@
     line-height: 0px;
     font-size: 10px;
     line-height: 20px !important;
-    background:rgb(109, 179, 63);;
+    background:#4fbedf;
     padding: 0px 5px;
+    font-weight: bold;
+    color: white
 }
 .mat-stroked-button[disabled]{
     background:#d9e3ea;
 }
+
 .head-control{
     background: white;
     font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
@@ -64,3 +67,13 @@
     
     margin-bottom: 60px;
 }
+
+.toast-top-center {
+    top: 56%;
+    margin: 0 auto;
+    width: 100%
+ }
+
+ .addRow {
+     padding-left: 90%;
+ }

@@ -28,7 +28,24 @@ import { DialogComponent } from "./rich-grid-example/dialog.component";
 import { MatDialogModule, MatDatepickerInput, MatDatepicker, MatDatepickerModule, MatNativeDateModule } from "@angular/material";
 import {MatInputModule} from '@angular/material';
 import {MatMenuModule} from '@angular/material/menu';
-import { ToastModule } from "ng2-toastr";
+import { ToastModule,  ToastOptions } from "ng2-toastr";
+import { CustomOption } from "./Toast/CustomOption";
+
+
+export function toastOptions(): ToastOptions {
+    return {
+        toastLife: 5000,
+        dismiss: 'auto',
+        showCloseButton: true,
+        positionClass: 'toast-top-full-width',
+        animate: 'fade',
+        maxShown: 5,
+        newestOnTop: true,
+        enableHTML: true,
+        messageClass: '',
+        titleClass: ''
+    };
+}
 
 @NgModule({
     imports: [
@@ -68,7 +85,7 @@ import { ToastModule } from "ng2-toastr";
         HeaderComponent,
         HeaderGroupComponent,DialogComponent,DialogOverviewExampleDialog
     ],
-    providers: [ReportService, ProjectService],
+    providers: [ReportService, ProjectService,{provide: ToastOptions, useClass: CustomOption}],
     bootstrap: [AppComponent],
     entryComponents: [RichGridComponent, DialogOverviewExampleDialog],
     // entryComponents: [

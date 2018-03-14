@@ -36,14 +36,24 @@
     background-color:#ece6dc;
 }
 
-.mat-stroked-button, .head-control{
+ .head-control{
     line-height: 0px;
     font-size: 10px;
     line-height: 20px !important;
     background:#4fbedf;
     padding: 0px 5px;
-    font-weight: bold;
-    color: white
+   
+}
+
+.mat-stroked-button{
+    line-height: 0px;
+    font-size: 10px;
+    line-height: 20px !important;
+    background:#4fbedf;
+    padding: 0px 5px;
+    color: white;
+    font-weight: bold
+   
 }
 .mat-stroked-button[disabled]{
     background:#d9e3ea;

@@ -13,7 +13,12 @@
 		
 	<div style="padding-top: 5px;"> 
 		<mat-chip-list #chipList>
-			<mat-chip style=" margin-right: 5px" *ngFor="let project of chosenProject" [selectable]="selectable"
+			<mat-chip *ngIf="showALLChip" style="margin-right: 5px;margin-top: 5px;" [selectable]="selectable"
+						[removable]="removable" (remove)="removeAllProjectSelection()">
+				All
+				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+			</mat-chip>
+			<mat-chip style=" margin-right: 5px;margin-top: 5px;" *ngFor="let project of chosenProject" [selectable]="selectable"
 						[removable]="removable" (remove)="remove(project)">
 				{{project.projectName}}
 				<mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
@@ -42,9 +47,9 @@
 			id="quickFilterInput" placeholder="Filter by data" style="width: 50%;" />		
 		<div style="float: right" >
 			<span class="controls-spacing"></span> 
-			<button mat-stroked-button (click)="onBtExport()">Export As Excel</button>
+			<button mat-stroked-button (click)="onBtExport()">Export Current Rows to Excel</button>
 			<span class="controls-spacing"></span>
-			<button mat-stroked-button (click)="getALLReports()">Export All Project Data To Excel</button>
+			<button mat-stroked-button (click)="getALLReports()">Export All Data To Excel</button>
 		</div>
 	</div>
 

@@ -59,6 +59,7 @@ export class RichGridComponent {
     public addNewRow:boolean=false;
     public selectedRowIndex;
     public editable:boolean=false;
+    public showALLChip:boolean=false;
     public  duplicaterowData: ReportType[]=[];
     //public parentRowData: ReportType[]=[];
     public  errorData: ReportType[]=[];
@@ -75,7 +76,7 @@ export class RichGridComponent {
     // Chips Config
     selectable: boolean = true;
     removable: boolean = true;
-    addOnBlur: boolean = true;
+    //addOnBlur: boolean = true;
     // Enter, comma
     separatorKeysCodes = [ENTER, COMMA];
 
@@ -698,6 +699,7 @@ export class RichGridComponent {
   }
 
   add(event: MatChipInputEvent): void {
+    this.showALLChip = false;
     let input = event.input;
     let value = event.value;
   
@@ -829,9 +831,40 @@ getALLReports(){
 }
 
 listAllProject(){
-    this.chosenProject = this.projects;
+    this.showALLChip = true;
+    this.chosenProject = new Array<Project>();    
+    this.hideprogress = false;
+    this._reportservice.getAllReports()
+        .subscribe( data => {
+            var serviceRowData: Report[]=data;
+             this.rowData = this._reportservice.convertReport(serviceRowData); 
+             if(this.rowData.length>0){
+                 let index=0;
+                 for(let i=0;i<serviceRowData.length;i++){
+                     if(serviceRowData[i].reportAdjustmentEntity.length===12){
+                        index=i;
+                        console.log("index of the record");
+                        console.log(index);
+                        break;
+                     }
+                 }
+                
+                 
+                this.createDynamicColumn(data[index])
+             }
+             this.hideprogress = true;
+            }
+        ,error=>{
+            this.toastr.error(error, 'Error!');
+        }); 
+}
+
+removeAllProjectSelection(){
+    this.showALLChip = false;
+    console.log("remove all .. all project")
     this.getReports();
 }
+
 focusOnProjectAutoComplete(){
     this.filteredProjectsObs = new Observable<Project[]>(
         observer => {

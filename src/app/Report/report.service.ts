@@ -20,7 +20,7 @@ export class ReportService{
 
 	}
 
-	getCurrentReport():Observable<Report[]>{
+	getAllReports():Observable<Report[]>{
 		return this._http
 		.get(Constants.base_url+'reports/all' )
 		.map((res:Response) => {return res.json();})

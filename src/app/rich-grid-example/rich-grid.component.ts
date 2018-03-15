@@ -177,16 +177,6 @@ export class RichGridComponent {
         this.updatedRowData=[];
         this.selectedRow=false;
         this.selectedRowIndex="";
-        // this._reportservice.getCurrentReport().subscribe(rowdata => {
-        //     this.serviceRowData = rowdata;
-        //     this.createDynamicColumn(this.serviceRowData[0])
-        //     this.rowData = this._reportservice.convertReport(this.serviceRowData);
-        //     console.log(rowdata);
-        //     this.hideprogress = true;
-        // }, err => {
-        //     this.hideprogress = true;
-        //     console.log(err);
-        // });
 
         this._projectService.getAllProjects().subscribe(projects => {
             this.projects = projects;
@@ -808,6 +798,32 @@ export class RichGridComponent {
             this.toastr.error(error, 'Error!');
         }); 
 
+}
+
+getALLReports(){
+    this.hideprogress = false;    
+    this._reportservice.getAllReports()
+        .subscribe( data => {
+            var serviceRowData: Report[]=data;
+             this.rowData = this._reportservice.convertReport(serviceRowData); 
+             if(this.rowData.length>0){
+                 let index=0;
+                 for(let i=0;i<serviceRowData.length;i++){
+                     if(serviceRowData[i].reportAdjustmentEntity.length===12){
+                        index=i;
+                        console.log("index of the record");
+                        console.log(index);
+                        break;
+                     }
+                 }
+                
+                 
+                this.createDynamicColumn(data[index])
+             }
+             this.hideprogress = true;}
+        ,error=>{
+            this.toastr.error(error, 'Error!');
+        }); 
 }
   
   

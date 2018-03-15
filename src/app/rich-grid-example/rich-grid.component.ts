@@ -115,7 +115,7 @@ export class RichGridComponent {
             console.log("test .."  + value) 
             
             this.filteredProjects = this.projects.filter(project =>
-                project.projectName.toLowerCase().indexOf((value + "").toLowerCase()) === 0);
+                project.projectName.toLowerCase().indexOf((value + "").toLowerCase()) !== -1 );
               
             this.filteredProjectsObs = new Observable<Project[]>(
                 observer => {

@@ -820,7 +820,9 @@ getALLReports(){
                  
                 this.createDynamicColumn(data[index])
              }
-             this.hideprogress = true;}
+             this.hideprogress = true;
+             this.onBtExport();
+            }
         ,error=>{
             this.toastr.error(error, 'Error!');
         }); 

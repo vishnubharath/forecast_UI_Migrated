@@ -737,7 +737,7 @@ export class RichGridComponent {
   }
 
   autoComplete(projectSelected:any){
-    console.log("->");    
+    this.showALLChip = false;
     this.projectCtrl.setValue("");  
     
     let project  = this.projects.filter( proj => proj.projectId + "" === projectSelected.projectId + "")[0];      

@@ -827,7 +827,19 @@ getALLReports(){
             this.toastr.error(error, 'Error!');
         }); 
 }
-  
+
+listAllProject(){
+    this.chosenProject = this.projects;
+    this.getReports();
+}
+focusOnProjectAutoComplete(){
+    this.filteredProjectsObs = new Observable<Project[]>(
+        observer => {
+            observer.next(this.projects);
+        }
+
+    );
+}
   
 }
 

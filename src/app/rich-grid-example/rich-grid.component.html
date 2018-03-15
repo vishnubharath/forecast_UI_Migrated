@@ -23,14 +23,17 @@
 					[matChipInputSeparatorKeyCodes]="separatorKeysCodes"
 					[matChipInputAddOnBlur]="addOnBlur"
 					(matChipInputTokenEnd)="add($event)"
-					[matAutocomplete]="auto2" [formControl]="projectCtrl" style="margin: 0px"/>
+					[matAutocomplete]="auto2" [formControl]="projectCtrl" style="margin: 0px" (focus)="focusOnProjectAutoComplete()"/>
 			<span class="controls-spacing"></span> 			
 		</mat-chip-list>	
-		<mat-autocomplete #auto2="matAutocomplete"> 
+		<mat-autocomplete #auto2="matAutocomplete"> 			 
 			<mat-option *ngFor="let project of filteredProjectsObs | async"
 				[value]="project.projectId" (click)="autoComplete(project)" > 
 				<span>{{project.projectName }}</span> 
 			</mat-option> 
+			<mat-option [value]="all" (click)="listAllProject()" > 
+				<span>All</span> 
+			</mat-option>
 		</mat-autocomplete>
 	</div>
 

@@ -1,7 +1,7 @@
 <div class="overlay" align="center" *ngIf="hideprogress == false">
-	<img  src="images/spinner.gif" style="width: 80px;">
+	<img  src="images/spinner_2.gif" style="width: 80px;">
 </div>
-<mat-toolbar color="primary" role="header" style="background: #285682">
+<mat-toolbar color="primary" role="header" style="background: #1565C0">
 <mat-toolbar-row> 
 	<img src="https://www.cognizant.com/content/dam/cognizant_foundation/Dotcomimage/COG-Logo-White.svg" style="width: 80px;">
 
@@ -68,7 +68,8 @@
 <div style="margin: 0px 10px 0px 10px">
 	<ag-grid-angular style="width: 100%; height: 500px;" class="ag-fresh"
 		#agGrid
-    	id="myGrid"
+		id="myGrid"
+		[overlayNoRowsTemplate]="overlayNoRowsTemplate" 
     	[defaultColDef]="defaultColDef"
     	[showToolPanel]="false"
 		[enableFilter]="true"

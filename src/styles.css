@@ -25,15 +25,21 @@
 }
  
 .ag-fresh .ag-header {
-    background: antiquewhite;
+    background: #1565C0;
+    color: white;
 }
 
 .ag-fresh .ag-row-even {
-    background-color:#fff6ea;
+    background-color:#E3F2FD;
 }
 
 .ag-fresh .ag-row-odd {
-    background-color:#ece6dc;
+    background-color:#ffffff;
+}
+
+.mat-chip:not(.mat-basic-chip) {
+    background-color: #FFCC80;
+    color: #000;
 }
 
  .head-control{
@@ -49,7 +55,7 @@
     line-height: 0px;
     font-size: 10px;
     line-height: 20px !important;
-    background:#4fbedf;
+    background:#26A69A;
     padding: 0px 5px;
     color: white;
     font-weight: bold
@@ -74,7 +80,7 @@
 
 
 .ag-header-group-cell{
-    
+    text-align: center;
     margin-bottom: 60px;
 }
 
@@ -101,4 +107,9 @@
     z-index: 2;
     cursor: pointer;
     padding: 20%;
+}
+
+.ag-side-buttons button {
+    background: #AB47BC;
+    color: #fff;
 }

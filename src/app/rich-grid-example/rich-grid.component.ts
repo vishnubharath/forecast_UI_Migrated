@@ -80,7 +80,7 @@ export class RichGridComponent {
     // Enter, comma
     separatorKeysCodes = [ENTER, COMMA];
 
-  
+    private overlayNoRowsTemplate; 
     
     constructor(_reportservice: ReportService, _projectService: ProjectService,public dialog: MatDialog,public toastr: ToastsManager, vcr: ViewContainerRef ) {
         // we pass an empty gridOptions in, so we can grab the api out
@@ -88,6 +88,7 @@ export class RichGridComponent {
        // this. toastr.op = { positionClass: 'toast-bottom-right' }
         this._reportservice = _reportservice;
         this._projectService = _projectService;
+        this.overlayNoRowsTemplate = "<span style=\"padding: 10px; border: 1px solid #fff; background: #E57373; color: white; border-radius: 10px;\">Please filter by Projects option(in top left) to view Reports data</span>"; 
         this.gridOptions = <GridOptions>{};
         this.defaultColDef = {
             enableValue: true,
@@ -164,7 +165,7 @@ export class RichGridComponent {
         //         return params.defaultItems;
         //     }
         //   };
-          this.toastr.info('Please choose projects for querying','Please Choose Projects');
+         // this.toastr.info('Please choose projects for querying','Please Choose Projects');
           this.rowData=[];
     }
 
@@ -766,7 +767,7 @@ export class RichGridComponent {
     this.chosenProject.forEach(cp => projects.push(cp.projectId+"")); 
     
     if(projects.length <= 0) {
-        this.toastr.info('Please choose projects for querying','Please Choose Projects');
+        //this.toastr.info('Please choose projects for querying','Please Choose Projects');
         this.rowData=[];
         return;
     }
